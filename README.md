@@ -4,7 +4,7 @@ The application allows users to create, share and complete quizzes on various to
 
 ## Quiz
 
-Quizzes can consist of one to many questions each with three to five(?) answer options, only one of which is correct. Upon answering a question, user should see the correct answer and possibly extra info on the selected answer if it was incorrect. User can only progress linearly through a quiz, no backsies. Quiz filling time is recorded and some "points" on a quiz is calculated based on how many correct answers there were and how quick they were answered.
+Quizzes can consist of one to many questions each with three to five(?) answer options, only one of which is correct. Upon answering a question, user should see the correct answer and possibly extra info on the selected answer if it was incorrect. User can only progress linearly through a quiz, no backsies. Quiz attempts are timed and some score on a quiz is calculated based on how many correct answers there were and how quick they were answered.
 
 Quizzes can be created, edited, deleted and attemped by any registered user. Some data about attempts are collected per user that only the user themselves and admin can see. User cannot edit or delete another users quizzes. User should not see other users' scores on quizzes.
 
