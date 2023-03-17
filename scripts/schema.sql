@@ -14,10 +14,12 @@ CREATE TABLE quizuser (
 
 CREATE TABLE quiz (
   id SERIAL PRIMARY KEY,
+  quizuser_id INTEGER NOT NULL,
   title VARCHAR(255) NOT NULL,
   quiz_description TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP
+  updated_at TIMESTAMP,
+  FOREIGN KEY(quizuser_id) REFERENCES quizuser(id)
 );
 
 CREATE TABLE question (id SERIAL PRIMARY KEY, question_name TEXT);

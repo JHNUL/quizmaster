@@ -20,3 +20,8 @@ Then running the following command in the project root to initialize the databas
 ```sh
 PGPASSWORD=your_password ./scripts/reset_db.sh
 ```
+
+Seed test data into the database. Users (-u), quizzers per user (-z) and questions per quiz (-q).
+```python
+PGPASSWORD=your_password python ./scripts/seed_data.py -u 2 -z 2 -q 5
+```
