@@ -2,6 +2,8 @@ import psycopg2
 import os
 import random
 import argparse
+from dotenv import load_dotenv
+load_dotenv()
 
 parser = argparse.ArgumentParser(description='Seed data details.')
 parser.add_argument('-u', '--users', type=int,
@@ -21,7 +23,7 @@ conn = psycopg2.connect(
     host="localhost",
     database="quizdeveloper",
     user="postgres",
-    password=os.environ.get("PGPASSWORD"),
+    password=os.environ.get("PG_PASSWORD"),
 )
 
 cur = conn.cursor()

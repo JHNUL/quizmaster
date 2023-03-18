@@ -9,6 +9,8 @@
 
 ```
 PG_PASSWORD=your_password
+DATABASE_URL=database_uri_for_postgres_driver
+FLASK_APP=src/app.py
 ```
 
 
@@ -18,10 +20,10 @@ Run `docker compose up` in the root folder to start a postgresql container avail
 
 Then running the following command in the project root to initialize the database. Rerunning this will destroy existing database and reset a new one.
 ```sh
-PGPASSWORD=your_password ./scripts/reset_db.sh
+./scripts/reset_db.sh
 ```
 
 Seed test data into the database. Users (-u), quizzers per user (-z) and questions per quiz (-q).
 ```python
-PGPASSWORD=your_password python ./scripts/seed_data.py -u 2 -z 2 -q 5
+python ./scripts/seed_data.py -u 2 -z 2 -q 5
 ```
