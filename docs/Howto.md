@@ -40,3 +40,13 @@ Start app with
 ```python
 flask run
 ```
+
+## Testing
+
+Project uses Robot Framework to run system tests against the running application. To run the test suite locally use the following command.
+
+```python
+python ./scripts/run_tests_py
+```
+
+The test report is generated to `test-results` folder.
