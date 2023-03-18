@@ -2,9 +2,9 @@
 
 The application allows users to create, share and complete quizzes on various topics.
 
-## Techical documentation
+## Technical documentation
 
- - [Developing](docs/Howto.md)
+ - [Developing and testing](docs/Howto.md)
 
 ## Quiz
 
