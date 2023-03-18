@@ -5,6 +5,7 @@ The application allows users to create, share and complete quizzes on various to
 ## Technical documentation
 
  - [Developing and testing](docs/Howto.md)
+ - [Database schema](docs/Dbschema.md)
 
 ## Quiz
 
