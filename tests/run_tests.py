@@ -7,7 +7,8 @@ parent_folder = path.join(script_folder, "..")
 options = {
     'outputdir': f"{parent_folder}/test-results",
     'log': 'log.html',
-    'report': 'report.html'
+    'report': 'report.html',
+    'loglevel': 'TRACE'
 }
 
 run(f"{script_folder}", **options)
