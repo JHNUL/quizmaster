@@ -7,7 +7,7 @@ local/
 __pycache__/
 
 instance/
-test-results/
+test-results/*
 
 .pytest_cache/
 .coverage

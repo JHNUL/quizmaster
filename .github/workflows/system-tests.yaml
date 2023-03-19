@@ -1,0 +1,18 @@
+name: system-tests
+run-name: ${{ github.actor }} is mixing it up like there's no tomorrow
+on: [push]
+jobs:
+  run-system-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: upsie daisie
+        uses: actions/checkout@v3
+      - run: mkdir -p test-results
+      - run: mkdir -p local
+      - run: mkdir -p local/db
+      - run: docker compose up -d
+      - run: |
+          docker run --network="host" \
+          --volume ./tests:/home/testrunner/tests \
+          --volume ./test-results:/home/testrunner/test-results \
+          juhanir/test-runner:0.1.0
