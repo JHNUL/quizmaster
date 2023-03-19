@@ -7,6 +7,9 @@ jobs:
     steps:
       - name: upsie daisie
         uses: actions/checkout@v3
+        env:
+          PG_PASSWORD: ${{ secrets.PG_PW }}
+          DATABASE_URL: ${{ secrets.DB_URI }}
       - run: mkdir -p ${{github.workspace}}/local
       - run: chmod 777 ${{github.workspace}}/local
       - run: mkdir -p ${{github.workspace}}/local/db
