@@ -21,3 +21,9 @@ jobs:
           --volume ${{ github.workspace }}/tests:/home/testrunner/tests \
           --volume ${{ github.workspace }}/test-results:/home/testrunner/test-results \
           juhanir/test-runner:0.1.0
+
+      - name: Publish robot report
+        uses: actions/upload-artifact@v3
+        with:
+          name: System test report
+          path: ${{ github.workspace }}/test-results
