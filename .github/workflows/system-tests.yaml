@@ -7,7 +7,6 @@ jobs:
     steps:
       - name: upsie daisie
         uses: actions/checkout@v3
-      - run: mkdir -p test-results
       - run: mkdir -p local
       - run: mkdir -p local/db
       - run: docker compose up -d
