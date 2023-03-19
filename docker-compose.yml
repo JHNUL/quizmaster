@@ -1,8 +1,8 @@
-version: '3.1'
+version: '3.5'
 
 services:
 
-  db:
+  quizdb:
     image: postgres:15.2-alpine3.17
     restart: always
     ports:
@@ -11,3 +11,14 @@ services:
       - ./local/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${PG_PASSWORD}
+
+  quizserver:
+    build: .
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      FLASK_APP: ${FLASK_APP}
+    depends_on:
+      - quizdb

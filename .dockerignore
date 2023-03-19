@@ -1,0 +1,11 @@
+docker-compose.yml
+docs/
+.env
+local/
+.pylintrc
+README.md
+requirements-dev.txt
+test-results/
+tests/
+.venv/
+.vscode/

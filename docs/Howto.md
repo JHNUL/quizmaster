@@ -50,3 +50,23 @@ python ./tests/run_tests.py
 ```
 
 The test report is generated to `test-results` folder.
+
+### Containerized
+
+Running tests against containerized application requires the following steps. This is basically how the service is tested in CI environment.
+
+```sh
+# to start the service with database
+
+docker compose up
+```
+
+```sh
+# Pull test container and run tests against the service.
+# test-results folder should exist in the project root.
+
+docker run --network="host" \
+ --volume ./tests:/home/testrunner/tests \
+ --volume ./test-results:/home/testrunner/test-results \
+ juhanir/test-runner:0.1.0
+```
