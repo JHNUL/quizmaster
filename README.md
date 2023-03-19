@@ -1,3 +1,5 @@
+[![system-tests](https://github.com/JHNUL/quizmaster/actions/workflows/system-tests.yaml/badge.svg?branch=main)](https://github.com/JHNUL/quizmaster/actions/workflows/system-tests.yaml)
+
 # Quizmaster
 
 The application allows users to create, share and complete quizzes on various topics.
