@@ -1,5 +1,6 @@
 *** Settings ***
 Resource            login_resource.robot
+Resource            ../common_resource.robot
 
 Suite Setup         Open And Configure Browser
 Suite Teardown      Close Browser
