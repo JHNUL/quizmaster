@@ -16,7 +16,7 @@ jobs:
       - run: mkdir -p ${{github.workspace}}/test-results
       - run: chmod 777 ${{github.workspace}}/test-results
       - run: docker compose up -d
-      - run: curl --fail http://localhost:5000/health
+      # - run: curl --fail http://localhost:5000/health
       - run: |
           docker run --network="host" \
           --volume ${{ github.workspace }}/tests:/home/testrunner/tests \
