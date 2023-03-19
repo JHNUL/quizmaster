@@ -13,6 +13,6 @@ jobs:
       - run: docker compose up -d
       - run: |
           docker run --network="host" \
-          --volume ./tests:/home/testrunner/tests \
-          --volume ./test-results:/home/testrunner/test-results \
+          --volume ${{ github.workspace }}/tests:/home/testrunner/tests \
+          --volume ${{ github.workspace }}/test-results:/home/testrunner/test-results \
           juhanir/test-runner:0.1.0

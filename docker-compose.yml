@@ -4,7 +4,7 @@ services:
 
   quizdb:
     image: postgres:15.2-alpine3.17
-    restart: always
+    restart: "no"
     ports:
       - 5555:5432
     volumes:
@@ -14,7 +14,7 @@ services:
 
   quizserver:
     build: .
-    restart: always
+    restart: "no"
     ports:
       - 5000:5000
     environment:
