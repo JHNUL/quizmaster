@@ -2,7 +2,7 @@ name: system-tests
 run-name: ${{ github.actor }} is mixing it up like there's no tomorrow
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, synchronize, reopened]
     branches:
       - "main"
 jobs:
