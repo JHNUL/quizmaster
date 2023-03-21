@@ -9,15 +9,15 @@ jobs:
       - name: upsie daisie
         uses: actions/checkout@v3
         env:
-          PG_PASSWORD: ${{secrets.PG_PW}}
-          DATABASE_URL: ${{secrets.DB_URI}}
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          PG_PASSWORD: ${{ secrets.PG_PW }}
+          DATABASE_URL: ${{ secrets.DB_URI }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
       - run: echo "$DATABASE_URL" | wc -c
-      - run: mkdir -p ${{github.workspace}}/test-results
-      - run: chmod 777 ${{github.workspace}}/test-results
-      - run: docker compose -f ${{github.workspace}}/docker-compose-ci.yml up
+      - run: mkdir -p ${{ github.workspace }}/test-results
+      - run: chmod 777 ${{ github.workspace }}/test-results
+      - run: docker compose -f ${{ github.workspace }}/docker-compose-ci.yml up
       - run: docker pull juhanir/test-runner:0.1.0
-      - run: PGPASSWORD=${{secrets.PG_PW}} ${{github.workspace}}/scripts/reset_db.sh
+      - run: PGPASSWORD=${{secrets.PG_PW}} ${{ github.workspace }}/scripts/reset_db.sh
       - run: |
           docker run --network="host" \
           --volume ${{ github.workspace }}/tests:/home/testrunner/tests \
