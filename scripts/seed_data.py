@@ -1,5 +1,5 @@
 import psycopg2
-import os
+from os import getenv
 import random
 import argparse
 from dotenv import load_dotenv
@@ -23,7 +23,7 @@ conn = psycopg2.connect(
     host="localhost",
     database="quizdeveloper",
     user="postgres",
-    password=os.environ.get("PG_PASSWORD"),
+    password=getenv("PG_PASSWORD"),
 )
 
 cur = conn.cursor()

@@ -11,6 +11,7 @@
 ```
 PG_PASSWORD=your_postgres_password
 DATABASE_URL=postresql_database_uri
+SECRET_KEY=cookie_signing_key
 FLASK_APP=src/app.py
 ```
 

@@ -6,7 +6,7 @@ CREATE DATABASE quizdeveloper;
 
 CREATE TABLE quizuser (
   id SERIAL PRIMARY KEY,
-  username VARCHAR(50) NOT NULL,
+  username VARCHAR(50) UNIQUE NOT NULL,
   pw VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   logged_at TIMESTAMP

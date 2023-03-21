@@ -1,10 +1,12 @@
 name: system-tests
 run-name: ${{ github.actor }} is mixing it up like there's no tomorrow
 on:
-  pull_request:
-    types: [opened, edited]
+  push:
     branches:
-      - 'main'
+      - "main"
+  pull_request:
+    branches:
+      - "main"
 jobs:
   run-system-tests:
     runs-on: ubuntu-latest
@@ -14,12 +16,14 @@ jobs:
         env:
           PG_PASSWORD: ${{ secrets.PG_PW }}
           DATABASE_URL: ${{ secrets.DB_URI }}
-      - run: mkdir -p ${{github.workspace}}/local
-      - run: chmod 777 ${{github.workspace}}/local
-      - run: mkdir -p ${{github.workspace}}/local/db
-      - run: mkdir -p ${{github.workspace}}/test-results
-      - run: chmod 777 ${{github.workspace}}/test-results
-      - run: docker compose up -d
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      # Remove this when access to secrets is sorted out
+      - run: echo "$DATABASE_URL" | wc -c
+      - run: mkdir -p ${{ github.workspace }}/test-results
+      - run: chmod 777 ${{ github.workspace }}/test-results
+      - run: docker compose -f ${{ github.workspace }}/docker-compose-ci.yml up
+      - run: docker pull juhanir/test-runner:0.1.0
+      - run: PGPASSWORD=${{secrets.PG_PW}} ${{ github.workspace }}/scripts/reset_db.sh
       - run: |
           docker run --network="host" \
           --volume ${{ github.workspace }}/tests:/home/testrunner/tests \

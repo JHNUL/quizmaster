@@ -1,5 +1,8 @@
-from flask import render_template, request
+from flask import render_template, request, redirect
+from werkzeug.security import generate_password_hash
 from src.app import app
+from src.db import db
+from src.repositories.users import UserRepository
 
 
 @app.route("/register", methods=["GET"])
@@ -9,4 +12,13 @@ def register_page():
 
 @app.route("/register", methods=["POST"])
 def register():
-    return render_template("register.html")
+    username = request.form["username"]
+    password = request.form["password"]
+    user_repo = UserRepository(db)
+    user = user_repo.get_user_by_username(username)
+    if len(user) == 0:
+        pass_hash = generate_password_hash(password)
+        user_repo.create_new_user(username, pass_hash)
+        return redirect("/login")
+    else:
+        return render_template("register.html", message=f"Username {username} not available!")
