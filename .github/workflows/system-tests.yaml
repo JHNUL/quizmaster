@@ -12,6 +12,7 @@ jobs:
           PG_PASSWORD: ${{secrets.PG_PW}}
           DATABASE_URL: ${{secrets.DB_URI}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
+      - run: echo "$DATABASE_URL" | cut -c 1-5
       - run: mkdir -p ${{github.workspace}}/test-results
       - run: chmod 777 ${{github.workspace}}/test-results
       - run: docker compose -f ${{github.workspace}}/docker-compose-ci.yml up
