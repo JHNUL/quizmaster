@@ -10,18 +10,14 @@ on:
 jobs:
   run-system-tests:
     runs-on: ubuntu-latest
+    env:
+      PG_PASSWORD: ${{ secrets.PG_PW }}
+      DATABASE_URL: ${{ secrets.DB_URI }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     steps:
       - name: upsie daisie
         uses: actions/checkout@v3
-      # Remove this when access to secrets is sorted outttt
-      - run: mkdir -p ${{github.workspace}}/local
-      - run: chmod 777 ${{github.workspace}}/local
-      - run: mkdir -p ${{github.workspace}}/local/db
       - run: mkdir -p ${{ github.workspace }}/test-results
-        env:
-          PG_PASSWORD: ${{ secrets.PG_PW }}
-          DATABASE_URL: ${{ secrets.DB_URI }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
       - run: chmod 777 ${{ github.workspace }}/test-results
       - run: docker compose -f ${{ github.workspace }}/docker-compose-ci.yml up
       - run: docker pull juhanir/test-runner:0.1.0
