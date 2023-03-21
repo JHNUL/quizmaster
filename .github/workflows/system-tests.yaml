@@ -1,6 +1,12 @@
 name: system-tests
 run-name: ${{ github.actor }} is mixing it up like there's no tomorrow
-on: pull_request
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
 jobs:
   run-system-tests:
     runs-on: ubuntu-latest
@@ -11,6 +17,7 @@ jobs:
           PG_PASSWORD: ${{ secrets.PG_PW }}
           DATABASE_URL: ${{ secrets.DB_URI }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      # Remove this when access to secrets is sorted out
       - run: echo "$DATABASE_URL" | wc -c
       - run: mkdir -p ${{ github.workspace }}/test-results
       - run: chmod 777 ${{ github.workspace }}/test-results
