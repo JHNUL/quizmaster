@@ -11,4 +11,5 @@ options = {
     'loglevel': 'TRACE'
 }
 
-run(f"{script_folder}", **options)
+exit_code = run(f"{script_folder}", **options)
+exit(exit_code)

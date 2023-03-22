@@ -46,4 +46,4 @@ User Inputs The Same Username
 
 User Stays On Register Page And Sees Error Message
     Register Page Should Be Open
-    Page Should Contain    Username ${UN} not available!
+    Page Should Contain    Username ${UN} not available hooooman!
