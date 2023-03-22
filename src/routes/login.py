@@ -16,7 +16,6 @@ def login():
     password = request.form["password"]
     user_repo = UserRepository(db)
     user = user_repo.get_user_by_username(username, include_password=True)
-    print(user)
     if len(user) == 0:
         return render_template("login.html", message="Username not found!")
 

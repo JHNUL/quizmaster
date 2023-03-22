@@ -38,16 +38,16 @@ python ./scripts/seed_data.py -u 2 -z 2 -q 5
 ```
 
 Start app with
-```python
-flask run
+```sh
+invoke start
 ```
 
 ## Testing
 
 Project uses Robot Framework to run system tests against the running application. To run the test suite locally use the following command.
 
-```python
-python ./tests/run_tests.py
+```sh
+invoke test
 ```
 
 The test report is generated to `test-results` folder.
