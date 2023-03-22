@@ -3,12 +3,8 @@ Library         SeleniumLibrary
 Library         String
 Library         LoginLibrary.py
 Library         Screenshot
+Library         ../../.venv/lib/python3.11/site-packages/robot/libraries/Collections.py
 Variables       ../variables.py
-
-
-*** Variables ***
-${REGISTER_URL}     ${BASE_URL}/register
-${LOGIN_URL}        ${BASE_URL}/login
 
 
 *** Keywords ***
@@ -21,13 +17,9 @@ Login Page Should Be Open
 Landing Page Should Be Open
     Title Should Be    Langing page
 
-User Can Navigate To Register Page
-    Go To    ${REGISTER_URL}
-    Register Page Should Be Open
-
-User Can Navigate To Login Page
-    Go To    ${LOGIN_URL}
-    Login Page Should Be Open
+User Navigates To ${target} Page
+    ${url}=    Get From Dictionary    ${ROUTES_DICT}    ${target}
+    Go To    ${url}
 
 User Inputs Username And Password
     [Arguments]    ${username}=${None}    ${password}=${None}
@@ -47,13 +39,13 @@ User Is Redirected To Login
     Title Should Be    Login
 
 Username Has Been Registered
-    User Can Navigate To Register Page
+    User Navigates To Register Page
     ${UN}    ${PW}=    User Inputs Username And Password
     Set Test Variable    ${UN}
     Set Test Variable    ${PW}
 
 User Inputs The Same Username
-    User Can Navigate To Register Page
+    User Navigates To Register Page
     User Inputs Username And Password    ${UN}    ${PW}
 
 User Stays On Register Page And Sees Error Message
