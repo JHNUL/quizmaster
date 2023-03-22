@@ -6,19 +6,22 @@ class UserRepository:
     def __init__(self, db: 'SQLAlchemy'):
         self.db = db
 
-    def _get_user(self, attribute: str, value):
+    def _get_user(self, attribute: str, value, include_password=False):
+        basic_attributes = ["id", "username", "created_at"]
+        if include_password:
+            basic_attributes.append("pw")
         if attribute == "id":
-            query_string = "SELECT id, username, created_at FROM quizuser WHERE id = :value"
+            query_string = f"SELECT {', '.join(basic_attributes)} FROM quizuser WHERE id = :value"
         elif attribute == "username":
-            query_string = "SELECT id, username, created_at FROM quizuser WHERE username = :value"
+            query_string = f"SELECT {', '.join(basic_attributes)} FROM quizuser WHERE username = :value"
         cursor = self.db.session.execute(_text(query_string), {"value": value})
         return cursor.fetchall()
 
     def get_user_by_id(self, user_id: int):
         return self._get_user("id", user_id)
 
-    def get_user_by_username(self, username: str):
-        return self._get_user("username", username)
+    def get_user_by_username(self, username: str, include_password=False):
+        return self._get_user("username", username, include_password)
 
     def create_new_user(self, username: str, password: str):
         query_string = "INSERT INTO quizuser (username, pw) VALUES (:username, :pw)"
