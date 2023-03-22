@@ -3,7 +3,7 @@ Library         SeleniumLibrary
 Library         String
 Library         LoginLibrary.py
 Library         Screenshot
-Library         ../../.venv/lib/python3.11/site-packages/robot/libraries/Collections.py
+Library         Collections
 Variables       ../variables.py
 
 
