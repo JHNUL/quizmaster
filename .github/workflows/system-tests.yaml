@@ -30,6 +30,8 @@ jobs:
 
       - name: Publish robot report
         uses: actions/upload-artifact@v3
+        # if test-runner reports non-zero exit status, this should still run
+        if: always()
         with:
           name: System test report
           path: ${{ github.workspace }}/test-results
