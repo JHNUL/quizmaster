@@ -47,3 +47,11 @@ User Cannot Login To The Application With Incorrect Username
 User Cannot Access Application Unless Logged In
     Given User Navigates To Landing Page
     Then User Is Redirected To Login
+
+There Should Be A Link To Register From Login
+    Given User Navigates To Login Page
+    Then User Is Able To Go To Register Page By Link
+
+There Should Be A Link To Login From Register
+    Given User Navigates To Register Page
+    Then User Is Able To Go To Login Page By Link
