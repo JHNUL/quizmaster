@@ -7,6 +7,11 @@ Library         Collections
 Variables       ../variables.py
 
 
+*** Variables ***
+${REGISTER_LINK}    //a[@href='/register']
+${LOGIN_LINK}       //a[@href='/login']
+
+
 *** Keywords ***
 Register Page Should Be Open
     Title Should Be    Register
@@ -24,7 +29,7 @@ User Navigates To ${target} Page
 User Inputs Username And Password
     [Arguments]    ${username}=${None}    ${password}=${None}
     IF    '${username}'=='${None}'
-        ${rnd}=    Generate Random String    8    [LOWER]
+        ${rnd}=    Generate Random String    10    [LOWER]
         ${username}=    Set Variable    ${rnd}@quiztester.dev
     END
     IF    '${password}'=='${None}'
@@ -61,3 +66,13 @@ User Stays On Login Page And Sees Error Message
     Login Page Should Be Open
     Page Should Contain    ${msg}
     Capture Page Screenshot
+
+User Is Able To Go To Register Page By Link
+    Login Page Should Be Open
+    Click Link    ${REGISTER_LINK}
+    Register Page Should Be Open
+
+User Is Able To Go To Login Page By Link
+    Register Page Should Be Open
+    Click Link    ${LOGIN_LINK}
+    Login Page Should Be Open
