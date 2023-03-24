@@ -10,6 +10,7 @@ Variables       ../variables.py
 *** Variables ***
 ${REGISTER_LINK}    //a[@href='/register']
 ${LOGIN_LINK}       //a[@href='/login']
+${LOGOUT_BTN}       //input[@value="Logout"]
 
 
 *** Keywords ***
@@ -75,4 +76,21 @@ User Is Able To Go To Register Page By Link
 User Is Able To Go To Login Page By Link
     Register Page Should Be Open
     Click Link    ${LOGIN_LINK}
+    Login Page Should Be Open
+
+User Is Logged In
+    Username Has Been Registered
+    User Navigates To Login Page
+    User Inputs Username And Password    ${UN}    ${PW}
+    Landing Page Should Be Open
+
+User Can Find Logout Button
+    Page Should Contain Element    ${LOGOUT_BTN}
+
+Pressing Logout Button Logs User Out Of The Application
+    Click Element    ${LOGOUT_BTN}
+    Login Page Should Be Open
+    User Navigates To Landing Page
+    Login Page Should Be Open
+    Go Back
     Login Page Should Be Open

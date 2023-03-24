@@ -9,3 +9,4 @@ app.secret_key = getenv("SECRET_KEY")
 import src.routes.landingpage
 import src.routes.register
 import src.routes.login
+import src.routes.logout

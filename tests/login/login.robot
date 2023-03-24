@@ -55,3 +55,8 @@ There Should Be A Link To Register From Login
 There Should Be A Link To Login From Register
     Given User Navigates To Register Page
     Then User Is Able To Go To Login Page By Link
+
+User Should Be Able To Logout From The Application
+    Given User Is Logged In
+    Then User Can Find Logout Button
+    And Pressing Logout Button Logs User Out Of The Application
