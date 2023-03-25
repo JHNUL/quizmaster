@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block title %}New quiz{% endblock %}
+{% block content %}
+  <h1>Create new quiz</h1>
+  <p>Input some values</p>
+  <form action="/quiz" method="post">
+    <label for="quiztitle">Title</label>
+    <input type="text" name="quiztitle" id="quiztitle" autocomplete="off" />
+    <label for="quizdescription">Description</label>
+    <textarea name="quizdescription" id="quizdescription" autocomplete="off"></textarea>
+    <input type="submit" value="Create">
+  </form>
+{% endblock %}

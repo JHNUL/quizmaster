@@ -10,3 +10,4 @@ import src.routes.landingpage
 import src.routes.register
 import src.routes.login
 import src.routes.logout
+import src.routes.quiz

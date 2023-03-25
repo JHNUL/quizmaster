@@ -21,6 +21,7 @@ def login():
 
     if check_password_hash(user[0].pw, password):
         session["username"] = username
+        session["user_id"] = user[0].id
         return redirect("/")
 
     return render_template("login.html", message="Incorrect password!")
