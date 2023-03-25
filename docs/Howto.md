@@ -18,7 +18,6 @@ FLASK_APP=src/app.py
 Install project dependencies from `requirements*.txt` files.
 
 ```sh
-pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 

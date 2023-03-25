@@ -6,4 +6,5 @@ ROUTES_DICT = {
     'Landing': f"{BASE_URL}",
     'Register': f"{BASE_URL}/register",
     'Login': f"{BASE_URL}/login",
+    'Quiz': f"{BASE_URL}/quiz",
 }
