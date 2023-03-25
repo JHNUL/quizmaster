@@ -20,6 +20,9 @@ Landing Page Should Be Open
 Quiz Page Should Be Open
     Title Should Be    New quiz
 
+Quiz Details Page Should Be Open
+    Title Should Be    Quiz detail
+
 User Navigates To ${target} Page
     ${url}=    Get From Dictionary    ${ROUTES_DICT}    ${target}
     Go To    ${url}

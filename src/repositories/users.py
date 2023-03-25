@@ -15,7 +15,10 @@ class UserRepository:
         elif attribute == "username":
             query_string = f"SELECT {', '.join(basic_attributes)} FROM quizuser WHERE username = :value"
         cursor = self.db.session.execute(_text(query_string), {"value": value})
-        return cursor.fetchall()
+        users = cursor.fetchall()
+        if len(users) == 0:
+            return None
+        return users[0]
 
     def get_user_by_id(self, user_id: int):
         return self._get_user("id", user_id)

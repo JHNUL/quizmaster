@@ -16,7 +16,7 @@ def register():
     password = request.form["password"]
     user_repo = UserRepository(db)
     user = user_repo.get_user_by_username(username)
-    if len(user) == 0:
+    if user is None:
         pass_hash = generate_password_hash(password)
         user_repo.create_new_user(username, pass_hash)
         return redirect("/login")

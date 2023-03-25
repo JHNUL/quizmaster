@@ -8,3 +8,6 @@ ROUTES_DICT = {
     'Login': f"{BASE_URL}/login",
     'Quiz': f"{BASE_URL}/quiz",
 }
+
+DEFAULT_ANSWER_OPTIONS = 2
+MAX_ANSWER_OPTIONS = 5

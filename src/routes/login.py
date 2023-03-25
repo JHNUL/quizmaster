@@ -16,12 +16,12 @@ def login():
     password = request.form["password"]
     user_repo = UserRepository(db)
     user = user_repo.get_user_by_username(username, include_password=True)
-    if len(user) == 0:
+    if user is None:
         return render_template("login.html", message="Username not found!")
 
-    if check_password_hash(user[0].pw, password):
+    if check_password_hash(user.pw, password):
         session["username"] = username
-        session["user_id"] = user[0].id
+        session["user_id"] = user.id
         return redirect("/")
 
     return render_template("login.html", message="Incorrect password!")
