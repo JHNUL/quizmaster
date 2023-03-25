@@ -1,7 +1,9 @@
-<title>Langing page</title>
-<h1>Langing page</h1>
-<!-- TODO: implement topbar or something where to put the logout -->
-<form action="/logout" method="post">
-  <input type="submit" value="Logout" />
-</form>
-<p>well hello there</p>
+{% extends "layout.html" %}
+{% block title %}Langing page{% endblock %}
+{% block content %}
+  <h1>Langing page</h1>
+  <p>well hello there</p>
+  <a href="/quiz">
+    <button>Create new quiz</button>
+  </a>
+{% endblock %}

@@ -2,9 +2,9 @@ from invoke import task
 
 
 @task
-def test(ctx):
+def test(ctx, include=""):
     ctx.run("rm -rf test-results/")
-    ctx.run("python tests/run_tests.py")
+    ctx.run(f"python tests/run_tests.py {include}")
 
 
 @task

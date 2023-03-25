@@ -1,10 +1,10 @@
 *** Settings ***
 Library         SeleniumLibrary
 Library         String
-Library         LoginLibrary.py
 Library         Screenshot
 Library         Collections
 Variables       ../variables.py
+Resource        ../common_resource.robot
 
 
 *** Variables ***
@@ -14,27 +14,14 @@ ${LOGOUT_BTN}       //input[@value="Logout"]
 
 
 *** Keywords ***
-Register Page Should Be Open
-    Title Should Be    Register
-
-Login Page Should Be Open
-    Title Should Be    Login
-
-Landing Page Should Be Open
-    Title Should Be    Langing page
-
-User Navigates To ${target} Page
-    ${url}=    Get From Dictionary    ${ROUTES_DICT}    ${target}
-    Go To    ${url}
-
 User Inputs Username And Password
     [Arguments]    ${username}=${None}    ${password}=${None}
+    ${gen_username}    ${gen_password}=    Generate Random Username And Password
     IF    '${username}'=='${None}'
-        ${rnd}=    Generate Random String    10    [LOWER]
-        ${username}=    Set Variable    ${rnd}@quiztester.dev
+        ${username}=    Set Variable    ${gen_username}
     END
     IF    '${password}'=='${None}'
-        ${password}=    Generate Random String    15    [NUMBERS][LOWER]
+        ${password}=    Set Variable    ${gen_password}
     END
     Input Text    username    ${username}
     Input Text    password    ${password}

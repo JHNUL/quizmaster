@@ -1,6 +1,5 @@
 *** Settings ***
 Resource            login_resource.robot
-Resource            ../common_resource.robot
 
 Test Setup          Open And Configure Browser
 Test Teardown       Close Browser
@@ -46,6 +45,8 @@ User Cannot Login To The Application With Incorrect Username
 
 User Cannot Access Application Unless Logged In
     Given User Navigates To Landing Page
+    Then User Is Redirected To Login
+    And User Navigates To Quiz Page
     Then User Is Redirected To Login
 
 There Should Be A Link To Register From Login

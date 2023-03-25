@@ -1,5 +1,5 @@
 # Keyword implementations here
-class LoginLibrary:
+class QuizLibrary:
     def __init__(self):
         self.reset_application()
 
