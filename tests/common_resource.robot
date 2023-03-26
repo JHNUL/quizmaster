@@ -48,6 +48,7 @@ Create User And Login
     Input Text    password    ${password}
     Click Button    Submit
     Landing Page Should Be Open
+    RETURN    ${username}    ${password}
 
 Get Lorem Ipsum Text
     [Arguments]    ${words}=${5}    ${as_question}=${False}
@@ -57,3 +58,25 @@ Get Lorem Ipsum Text
         ${txt}=    Set Variable    ${txt}?
     END
     RETURN    ${txt}
+
+Create New Quiz
+    User Navigates To Quiz Page
+    Quiz Page Should Be Open
+    ${quiz_title}=    Get Lorem Ipsum Text    words=${3}
+    ${quiz_desc}=    Get Lorem Ipsum Text    words=${10}
+    Input Text    quiztitle    ${quiz_title}
+    Input Text    quizdescription    ${quiz_desc}
+    Click Button    ${ADD_QUIZ_BTN}
+    Quiz Details Page Should Be Open
+    FOR    ${i}    IN RANGE    5
+        ${question_name}=    Get Lorem Ipsum Text    as_question=${True}
+        Input Text    questionname    ${question_name}
+        Repeat Keyword    ${MAX_ANSWER_OPTIONS} times    Click Button    ${ADD_ANSWER_BTN}
+        @{inputs}=    Get WebElements    ${ANSWER_INPUTS}
+        FOR    ${input}    IN    @{inputs}
+            ${answer}=    Get Lorem Ipsum Text
+            Input Text    ${input}    ${answer}
+        END
+        Click Button    ${ADD_QUESTION_BTN}
+    END
+    RETURN    ${quiz_title}    ${quiz_desc}

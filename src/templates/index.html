@@ -2,7 +2,11 @@
 {% block title %}Langing page{% endblock %}
 {% block content %}
   <h1>Langing page</h1>
-  <p>well hello there</p>
+  <p>Hello {{ username }}</p>
+  <p>Quizzes</p>
+  {% for quiz in quizzes %}
+    <div>{{ quiz.title }}</div>
+  {% endfor %}
   <a href="/quiz">
     <button>Create new quiz</button>
   </a>

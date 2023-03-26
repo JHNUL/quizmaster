@@ -1,5 +1,5 @@
 *** Settings ***
-Resource            quiz_resource.robot
+Resource            quiz_creation_resource.robot
 
 Test Setup          Create User And Login
 Test Teardown       Close Browser
