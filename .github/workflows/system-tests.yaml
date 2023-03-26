@@ -1,14 +1,12 @@
 name: system-tests
 run-name: ${{ github.actor }} is mixing it up like there's no tomorrow
 on:
-  push:
-    branches:
-      - "main"
   pull_request:
     branches:
       - "main"
 jobs:
   run-system-tests:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     env:
       PG_PASSWORD: ${{ secrets.PG_PW }}

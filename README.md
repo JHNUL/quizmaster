@@ -15,21 +15,17 @@ Quizzes can consist of one to many questions each with three to five(?) answer o
 
 Quizzes can be created, edited, deleted and attemped by any registered user. Some data about attempts are collected per user that only the user themselves and admin can see. User cannot edit or delete another users quizzes. User should not see other users' scores on quizzes.
 
-## Roles
+## Functionality
 
-### User
+High level functionality from user role perspective that can be tested at this point by course reviewers. Everything looks awful because function takes priority over form at this point, styles are added in the end if time permits. Robot Framework test suite tags are there for convenience, should you want to run relevant tests with the browser. See instructions in [Developing and testing](docs/Howto.md).
 
-Can:
-  - create username and password DONE
-  - log in DONE
-  - see list of existing published quizzes from everyone DONE
-  - create a new quiz DONE
-  - complete any quiz in the list
-  - delete a quiz that belongs to the user (note that quiz might be used while deleting)
-  - publish a quiz or keep it private
-  - see all quizzes that they have created, attempted and completed
-
-### Admin (not MVP)
-
-Can:
- - see some aggregated data of usage, e.g. how many quizzes created at any given period of time, what percentage is private/published etc.
+|Role|Functionality|Status|Robot tags|
+|---|---|---|---|
+|User|create username and password|DONE|loginORlogout|
+|User|login and logout|DONE|loginORlogout|
+|User|see list of quizzes|DONE|quiz_creationORquestion_creation|
+|User|create a new quiz|DONE|quiz_creationORquestion_creation|
+|User|complete a quiz||
+|User|edit or delete own quiz||
+|User|see data on own completed quizzes||
+|Admin|(TBC, not included in MVP)||
