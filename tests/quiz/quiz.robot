@@ -20,6 +20,6 @@ User Can Add Question To Quiz
     Then User Should Be Able To Add A Question With Answer Options
 
 Questions Included In Quiz Are Listed
-    [Tags]    quiz_creation    question_creation    foodidoo
+    [Tags]    quiz_creation    question_creation
     Given User Has Added Multiple Questions To Quiz
     Then Created Questions Are Visible On Page
