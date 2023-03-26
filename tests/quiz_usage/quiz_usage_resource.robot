@@ -46,3 +46,26 @@ Quizzes Created By Other User Should Be Listed On Landing Page
     Click Button    Submit
     Landing Page Should Be Open
     Quizzes Should Be Listed On Landing Page    ${names}
+
+User Clicks To Start Quiz
+    Start Random Quiz From Landing Page
+
+User Can See Quiz Front Page
+    Quiz Start Page Should Be Open
+    Capture Page Screenshot
+
+User Can Click Through Questions
+    Quiz Start Page Should Be Open
+    Click Button    ${START_QUIZ_BUTTON}
+    Quiz Question Page Should Be Open
+    ${sanity}    Set Variable    ${30}
+    ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
+    WHILE    $count == 1 and $sanity > 0
+        ${next_btn}    Get WebElement    ${NEXT_QUESTION_BUTTON}
+        Click Button    ${next_btn}
+        ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
+        ${sanity}    Evaluate    ${sanity}-1
+        Capture Page Screenshot
+    END
+    Quiz Results Page Should Be Open
+    Capture Page Screenshot

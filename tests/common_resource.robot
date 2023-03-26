@@ -24,6 +24,15 @@ Quiz Page Should Be Open
 Quiz Details Page Should Be Open
     Title Should Be    Quiz detail
 
+Quiz Start Page Should Be Open
+    Title Should Be    Start quiz
+
+Quiz Question Page Should Be Open
+    Title Should Be    Question time!
+
+Quiz Results Page Should Be Open
+    Title Should Be    Quiz stats
+
 User Navigates To ${target} Page
     ${url}=    Get From Dictionary    ${ROUTES_DICT}    ${target}
     Go To    ${url}
@@ -80,3 +89,18 @@ Create New Quiz
         Click Button    ${ADD_QUESTION_BTN}
     END
     RETURN    ${quiz_title}    ${quiz_desc}
+
+Get All Visible Quizzes From Landing Page
+    User Navigates To Landing Page
+    Landing Page Should Be Open
+    ${quizzes}=    Get WebElements    ${VISIBLE_QUIZZES}
+    ${quizzes_text}=    Create List
+    FOR    ${quiz}    IN    @{quizzes}
+        Append To List    ${quizzes_text}    ${quiz.text}
+    END
+    RETURN    ${quizzes_text}
+
+Start Random Quiz From Landing Page
+    ${quizzes}=    Get All Visible Quizzes From Landing Page
+    ${quiz}=    Get Random Element From List    ${quizzes}
+    Click Button    //*[@id='quizlist']/div/span[text()='${quiz}']/following-sibling::a/button
