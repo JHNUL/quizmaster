@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Start quiz{% endblock %}
+{% block content %}
+  <h1>{{ quiz.title }}</h1>
+  <p>{{ quiz.quiz_description }}</p>
+  {% if question_id == -1 %}
+    <a href="/attempt/{{ quiz.id }}/stats">
+      <button>Start quiz</button>
+    </a>
+  {% else %}
+    <a href="/attempt/{{ quiz.id }}/question/{{question_id}}">
+      <button>Start quiz</button>
+    </a>
+  {% endif %}
+{% endblock %}

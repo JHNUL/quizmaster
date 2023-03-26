@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Question time!{% endblock %}
+{% block content %}
+  <h1>{{ question.question_name }}</h1>
+  <p>Answer options</p>
+  <form action="/attempt/{{ quiz_id }}/question/{{ question.id }}" method="post">
+    {% for answer in answer_opts %}
+      <div>{{ answer.answer_text }}</div>
+    {% endfor %}
+    <input type="submit" value="Next">
+  </form>
+{% endblock %}

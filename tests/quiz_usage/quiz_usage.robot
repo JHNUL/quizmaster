@@ -17,3 +17,17 @@ Quizzes Created By Other Users Are Visible On Landing Page
     [Setup]    Create User And Login
     Given User Navigates To Landing Page
     Then Quizzes Created By Other User Should Be Listed On Landing Page
+
+Quiz Can Be Started
+    [Tags]    quiz_usage
+    Given User Navigates To Landing Page
+    And Quizzes Should Be Listed On Landing Page
+    When User Clicks To Start Quiz
+    Then User Can See Quiz Front Page
+
+Quiz Questions Can Be Clicked Through
+    [Tags]    quiz_usage
+    Given User Navigates To Landing Page
+    And Quizzes Should Be Listed On Landing Page
+    When User Clicks To Start Quiz
+    Then User Can Click Through Questions

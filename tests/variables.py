@@ -14,8 +14,11 @@ DEFAULT_ANSWER_OPTIONS = 2
 MAX_ANSWER_OPTIONS = 5
 
 ANSWER_INPUTS = "//*[@id='answeropts']/input[contains(@id,'answeropt')]"
-LOGOUT_BTN = "//input[@value='Logout']"
+VISIBLE_QUIZZES = "//*[@id='quizlist']/div/span"
 
+NEXT_QUESTION_BUTTON = "//*[@id='content']/form/input[@value='Next']"
+LOGOUT_BTN = "//input[@value='Logout']"
 ADD_ANSWER_BTN = "Add answer"
 ADD_QUIZ_BTN = "Create"
 ADD_QUESTION_BTN = "Create"
+START_QUIZ_BUTTON = "Start quiz"

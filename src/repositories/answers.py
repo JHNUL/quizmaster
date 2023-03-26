@@ -17,3 +17,13 @@ class AnswerRepository:
         self.db.session.commit()
         answer_id, = cursor.fetchone()
         return answer_id
+
+    def get_answers_linked_to_question(self, question_id: int):
+        query_string = """
+            SELECT ans.* FROM question_answer
+            JOIN answer ans ON ans.id = question_answer.answer_id
+            WHERE question_answer.question_id = :question_id;
+        """
+        cursor = self.db.session.execute(
+            _text(query_string), {"question_id": question_id})
+        return cursor.fetchall()

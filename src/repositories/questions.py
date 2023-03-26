@@ -23,9 +23,9 @@ class QuestionRepository:
         query_string = """
         SELECT q.* FROM question q
         JOIN quiz_question qq ON qq.question_id = q.id
-        WHERE qq.quiz_id = :quiz_id;
+        WHERE qq.quiz_id = :quiz_id
+        ORDER BY q.id ASC;
         """
         cursor = self.db.session.execute(
             _text(query_string), {"quiz_id": quiz_id})
-        questions = cursor.fetchall()
-        return questions
+        return cursor.fetchall()

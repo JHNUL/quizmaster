@@ -1,4 +1,4 @@
-from random import randbytes
+from random import randbytes, choice
 from robot.api.deco import keyword
 
 
@@ -11,3 +11,7 @@ class Common:
         username = randbytes(8).hex()
         password = randbytes(8).hex()
         return f"{username}@quiztester.dev", password
+
+    @keyword("Get Random Element From List")
+    def get_random_element_from_list(self, elements: list):
+        return choice(elements)
