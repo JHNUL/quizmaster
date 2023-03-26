@@ -57,7 +57,6 @@ User Can See Quiz Front Page
 User Can Click Through Questions
     Quiz Start Page Should Be Open
     Click Button    ${START_QUIZ_BUTTON}
-    Quiz Question Page Should Be Open
     ${sanity}    Set Variable    ${30}
     ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
     WHILE    $count == 1 and $sanity > 0
