@@ -2,6 +2,7 @@
 Library         SeleniumLibrary
 Library         RequestsLibrary
 Library         Collections
+Library         FakerLibrary
 Library         Selenium.py
 Library         Common.py
 Variables       variables.py
@@ -47,3 +48,12 @@ Create User And Login
     Input Text    password    ${password}
     Click Button    Submit
     Landing Page Should Be Open
+
+Get Lorem Ipsum Text
+    [Arguments]    ${words}=${5}    ${as_question}=${False}
+    @{text_list}=    FakerLibrary.Words    nb=${words}
+    ${txt}=    Catenate    @{text_list}
+    IF    '${as_question}'=='${True}'
+        ${txt}=    Set Variable    ${txt}?
+    END
+    RETURN    ${txt}

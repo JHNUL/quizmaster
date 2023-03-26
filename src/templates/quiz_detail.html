@@ -4,6 +4,10 @@
   <h2>{{ quiz_title }}</h2>
   <h4>{{ quiz_created }}</h4>
   <p>{{ quiz_description }}</p>
+  <p>Questions</p>
+  {% for question in questions %}
+  <div>{{ question.question_name }}</div>
+  {% endfor %}
   <p>Add questions</p>
   <form action="/quiz/{{ quiz_id }}/question" method="post">
     <label for="questionname">Question</label>

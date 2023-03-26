@@ -68,5 +68,5 @@ docker compose up
 docker run --network="host" \
  --volume ./tests:/home/testrunner/tests \
  --volume ./test-results:/home/testrunner/test-results \
- juhanir/test-runner:0.1.0
+ juhanir/test-runner:0.1.2
 ```

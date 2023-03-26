@@ -18,3 +18,8 @@ User Can Add Question To Quiz
     And Quiz Page Should Be Open
     And User Should Be Able To Create A New Quiz
     Then User Should Be Able To Add A Question With Answer Options
+
+Questions Included In Quiz Are Listed
+    [Tags]    quiz_creation    question_creation
+    Given User Has Added Multiple Questions To Quiz
+    Then Created Questions Are Visible On Page
