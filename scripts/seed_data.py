@@ -1,4 +1,4 @@
-import psycopg2
+from psycopg2 import connect
 from os import getenv
 import random
 import argparse
@@ -18,7 +18,7 @@ args = parser.parse_args()
 print(
     f"Creating {args.users} users, with {args.quizzes} quizzes and {args.questions} questions each")
 
-conn = psycopg2.connect(
+conn = connect(
     port=5555,
     host="localhost",
     database="quizdeveloper",
