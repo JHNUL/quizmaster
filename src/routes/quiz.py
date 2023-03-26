@@ -17,25 +17,27 @@ def quiz():
 
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
 @login_required
-def quiz_detail(quiz_id):
+def quiz_detail(quiz_id: int):
     found_quiz = QuizRepository(db).get_quiz_by_id(quiz_id)
     if found_quiz is None:
-        redirect("/") # TODO: not found page
+        redirect("/")  # TODO: not found page
+    questions = QuestionRepository(db).get_questions_linked_to_quiz(quiz_id)
     return render_template(
         "quiz_detail.html",
         quiz_title=found_quiz[2],
         quiz_description=found_quiz[3],
         quiz_created=found_quiz[4],
-        quiz_id=found_quiz[0]
+        quiz_id=found_quiz[0],
+        questions=questions
     )
 
 
 @app.route("/quiz/<int:quiz_id>/question", methods=["POST"])
 @login_required
-def quiz_question(quiz_id):
+def quiz_question(quiz_id: int):
     question_name = request.form["questionname"]
     fields = request.form.items()
-    answers = [] # TODO: fail if request has > max accepted amount of answers
+    answers = []  # TODO: fail if request has > max accepted amount of answers
     for name, val in fields:
         if match("^answeropt", name) is not None:
             answers.append(val)
