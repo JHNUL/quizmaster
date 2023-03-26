@@ -10,7 +10,6 @@ Resource        ../common_resource.robot
 *** Variables ***
 ${REGISTER_LINK}    //a[@href='/register']
 ${LOGIN_LINK}       //a[@href='/login']
-${LOGOUT_BTN}       //input[@value="Logout"]
 
 
 *** Keywords ***

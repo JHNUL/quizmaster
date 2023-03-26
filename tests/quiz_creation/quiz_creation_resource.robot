@@ -4,13 +4,6 @@ Library     Screenshot
 Resource    ../common_resource.robot
 
 
-*** Variables ***
-${ANSWER_INPUTS}        //*[@id="answeropts"]/input[contains(@id,'answeropt')]
-${ADD_ANSWER_BTN}       Add answer
-${ADD_QUIZ_BTN}         Create
-${ADD_QUESTION_BTN}     Create
-
-
 *** Keywords ***
 User Should Be Able To Create A New Quiz
     ${quiz_title}    Get Lorem Ipsum Text    words=${3}
