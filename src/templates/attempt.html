@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Start quiz{% endblock %}
+{% block content %}
+  <h1>{{ quiz.title }}</h1>
+  <p>{{ quiz.quiz_description }}</p>
+  <a href="/attempt/{{ quiz.id }}/question/{{question_id}}">
+    <button>Start quiz</button>
+  </a>
+{% endblock %}

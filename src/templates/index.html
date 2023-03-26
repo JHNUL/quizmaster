@@ -5,7 +5,7 @@
   <p>Hello {{ username }}</p>
   <p>Quizzes</p>
   {% for quiz in quizzes %}
-    <div>{{ quiz.title }}</div>
+    <div>{{ quiz.title }} <a href="/attempt/{{ quiz.id }}"> <button>Attempt</button> </a> </div>
   {% endfor %}
   <a href="/quiz">
     <button>Create new quiz</button>
