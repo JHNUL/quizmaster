@@ -67,7 +67,7 @@ If you want to see the stuff happening in the browser, comment out the headless 
 
 # tests/variables.py
 - DELAY = "0 seconds"
-+ DELAY = "0.5 seconds"
++ DELAY = "0.1 seconds"
 ```
 
 The test report is generated to `test-results` folder.

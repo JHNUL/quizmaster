@@ -16,7 +16,7 @@ User Should Be Able To Create A New Quiz
 Add Maximum Number Of Answers
     ${answers}    Get Element Count    ${ANSWER_INPUTS}
     Should Be Equal As Integers    ${answers}    ${DEFAULT_ANSWER_OPTIONS}
-    ${over_max}    Evaluate    ${MAX_ANSWER_OPTIONS}+10
+    ${over_max}    Evaluate    ${MAX_ANSWER_OPTIONS}+1
     Repeat Keyword    ${over_max} times    Click Button    ${ADD_ANSWER_BTN}
     ${answers_after}    Get Element Count    ${ANSWER_INPUTS}
     Should Be Equal As Integers    ${answers_after}    ${MAX_ANSWER_OPTIONS}
