@@ -20,16 +20,16 @@ Quizzes can be created, edited, deleted and attemped by any registered user. Som
 ### User
 
 Can:
-  - create username and password
-  - log in
-  - see list of existing published quizzes from everyone
+  - create username and password DONE
+  - log in DONE
+  - see list of existing published quizzes from everyone DONE
+  - create a new quiz DONE
   - complete any quiz in the list
-  - create a new quiz
   - delete a quiz that belongs to the user (note that quiz might be used while deleting)
   - publish a quiz or keep it private
   - see all quizzes that they have created, attempted and completed
 
-### Admin
+### Admin (not MVP)
 
 Can:
  - see some aggregated data of usage, e.g. how many quizzes created at any given period of time, what percentage is private/published etc.

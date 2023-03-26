@@ -7,7 +7,7 @@ services:
     restart: "no"
     ports:
       - 5555:5432
-    volumes:
-      - ./local/db:/var/lib/postgresql/data
+    # volumes:
+    #   - ./local/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${PG_PASSWORD}
