@@ -6,6 +6,11 @@ class QuizRepository:
     def __init__(self, db: 'SQLAlchemy'):
         self.db = db
 
+    def get_all_quizzes(self):
+        query_string = "SELECT * FROM quiz;"
+        cursor = self.db.session.execute(_text(query_string))
+        return cursor.fetchall()
+
     def get_quiz_by_id(self, quiz_id):
         query_string = f"SELECT * FROM quiz WHERE id = :id"
         cursor = self.db.session.execute(_text(query_string), {"id": quiz_id})
