@@ -43,3 +43,16 @@ CREATE TABLE question_answer (
   FOREIGN KEY(question_id) REFERENCES question(id),
   FOREIGN KEY(answer_id) REFERENCES answer(id)
 );
+
+CREATE TABLE quiz_instance (
+  quizuser_id INTEGER NOT NULL,
+  quiz_id INTEGER NOT NULL,
+  question_id INTEGER NOT NULL,
+  answer_id INTEGER NOT NULL,
+  started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  finished_at TIMESTAMP,
+  FOREIGN KEY(quizuser_id) REFERENCES quizuser(id),
+  FOREIGN KEY(quiz_id) REFERENCES quiz(id),
+  FOREIGN KEY(question_id) REFERENCES question(id),
+  FOREIGN KEY(answer_id) REFERENCES answer(id)
+);
