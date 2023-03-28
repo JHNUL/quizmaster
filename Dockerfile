@@ -16,5 +16,4 @@ RUN python3 -m pip install --upgrade pip && \
   pip install --user -r requirements.txt --no-cache-dir && \
   pip cache purge
 
-USER quizmaster
 CMD [ "python3", "-m", "gunicorn", "--access-logfile=-", "--workers=2", "--threads=4",  "--worker-class=gthread", "--bind=0.0.0.0", "src.app:app" ]
