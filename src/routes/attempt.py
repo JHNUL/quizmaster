@@ -10,12 +10,15 @@ from src.repositories.answers import AnswerRepository
 @app.route("/attempt/<int:quiz_id>", methods=["GET"])
 @login_required
 def attempt(quiz_id: int):
+    user_id = session["user_id"]
     quiz = QuizRepository(db).get_quiz_by_id(quiz_id)
-    if quiz is None:
+    active_instances = QuizRepository(
+        db).get_quiz_instances(user_id, quiz_id)
+    if quiz is None or len(active_instances) > 1:
         # TODO: show some error?
         return redirect(url_for("landingpage"))
     # TODO: quiz with no questions cannot be attempted
-    return render_template("attempt.html", quiz=quiz)
+    return render_template("attempt.html", quiz=quiz, has_active_instance=len(active_instances) == 1)
 
 
 @app.route("/attempt/<int:quiz_id>/instance", methods=["POST"])
@@ -97,7 +100,8 @@ def save_question(quiz_instance_id: int, question_id: int):
     if question is None and len(all_questions) > 0:
         QuizRepository(db).complete_quiz_instance(quiz_instance_id)
         return redirect(url_for("quiz_stats", quiz_instance_id=quiz_instance_id))
-    if question is None or len(all_questions) == 0:  # If attempting to post to quiz with no questions
+    # If attempting to post to quiz with no questions
+    if question is None or len(all_questions) == 0:
         # TODO: show some error?
         return redirect(url_for("landingpage"))
     return redirect(url_for("attempt_question", quiz_instance_id=quiz_instance_id, question_id=question.id))

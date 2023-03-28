@@ -4,6 +4,10 @@
   <h1>{{ quiz.title }}</h1>
   <p>{{ quiz.quiz_description }}</p>
   <form action="/attempt/{{ quiz.id }}/instance" method="post">
-    <input type="submit" value="Start quiz">
+    {% if has_active_instance %}
+      <input type="submit" value="Continue quiz">
+    {% else %}
+      <input type="submit" value="Start quiz">
+    {% endif %}
   </form>
 {% endblock %}
