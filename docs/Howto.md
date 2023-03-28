@@ -5,6 +5,7 @@
 - Python v3.11+
 - Create virtual environment with venv (optional)
 - run `pip install -r requirements-dev.txt`
+  <br>Note that `requirements.txt` is for production use and contains minimal dependencies.
 - Docker
 - psql
 - create an `.env` file with the following content using your own passwords and secrets
