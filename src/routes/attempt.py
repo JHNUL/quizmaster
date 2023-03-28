@@ -84,8 +84,7 @@ def save_question(quiz_instance_id: int, question_id: int):
     if "answeropt" in request.form:
         answer_id = request.form["answeropt"]
     else:
-        # TODO: must be there to go forward to next question
-        pass
+        return redirect(url_for("attempt_question", quiz_instance_id=quiz_instance_id, question_id=question_id))
     QuestionRepository(db).create_new_question_instance(
         quiz_instance_id, question_id, answer_id)
     answered_questions = QuestionRepository(
