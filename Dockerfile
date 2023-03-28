@@ -20,4 +20,4 @@ USER root
 RUN apk del postgresql-dev gcc musl-dev
 
 USER quizmaster
-CMD [ "python3", "-m", "gunicorn", "--access-logfile=-", "--workers=2", "--threads=4",  "--worker-class=gthread", "--bind=0.0.0.0", "src.app:app" ]
+CMD [ "python", "-m", "gunicorn", "--access-logfile=-", "--workers=2", "--threads=4",  "--worker-class=gthread", "--bind=0.0.0.0", "src.app:app" ]
