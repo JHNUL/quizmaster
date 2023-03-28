@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, make_response
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required
@@ -66,13 +66,21 @@ def attempt_question(quiz_instance_id: int, question_id: int):
     # TODO: common logic for checking that user_id from session has
     # an active quiz instance with the parameter quiz_instance_id
     # and that the question belongs to the quiz.
-    return render_template(
+
+    # This page should never be cached in the browser, so that
+    # when navigating back with the browser, a new GET request
+    # is fired.
+    response = make_response(render_template(
         "question.html",
         quiz_instance_id=quiz_instance_id,
         question=QuestionRepository(db).get_question_by_id(question_id),
         answer_opts=AnswerRepository(
             db).get_answers_linked_to_question(question_id)
-    )
+    ))
+    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
+    response.headers.set("Pragma", "no-cache")
+    response.headers.set("Expires", 0)
+    return response
 
 
 @app.route("/attempt/<int:quiz_instance_id>/question/<int:question_id>", methods=["POST"])
