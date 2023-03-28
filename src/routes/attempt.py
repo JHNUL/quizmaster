@@ -18,7 +18,13 @@ def attempt(quiz_id: int):
         # TODO: show some error?
         return redirect(url_for("landingpage"))
     # TODO: quiz with no questions cannot be attempted
-    return render_template("attempt.html", quiz=quiz, has_active_instance=len(active_instances) == 1)
+    response = make_response(render_template(
+        "attempt.html", quiz=quiz, has_active_instance=len(active_instances) == 1))
+    response.headers.set(
+        "Cache-Control", "no-cache, no-store, must-revalidate")
+    response.headers.set("Pragma", "no-cache")
+    response.headers.set("Expires", 0)
+    return response
 
 
 @app.route("/attempt/<int:quiz_id>/instance", methods=["POST"])
@@ -70,14 +76,18 @@ def attempt_question(quiz_instance_id: int, question_id: int):
     # This page should never be cached in the browser, so that
     # when navigating back with the browser, a new GET request
     # is fired.
+    question_instance = QuestionRepository(
+        db).get_question_instance(quiz_instance_id, question_id)
     response = make_response(render_template(
         "question.html",
         quiz_instance_id=quiz_instance_id,
         question=QuestionRepository(db).get_question_by_id(question_id),
         answer_opts=AnswerRepository(
-            db).get_answers_linked_to_question(question_id)
+            db).get_answers_linked_to_question(question_id),
+        question_instance=question_instance
     ))
-    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
+    response.headers.set(
+        "Cache-Control", "no-cache, no-store, must-revalidate")
     response.headers.set("Pragma", "no-cache")
     response.headers.set("Expires", 0)
     return response
@@ -89,12 +99,14 @@ def save_question(quiz_instance_id: int, question_id: int):
     # TODO: common logic for checking that user_id from session has
     # an active quiz instance with the parameter quiz_instance_id
     # and that the question belongs to the quiz.
-    if "answeropt" in request.form:
-        answer_id = request.form["answeropt"]
-    else:
-        return redirect(url_for("attempt_question", quiz_instance_id=quiz_instance_id, question_id=question_id))
-    QuestionRepository(db).create_new_question_instance(
-        quiz_instance_id, question_id, answer_id)
+    skip_saving = "skipsaved" in request.form
+    if not skip_saving:
+        if "answeropt" in request.form:
+            answer_id = request.form["answeropt"]
+        else:
+            return redirect(url_for("attempt_question", quiz_instance_id=quiz_instance_id, question_id=question_id))
+        QuestionRepository(db).create_new_question_instance(
+            quiz_instance_id, question_id, answer_id)
     answered_questions = QuestionRepository(
         db).get_question_instances_by_quiz_instance(quiz_instance_id)
     all_questions = QuestionRepository(
