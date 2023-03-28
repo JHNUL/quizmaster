@@ -8,5 +8,10 @@ def test(ctx, include=""):
 
 
 @task
+def dev(ctx):
+    ctx.run("LOG_LEVEL=debug flask run --debug")
+
+
+@task
 def start(ctx):
-    ctx.run("LOG_LEVEL=debug flask run")
+    ctx.run("flask run")

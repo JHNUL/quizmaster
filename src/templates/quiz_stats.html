@@ -1,8 +1,18 @@
 {% extends "layout.html" %}
 {% block title %}Quiz stats{% endblock %}
 {% block content %}
-  <h2>{{ quiz_title }}</h2>
-  <h4>{{ quiz_created }}</h4>
-  <p>{{ quiz_description }}</p>
+  <h2>{{ stats.quiz_title }}</h2>
+  <p>{{ stats.quiz_description }}</p>
+  <p>Started {{ stats.started }}</p>
+  <p>Completed {{ stats.completed }}</p>
   <p>Results</p>
+  {% for question in stats.questions %}
+    <div>
+      <span>Question: {{ question.question_name }}</span>
+      <span>Answer: {{ question.answer }}</span>
+      <span>Is correct: {{ question.is_correct }}</span>
+      <span>Answered: {{ question.answer_time }}</span>
+    </div>
+  {% endfor %}
+  <a href="/">Back to quizzes</a>
 {% endblock %}

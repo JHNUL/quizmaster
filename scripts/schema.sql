@@ -17,6 +17,7 @@ CREATE TABLE quiz (
   quizuser_id INTEGER NOT NULL,
   title VARCHAR(255) NOT NULL,
   quiz_description TEXT,
+  public BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP,
   FOREIGN KEY(quizuser_id) REFERENCES quizuser(id)
@@ -42,4 +43,26 @@ CREATE TABLE question_answer (
   answer_id INTEGER NOT NULL,
   FOREIGN KEY(question_id) REFERENCES question(id),
   FOREIGN KEY(answer_id) REFERENCES answer(id)
+);
+
+CREATE TABLE quiz_instance (
+  id SERIAL PRIMARY KEY,
+  quizuser_id INTEGER NOT NULL,
+  quiz_id INTEGER NOT NULL,
+  started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  finished_at TIMESTAMP,
+  FOREIGN KEY(quizuser_id) REFERENCES quizuser(id),
+  FOREIGN KEY(quiz_id) REFERENCES quiz(id)
+);
+
+CREATE TABLE question_instance (
+  id SERIAL PRIMARY KEY,
+  quiz_instance_id INTEGER NOT NULL,
+  question_id INTEGER NOT NULL,
+  answer_id INTEGER NOT NULL,
+  answered_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  FOREIGN KEY(quiz_instance_id) REFERENCES quiz_instance(id),
+  FOREIGN KEY(question_id) REFERENCES question(id),
+  FOREIGN KEY(answer_id) REFERENCES answer(id),
+  UNIQUE (quiz_instance_id, question_id)
 );
