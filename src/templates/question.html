@@ -3,9 +3,14 @@
 {% block content %}
   <h1>{{ question.question_name }}</h1>
   <p>Answer options</p>
-  <form action="/attempt/{{ quiz_id }}/question/{{ question.id }}" method="post">
+  <form action="/attempt/{{ quiz_instance_id }}/question/{{ question.id }}" method="post">
     {% for answer in answer_opts %}
-      <div>{{ answer.answer_text }}</div>
+    <div>
+      <label>
+        <input type="radio" name="answeropt" value="{{answer.id}}">
+        {{ answer.answer_text }}
+      </label>
+    </div>
     {% endfor %}
     <input type="submit" value="Next">
   </form>
