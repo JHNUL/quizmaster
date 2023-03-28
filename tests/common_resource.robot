@@ -100,7 +100,12 @@ Get All Visible Quizzes From Landing Page
     END
     RETURN    ${quizzes_text}
 
-Start Random Quiz From Landing Page
-    ${quizzes}=    Get All Visible Quizzes From Landing Page
-    ${quiz}=    Get Random Element From List    ${quizzes}
+Start Quiz From Landing Page
+    [Arguments]    ${selectable_quizzes}=${None}
+    User Navigates To Landing Page
+    Landing Page Should Be Open
+    IF    $selectable_quizzes==${None}
+        ${selectable_quizzes}=    Get All Visible Quizzes From Landing Page
+    END
+    ${quiz}=    Get Random Element From List    ${selectable_quizzes}
     Click Button    //*[@id='quizlist']/div/span[text()='${quiz}']/following-sibling::a/button

@@ -4,6 +4,10 @@ Library     Screenshot
 Resource    ../common_resource.robot
 
 
+*** Variables ***
+${ANSWER_OPTIONS}       //*[@id="content"]/form/div/label/span
+
+
 *** Keywords ***
 Quiz Usage Suite Setup
     ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User And Login
@@ -48,23 +52,40 @@ Quizzes Created By Other User Should Be Listed On Landing Page
     Quizzes Should Be Listed On Landing Page    ${names}
 
 User Clicks To Start Quiz
-    Start Random Quiz From Landing Page
+    Start Quiz From Landing Page    ${QUIZ_NAMES}
 
 User Can See Quiz Front Page
     Quiz Start Page Should Be Open
     Capture Page Screenshot
 
+Choose Answer Option
+    ${all_options}    Get WebElements    ${ANSWER_OPTIONS}
+    ${selected_option}    Get Random Element From List    ${all_options}
+    Click Element    ${selected_option}
+    ${option_text}    Get Text    ${selected_option}
+    RETURN    ${option_text}
+
 User Can Click Through Questions
     Quiz Start Page Should Be Open
+    Capture Page Screenshot
     Click Button    ${START_QUIZ_BUTTON}
-    ${sanity}    Set Variable    ${30}
+    ${sanity}    Set Variable    ${20}
     ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
+    ${SELECTED_ANSWERS}    Create List
     WHILE    $count == 1 and $sanity > 0
+        ${selected_answer}    Choose Answer Option
+        Append To List    ${SELECTED_ANSWERS}    ${selected_answer}
+        Capture Page Screenshot
         ${next_btn}    Get WebElement    ${NEXT_QUESTION_BUTTON}
         Click Button    ${next_btn}
         ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
         ${sanity}    Evaluate    ${sanity}-1
-        Capture Page Screenshot
     END
+    Set Test Variable    ${SELECTED_ANSWERS}
     Quiz Results Page Should Be Open
     Capture Page Screenshot
+
+Final Page Shows Quiz Results
+    FOR    ${answer}    IN    @{SELECTED_ANSWERS}
+        Page Should Contain    ${answer}
+    END

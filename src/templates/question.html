@@ -16,7 +16,7 @@
           {% else %}
           <input type="radio" name="answeropt" value="{{answer.id}}">
         {% endif %}
-        {{ answer.answer_text }}
+        <span>{{ answer.answer_text }}</span>
       </label>
     </div>
     {% endfor %}

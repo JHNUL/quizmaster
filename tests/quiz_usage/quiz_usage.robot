@@ -25,9 +25,10 @@ Quiz Can Be Started
     When User Clicks To Start Quiz
     Then User Can See Quiz Front Page
 
-Quiz Questions Can Be Clicked Through
-    [Tags]    quiz_usage
+Quiz Can Be Completed
+    [Tags]    quiz_usage    foodidoo
     Given User Navigates To Landing Page
     And Quizzes Should Be Listed On Landing Page
     When User Clicks To Start Quiz
     Then User Can Click Through Questions
+    And Final Page Shows Quiz Results
