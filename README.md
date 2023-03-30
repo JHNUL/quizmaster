@@ -4,6 +4,8 @@
 
 The application allows users to create, share and complete quizzes on various topics.
 
+The deployed application is available at https://quizmaster.fly.dev/
+
 ## Documentation
 
  - [Instructions to run locally](docs/dev.md)
