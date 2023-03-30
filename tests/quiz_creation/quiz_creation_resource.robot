@@ -22,17 +22,23 @@ Add Maximum Number Of Answers
     Should Be Equal As Integers    ${answers_after}    ${MAX_ANSWER_OPTIONS}
 
 Add Text To All Visible Empty Answers
-    @{inputs}    Get WebElements    ${ANSWER_INPUTS}
+    ${inputs}    Get WebElements    ${ANSWER_INPUTS}
     FOR    ${input}    IN    @{inputs}
         ${answer}    Get Lorem Ipsum Text
         Input Text    ${input}    ${answer}
     END
+
+Define Random Question As Correct
+    ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
+    ${correct}    Get Random Element From List    ${checkboxes}
+    Click Element    ${correct}
 
 User Should Be Able To Add A Question With Answer Options
     ${question_name}    Get Lorem Ipsum Text    as_question=${True}
     Input Text    questionname    ${question_name}
     Add Maximum Number Of Answers
     Add Text To All Visible Empty Answers
+    Define Random Question As Correct
     Capture Page Screenshot
     Click Button    ${ADD_QUESTION_BTN}
     RETURN    ${question_name}

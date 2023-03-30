@@ -81,11 +81,14 @@ Create New Quiz
         ${question_name}=    Get Lorem Ipsum Text    as_question=${True}
         Input Text    questionname    ${question_name}
         Repeat Keyword    ${MAX_ANSWER_OPTIONS} times    Click Button    ${ADD_ANSWER_BTN}
-        @{inputs}=    Get WebElements    ${ANSWER_INPUTS}
+        ${inputs}=    Get WebElements    ${ANSWER_INPUTS}
         FOR    ${input}    IN    @{inputs}
             ${answer}=    Get Lorem Ipsum Text
             Input Text    ${input}    ${answer}
         END
+        ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
+        ${correct}    Get Random Element From List    ${checkboxes}
+        Click Element    ${correct}
         Click Button    ${ADD_QUESTION_BTN}
     END
     RETURN    ${quiz_title}    ${quiz_desc}

@@ -36,17 +36,18 @@ def quiz_detail(quiz_id: int):
 @login_required
 def quiz_question(quiz_id: int):
     question_name = request.form["questionname"]
+    corrects = request.form.getlist("iscorrect")
     fields = request.form.items()
     answers = []  # TODO: fail if request has > max accepted amount of answers
     for name, val in fields:
         if match("^answeropt", name) is not None:
-            answers.append(val)
+            answers.append((val, len([c for c in corrects if c == name]) > 0))
     question_id = QuestionRepository(db).create_new_question(question_name)
     conn_repo = ConnectionRepository(db)
     conn_repo.link_question_to_quiz(question_id, quiz_id)
     answer_repo = AnswerRepository(db)
-    for answer in answers:
-        answer_id = answer_repo.create_new_answer(answer)
+    for answer, is_correct in answers:
+        answer_id = answer_repo.create_new_answer(answer, is_correct)
         conn_repo.link_answer_to_question(answer_id, question_id)
     return redirect(f"/quiz/{quiz_id}")
 
