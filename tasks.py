@@ -9,9 +9,9 @@ def test(ctx, include=""):
 
 @task
 def dev(ctx):
-    ctx.run("LOG_LEVEL=debug flask run --debug")
+    ctx.run("FLASK_APP=src/app.py LOG_LEVEL=debug flask run --debug")
 
 
 @task
 def start(ctx):
-    ctx.run("flask run")
+    ctx.run("FLASK_APP=src/app.py flask run")

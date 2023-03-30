@@ -19,7 +19,7 @@ print(
     f"Creating {args.users} users, with {args.quizzes} quizzes and {args.questions} questions each")
 
 conn = connect(
-    port=5555,
+    port=5432,
     host="localhost",
     database="quizdeveloper",
     user="postgres",

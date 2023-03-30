@@ -19,7 +19,7 @@ jobs:
       - run: chmod 777 ${{ github.workspace }}/test-results
       - run: docker compose -f ${{ github.workspace }}/docker-compose-ci.yml up -d
       - run: docker pull juhanir/test-runner:0.1.2
-      - run: PGPASSWORD=${{secrets.PG_PW}} ${{ github.workspace }}/scripts/reset_db.sh
+      - run: PGPASSWORD=${{secrets.PG_PW}} ${{ github.workspace }}/scripts/initialize_db.sh
       - run: |
           docker run --network="host" \
           --volume ${{ github.workspace }}/tests:/home/testrunner/tests \

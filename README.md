@@ -4,10 +4,12 @@
 
 The application allows users to create, share and complete quizzes on various topics.
 
-## Technical documentation
+## Documentation
 
- - [Developing and testing](docs/Howto.md)
- - [Database schema](docs/Dbschema.md)
+ - [Instructions to run locally](docs/dev.md)
+ - [Database schema](docs/dbschema.md)
+ - [CI/CD](docs/cicd.md)
+ - [Todos](docs/todos.md)
 
 ## About the application (Draft)
 
@@ -15,7 +17,7 @@ Quizzes can consist of one to many questions each with two to five answer option
 
 ## Functionality
 
-High level functionality from user role perspective that can be tested at this point by course reviewers. Everything looks awful because function takes priority over form at this point, styles are added in the end if time permits. Robot Framework test suite tags are there for convenience, should you want to run relevant tests with the browser. See instructions in [Developing and testing](docs/Howto.md).
+High level functionality that can be tested by course reviewers. Everything looks awful because function takes priority over form at this point, styles are added in the end if time permits. Robot Framework test suite tags are there for convenience, should you want to run relevant tests and see things happening in the browser. As these are very high level, more techical and detailed tasks on how the development is going are recorded [here](docs/todos.md).
 
 List is likely to grow once development goes further but at least the non-optionals here are required for MVP.
 
