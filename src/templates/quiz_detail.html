@@ -11,12 +11,12 @@
   <p>Add questions</p>
   <form action="/quiz/{{ quiz_id }}/question" method="post">
     <label for="questionname">Question</label>
-    <textarea name="questionname" id="questionname" autocomplete="off"></textarea>
+    <textarea name="questionname" id="questionname" autocomplete="off" required></textarea>
     <span id="answeropts">
       <label for="answeropt1">Answer option 1</label>
-      <input type="text" name="answeropt1" id="answeropt1" autocomplete="off">
+      <input type="text" name="answeropt1" id="answeropt1" autocomplete="off" required>
       <label for="answeropt2">Answer option 2</label>
-      <input type="text" name="answeropt2" id="answeropt2" autocomplete="off">
+      <input type="text" name="answeropt2" id="answeropt2" autocomplete="off" required>
     </span>
     <button id="add_answeropt">Add answer</button>
     <input type="submit" value="Create">

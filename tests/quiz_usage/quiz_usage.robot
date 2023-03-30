@@ -26,7 +26,7 @@ Quiz Can Be Started
     Then User Can See Quiz Front Page
 
 Quiz Can Be Completed
-    [Tags]    quiz_usage    foodidoo
+    [Tags]    quiz_usage
     Given User Navigates To Landing Page
     And Quizzes Should Be Listed On Landing Page
     When User Clicks To Start Quiz

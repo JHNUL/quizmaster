@@ -2,9 +2,25 @@
 <h1>Register to the app</h1>
 <form action="/register" method="post">
   <label for="username">Username</label>
-  <input type="text" name="username" id="username" autocomplete="off" />
+  <input
+    type="text"
+    name="username"
+    id="username"
+    autocomplete="off"
+    title="Min 6 max 50 alphanumeric characters"
+    required
+    pattern="^[a-zA-Z0-9_@.]{6,50}$"
+  />
   <label for="password">Password</label>
-  <input type="password" name="password" id="password" autocomplete="off" />
+  <input
+    type="password"
+    name="password"
+    id="password"
+    autocomplete="off"
+    title="Min 6 max 50 alphanumeric characters, can include _!&#"
+    required
+    pattern="^[a-zA-Z0-9_!&#]{6,50}$"
+  />
   <input type="submit" value="Submit" />
 </form>
 {% if message %}

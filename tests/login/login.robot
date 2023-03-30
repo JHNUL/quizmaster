@@ -7,14 +7,18 @@ Test Teardown       Close Browser
 
 *** Test Cases ***
 User Can Register To The Application
-    [Tags]    login
+    [Tags]    register
     Given User Navigates To Register Page
     And Register Page Should Be Open
     When User Inputs Username And Password
     Then User Is Redirected To Login
 
+User Cannot Register To The Application With Invalid Username Or Password
+    [Tags]    register
+    User Should Not Be Able To Register With Invalid Username Or Password
+
 Usernames Are Unique
-    [Tags]    login
+    [Tags]    register
     Given Username Has Been Registered
     When User Inputs The Same Username
     Then User Stays On Register Page And Sees Error Message

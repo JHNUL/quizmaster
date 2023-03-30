@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     input.setAttribute("name", `answeropt${index}`);
     input.setAttribute("id", `answeropt${index}`);
     input.setAttribute("autocomplete", "off");
+    input.setAttribute("required", true);
     answerOptsContainer.appendChild(label);
     answerOptsContainer.appendChild(input);
   });
