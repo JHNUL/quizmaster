@@ -1,13 +1,11 @@
-name: deploy
+name: Deploy to Fly.io
 run-name: ${{ github.actor }} is going to deploy this turd
 on:
-  workflow_run:
-    workflows: ["System Tests"]
-    types:
-      - completed
+  push:
+    branches:
+      - "main"
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Deploy quizmaster
     runs-on: ubuntu-latest
     steps:
@@ -16,4 +14,3 @@ jobs:
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
