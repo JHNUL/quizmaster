@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const getAnswerCount = () => {
-    const answers = document.querySelectorAll("#answeropts input");
+    const answers = document.querySelectorAll("#answeropts input[type=text]");
     return answers.length;
   };
 
@@ -19,7 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
     input.setAttribute("id", `answeropt${index}`);
     input.setAttribute("autocomplete", "off");
     input.setAttribute("required", true);
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("name", "iscorrect");
+    checkbox.setAttribute("id", `iscorrect${index}`);
+    checkbox.setAttribute("value", `answeropt${index}`);
     answerOptsContainer.appendChild(label);
     answerOptsContainer.appendChild(input);
+    answerOptsContainer.appendChild(checkbox);
   });
 });
