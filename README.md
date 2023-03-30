@@ -21,7 +21,7 @@ List is likely to grow once development goes further but at least the non-option
 
 |Optional|Role|Functionality|Status|Robot tags|
 |---|---|---|---|---|
-|No|User|create username and password|DONE|loginORlogout|
+|No|User|create username and password|DONE|registerORlogin|
 |No|User|login and logout|DONE|loginORlogout|
 |No|User|see list of quizzes|DONE|quiz_creationORquestion_creation|
 |No|User|create a new quiz|DONE|quiz_creationORquestion_creation|
