@@ -19,7 +19,7 @@ This is mainly to show progress below the main functionality level. These are no
     - An answer should be made in order to go forward DONE
     - After selection the answer is locked for this attempt DONE
     - Final page should show stats about the completed quiz DONE
-    - Final page should have link to retry or go to main page DONE
+    - Final page should have link to go to main page DONE
     - Handle quiz with no questions DONE
   - answer can be defined correct (no limitation at first) DONE
   - deploy to fly.io or somewhere, integrate deployment to pipeline DONE
