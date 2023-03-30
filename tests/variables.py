@@ -14,6 +14,7 @@ DEFAULT_ANSWER_OPTIONS = 2
 MAX_ANSWER_OPTIONS = 5
 
 ANSWER_INPUTS = "//*[@id='answeropts']/input[contains(@id,'answeropt')]"
+ANSWER_CHECKBOXES = "//*[@id='answeropts']/input[contains(@id,'iscorrect')]"
 VISIBLE_QUIZZES = "//*[@id='quizlist']/div/span"
 
 NEXT_QUESTION_BUTTON = "//*[@id='content']/form/input[@value='Next']"
