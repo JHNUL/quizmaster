@@ -16,10 +16,10 @@ DATABASE_URL=postgresql+psycopg2://postgres:<PG_PASSWORD>@localhost:5432/quizdev
 SECRET_KEY=cookie_signing_key
 ```
 
-### Testing dependencies (optional)
-
-- Chrome browser
-- [Chromedriver](https://chromedriver.chromium.org/downloads) with matching version, needs to be in path.
+- Chrome browser (Optional, for testing)
+- [Chromedriver](https://chromedriver.chromium.org/downloads) with matching version, needs to be in path. (Optional, for testing)
+- Node.js v18+ (Optional, for building styles with tailwindcss)
+  - If building styles, run `npm install` in the `tailwind` folder, then `invoke styles` at the project root. This builds css stylesheets to `src/static/css` folder.
 
 ## Starting the app
 

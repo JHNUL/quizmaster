@@ -24,6 +24,7 @@ This is mainly to show progress below the main functionality level. These are no
   - answer can be defined correct (no limitation at first) DONE
   - deploy to fly.io or somewhere, integrate deployment to pipeline DONE
   - user existence should be checked from DB in login_required decorator DONE
+  - integrate some style library DONE
   - transactionality at logical level -> cannot create e.g. 3 out of 5 intended answers
     for a question, all succeed or none do
   - common error message logic
