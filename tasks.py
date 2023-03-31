@@ -15,3 +15,8 @@ def dev(ctx):
 @task
 def start(ctx):
     ctx.run("FLASK_APP=src/app.py flask run")
+
+
+@task
+def styles(ctx):
+    ctx.run("npx tailwindcss -i tailwind/src/input.css -o src/static/css/output.css")
