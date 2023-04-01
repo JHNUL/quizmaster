@@ -25,6 +25,7 @@ This is mainly to show progress below the main functionality level. These are no
   - deploy to fly.io or somewhere, integrate deployment to pipeline DONE
   - user existence should be checked from DB in login_required decorator DONE
   - integrate some style library DONE
+  - answers can be deleted, not just added
   - transactionality at logical level -> cannot create e.g. 3 out of 5 intended answers
     for a question, all succeed or none do
   - common error message logic
@@ -39,4 +40,4 @@ This is mainly to show progress below the main functionality level. These are no
   - errorhandler with not found tpl
   - change all urls to use url_for
   - comb through all todos in the code
-  - make UI look better
+  - make UI look better IN PROGRESS

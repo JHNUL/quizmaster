@@ -1,5 +1,5 @@
 const path = require("path");
-
+const colors = require("tailwindcss/colors");
 const templates = path.join(__dirname, "..", "src", "templates/**/*.html");
 const javascript = path.join(__dirname, "..", "src", "static/**/*.js");
 
@@ -7,7 +7,11 @@ const javascript = path.join(__dirname, "..", "src", "static/**/*.js");
 module.exports = {
   content: [templates, javascript],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: colors.cyan
+      }
+    },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

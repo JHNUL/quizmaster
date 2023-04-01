@@ -1,0 +1,28 @@
+{% extends "layout/base.html" %}
+{% block title %}Start quiz{% endblock %}
+{% block content %}
+  <div class="p-4 max-w-md mx-auto">
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold">{{ quiz.title }}</h2>
+      <p class="mt-2">
+        {{ quiz.quiz_description }}
+      </p>
+      <p class="mt-2">
+        Some other info on the quiz...
+      </p>
+    </div>
+    {% if empty_quiz %}
+      <p>Quiz has no questions</p>
+    {% else %}
+      <div class="flex justify-end">
+        <form action="/attempt/{{ quiz.id }}/instance" method="post">
+          {% if has_active_instance %}
+            <button class="btn-primary" type="submit">Continue quiz</button>
+            {% else %}
+            <button class="btn-primary" type="submit">Start quiz</button>
+          {% endif %}
+        </form>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

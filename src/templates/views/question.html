@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout/base.html" %}
 {% block title %}Question time!{% endblock %}
 {% block content %}
   <h1>{{ question.question_name }}</h1>
@@ -23,6 +23,6 @@
     {% if question_instance %}
       <input type="hidden" name="skipsaved" value="skipsaved">
     {% endif %}
-    <input type="submit" value="Next">
+    <button class="btn-primary" type="submit">Next</button>
   </form>
 {% endblock %}

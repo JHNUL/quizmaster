@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout/base.html" %}
 {% block title %}Quiz stats{% endblock %}
 {% block content %}
   <h2>{{ stats.quiz_title }}</h2>
@@ -14,5 +14,4 @@
       <span>Answered: {{ question.answer_time }}</span>
     </div>
   {% endfor %}
-  <a href="/">Back to quizzes</a>
 {% endblock %}
