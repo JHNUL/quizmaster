@@ -10,22 +10,33 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const index = getAnswerCount() + 1;
     if (index >= 6) return;
-    const label = document.createElement("label");
-    label.textContent = `Answer option ${index}`;
-    label.setAttribute("for", `answeropt${index}`);
-    const input = document.createElement("input");
-    input.setAttribute("type", "text");
-    input.setAttribute("name", `answeropt${index}`);
-    input.setAttribute("id", `answeropt${index}`);
-    input.setAttribute("autocomplete", "off");
-    input.setAttribute("required", true);
-    const checkbox = document.createElement("input");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("name", "iscorrect");
-    checkbox.setAttribute("id", `iscorrect${index}`);
-    checkbox.setAttribute("value", `answeropt${index}`);
-    answerOptsContainer.appendChild(label);
-    answerOptsContainer.appendChild(input);
-    answerOptsContainer.appendChild(checkbox);
+    const span = document.createElement("span");
+    span.setAttribute("id", `answer_option${index}`);
+    span.innerHTML = `
+      <label class="block mb-1 md:mb-0 pr-4" for="answeropt${index}">
+        Answer option ${index}
+      </label>
+      <div class="md:flex md:items-center mb-6">
+        <div class="md:w-11/12">
+          <input
+            class="text-input"
+            type="text"
+            name="answeropt${index}"
+            id="answeropt${index}"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="md:w-1/12 flex items-center justify-center">
+          <input
+            type="checkbox"
+            id="iscorrect${index}"
+            name="iscorrect"
+            value="answeropt${index}"
+          />
+        </div>
+      </div>
+    `;
+    answerOptsContainer.appendChild(span);
   });
 });

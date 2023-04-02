@@ -4,10 +4,6 @@ Library     Screenshot
 Resource    ../common_resource.robot
 
 
-*** Variables ***
-${ANSWER_OPTIONS}       //*[@id="content"]/form/div/label/span
-
-
 *** Keywords ***
 Quiz Usage Suite Setup
     ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User And Login
@@ -27,7 +23,7 @@ Login As Test User
     User Navigates To Login Page
     Input Text    username    ${SUITE_USERNAME}
     Input Text    password    ${SUITE_PASSWORD}
-    Click Button    Submit
+    Click Button    ${SUBMIT_BTN}
     Landing Page Should Be Open
 
 Quizzes Should Be Listed On Landing Page
@@ -47,7 +43,7 @@ Quizzes Created By Other User Should Be Listed On Landing Page
     Login Page Should Be Open
     Input Text    username    ${SUITE_USERNAME}
     Input Text    password    ${SUITE_PASSWORD}
-    Click Button    Submit
+    Click Button    ${SUBMIT_BTN}
     Landing Page Should Be Open
     Quizzes Should Be Listed On Landing Page    ${names}
 
@@ -70,22 +66,22 @@ User Can Click Through Questions
     Capture Page Screenshot
     Click Button    ${START_QUIZ_BUTTON}
     ${sanity}    Set Variable    ${20}
-    ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
+    ${count}    Get Element Count    ${NEXT_QUESTION_BTN}
     ${SELECTED_ANSWERS}    Create List
     WHILE    $count == 1 and $sanity > 0
         ${selected_answer}    Choose Answer Option
         Append To List    ${SELECTED_ANSWERS}    ${selected_answer}
         Capture Page Screenshot
-        ${next_btn}    Get WebElement    ${NEXT_QUESTION_BUTTON}
+        ${next_btn}    Get WebElement    ${NEXT_QUESTION_BTN}
         Click Button    ${next_btn}
-        ${count}    Get Element Count    ${NEXT_QUESTION_BUTTON}
+        ${count}    Get Element Count    ${NEXT_QUESTION_BTN}
         ${sanity}    Evaluate    ${sanity}-1
     END
     Set Test Variable    ${SELECTED_ANSWERS}
     Quiz Results Page Should Be Open
-    Capture Page Screenshot
 
 Final Page Shows Quiz Results
     FOR    ${answer}    IN    @{SELECTED_ANSWERS}
         Page Should Contain    ${answer}
     END
+    Capture Page Screenshot

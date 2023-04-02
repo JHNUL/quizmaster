@@ -1,0 +1,30 @@
+{% extends "layout/base.html" %} {% block title %}New quiz{% endblock %} {%
+block content %}
+<div class="p-4 max-w-md mx-auto">
+  <div class="flex-grow">
+    <h2 class="text-2xl">Create new quiz</h2>
+  </div>
+  <form action="/quiz" method="post">
+    <label for="quiztitle">Title</label>
+    <input
+      class="text-input"
+      type="text"
+      name="quiztitle"
+      id="quiztitle"
+      autocomplete="off"
+      required
+    />
+    <label for="quizdescription">Description</label>
+    <textarea
+      class="description-text-area"
+      name="quizdescription"
+      id="quizdescription"
+      autocomplete="off"
+      required
+    ></textarea>
+    <div class="flex items-center justify-center">
+      <button class="btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

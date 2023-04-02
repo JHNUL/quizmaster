@@ -9,7 +9,7 @@ options = {
     'outputdir': f"{parent_folder}/test-results",
     'log': 'log.html',
     'report': 'report.html',
-    'loglevel': 'TRACE'
+    'loglevel': 'INFO'
 }
 
 if len(argv) > 1:

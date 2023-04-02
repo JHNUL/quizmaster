@@ -21,7 +21,7 @@ def attempt(quiz_id: int):
         return redirect(url_for("landingpage"))
     # TODO: quiz with no questions cannot be attempted
     response = make_response(render_template(
-        "attempt.html", quiz=quiz, has_active_instance=len(active_instances) == 1, empty_quiz=len(questions) == 0))
+        "views/start_quiz.html", quiz=quiz, has_active_instance=len(active_instances) == 1, empty_quiz=len(questions) == 0))
     response.headers.set(
         "Cache-Control", "no-cache, no-store, must-revalidate")
     response.headers.set("Pragma", "no-cache")
@@ -81,7 +81,7 @@ def attempt_question(quiz_instance_id: int, question_id: int):
     question_instance = QuestionRepository(
         db).get_question_instance(quiz_instance_id, question_id)
     response = make_response(render_template(
-        "question.html",
+        "views/question.html",
         quiz_instance_id=quiz_instance_id,
         question=QuestionRepository(db).get_question_by_id(question_id),
         answer_opts=AnswerRepository(
@@ -148,4 +148,4 @@ def quiz_stats(quiz_instance_id: int):
                 "is_correct": row[7],
                 "answer_time": row[8]
             })
-    return render_template("quiz_stats.html", stats=stats)
+    return render_template("views/quiz_stats.html", stats=stats)

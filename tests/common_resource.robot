@@ -16,7 +16,7 @@ Login Page Should Be Open
     Title Should Be    Login
 
 Landing Page Should Be Open
-    Title Should Be    Langing page
+    Title Should Be    Quizmaster
 
 Quiz Page Should Be Open
     Title Should Be    New quiz
@@ -55,7 +55,7 @@ Create User And Login
     User Navigates To Login Page
     Input Text    username    ${username}
     Input Text    password    ${password}
-    Click Button    Submit
+    Click Button    ${SUBMIT_BTN}
     Landing Page Should Be Open
     RETURN    ${username}    ${password}
 
@@ -89,7 +89,7 @@ Create New Quiz
         ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
         ${correct}    Get Random Element From List    ${checkboxes}
         Click Element    ${correct}
-        Click Button    ${ADD_QUESTION_BTN}
+        Click Button    ${SAVE_QUESTION_BTN}
     END
     RETURN    ${quiz_title}    ${quiz_desc}
 
@@ -111,4 +111,4 @@ Start Quiz From Landing Page
         ${selectable_quizzes}=    Get All Visible Quizzes From Landing Page
     END
     ${quiz}=    Get Random Element From List    ${selectable_quizzes}
-    Click Button    //*[@id='quizlist']/div/span[text()='${quiz}']/following-sibling::a/button
+    Click Button    //*[@id='quizlist']/div//h2[text()='${quiz}']/../../a/button[text()='Open']

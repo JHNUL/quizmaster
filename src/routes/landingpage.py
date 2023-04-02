@@ -10,4 +10,4 @@ from src.repositories.quizzes import QuizRepository
 def landingpage():
     username = session["username"]
     quizzes = QuizRepository(db).get_all_quizzes()
-    return render_template("index.html", quizzes=quizzes, username=username)
+    return render_template("views/index.html", quizzes=quizzes, username=username)

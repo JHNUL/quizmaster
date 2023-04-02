@@ -25,6 +25,9 @@ This is mainly to show progress below the main functionality level. These are no
   - deploy to fly.io or somewhere, integrate deployment to pipeline DONE
   - user existence should be checked from DB in login_required decorator DONE
   - integrate some style library DONE
+  - save timestamps in ISO8601 format
+  - show timestamps in client local tz
+  - answers can be deleted, not just added
   - transactionality at logical level -> cannot create e.g. 3 out of 5 intended answers
     for a question, all succeed or none do
   - common error message logic
@@ -35,8 +38,8 @@ This is mainly to show progress below the main functionality level. These are no
   - shorter session length
   - delete a quiz that belongs to the user (note that quiz might be used while deleting)
   - publish a quiz or keep it private
-  - see all quizzes that they have created, attempted and completed
+  - user sees all quizzes that they have created, attempted and completed
   - errorhandler with not found tpl
   - change all urls to use url_for
   - comb through all todos in the code
-  - make UI look better
+  - make UI look better IN PROGRESS

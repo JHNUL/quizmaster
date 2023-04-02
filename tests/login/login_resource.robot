@@ -24,7 +24,7 @@ User Inputs Username And Password
     END
     Input Text    username    ${username}
     Input Text    password    ${password}
-    Click Button    Submit
+    Click Button    ${SUBMIT_BTN}
     RETURN    ${username}    ${password}
 
 User Is Redirected To Login

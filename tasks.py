@@ -19,4 +19,4 @@ def start(ctx):
 
 @task
 def styles(ctx):
-    ctx.run("npx tailwindcss -i tailwind/src/input.css -o src/static/css/output.css")
+    ctx.run("cd tailwind && npx tailwindcss -i ../src/static/input.css -o ../src/static/css/output.css --minify && cd -")

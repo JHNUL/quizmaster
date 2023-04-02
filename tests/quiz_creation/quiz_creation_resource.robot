@@ -40,7 +40,7 @@ User Should Be Able To Add A Question With Answer Options
     Add Text To All Visible Empty Answers
     Define Random Question As Correct
     Capture Page Screenshot
-    Click Button    ${ADD_QUESTION_BTN}
+    Click Button    ${SAVE_QUESTION_BTN}
     RETURN    ${question_name}
 
 User Has Added Multiple Questions To Quiz

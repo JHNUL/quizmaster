@@ -12,7 +12,7 @@ from src.repositories.answers import AnswerRepository
 @app.route("/quiz", methods=["GET"])
 @login_required
 def quiz():
-    return render_template("quiz.html")
+    return render_template("views/create_quiz.html")
 
 
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
@@ -23,10 +23,10 @@ def quiz_detail(quiz_id: int):
         redirect("/")  # TODO: not found page
     questions = QuestionRepository(db).get_questions_linked_to_quiz(quiz_id)
     return render_template(
-        "quiz_detail.html",
+        "views/create_question.html",
         quiz_title=found_quiz[2],
         quiz_description=found_quiz[3],
-        quiz_created=found_quiz[4],
+        quiz_created=found_quiz[5],
         quiz_id=found_quiz[0],
         questions=questions
     )
