@@ -7,7 +7,7 @@
       <p class="mt-2">
         {{ quiz.quiz_description }}
       </p>
-      <p class="mt-2">Created at {{ quiz.created_at.strftime('%Y-%m-%d %X') }} by ...</p>
+      <p class="mt-2">Created at {{ JSDate(quiz.created_at).to_locale_str() }} by user {{ username }}</p>
     </div>
     {% if empty_quiz %}
       <p>Quiz has no questions</p>

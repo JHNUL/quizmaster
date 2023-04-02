@@ -1,0 +1,6 @@
+tailwind/
+tests/
+docs/
+scripts/
+.github/
+Dockerfile*

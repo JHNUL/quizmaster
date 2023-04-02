@@ -11,6 +11,7 @@ from src.repositories.answers import AnswerRepository
 @login_required
 def attempt(quiz_id: int):
     user_id = session["user_id"]
+    username = session["username"]
     quiz = QuizRepository(db).get_quiz_by_id(quiz_id)
     questions = QuestionRepository(
         db).get_questions_linked_to_quiz(quiz_id)
@@ -21,7 +22,7 @@ def attempt(quiz_id: int):
         return redirect(url_for("landingpage"))
     # TODO: quiz with no questions cannot be attempted
     response = make_response(render_template(
-        "views/start_quiz.html", quiz=quiz, has_active_instance=len(active_instances) == 1, empty_quiz=len(questions) == 0))
+        "views/start_quiz.html", quiz=quiz, has_active_instance=len(active_instances) == 1, empty_quiz=len(questions) == 0, username=username))
     response.headers.set(
         "Cache-Control", "no-cache, no-store, must-revalidate")
     response.headers.set("Pragma", "no-cache")

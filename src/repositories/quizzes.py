@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from src.repositories.utils import _text
+from src.repositories.utils import _text, _utcnow
 
 
 class QuizRepository:
@@ -21,12 +21,12 @@ class QuizRepository:
 
     def create_new_quiz(self, user_id: int, title: str, description: str):
         query_string = """
-            INSERT INTO quiz (title, quiz_description, quizuser_id)
-            VALUES (:title, :quiz_description, :quizuser_id)
+            INSERT INTO quiz (title, quiz_description, quizuser_id, created_at)
+            VALUES (:title, :quiz_description, :quizuser_id, :created_at)
             RETURNING id;
         """
         cursor = self.db.session.execute(_text(query_string), {
-            "title": title, "quiz_description": description, "quizuser_id": user_id})
+            "title": title, "quiz_description": description, "quizuser_id": user_id, "created_at": _utcnow()})
         self.db.session.commit()
         quiz_id, = cursor.fetchone()
         return quiz_id
@@ -59,12 +59,12 @@ class QuizRepository:
 
     def create_new_quiz_instance(self, user_id: int, quiz_id: int):
         query_string = """
-            INSERT INTO quiz_instance (quizuser_id, quiz_id)
-            VALUES (:quizuser_id, :quiz_id)
+            INSERT INTO quiz_instance (quizuser_id, quiz_id, started_at)
+            VALUES (:quizuser_id, :quiz_id, :started_at)
             RETURNING id;
         """
         cursor = self.db.session.execute(_text(query_string), {
-            "quizuser_id": user_id, "quiz_id": quiz_id})
+            "quizuser_id": user_id, "quiz_id": quiz_id, "started_at": _utcnow()})
         self.db.session.commit()
         quiz_instance_id, = cursor.fetchone()
         return quiz_instance_id
@@ -72,11 +72,11 @@ class QuizRepository:
     def complete_quiz_instance(self, quiz_instance_id: int):
         query_string = """
             UPDATE quiz_instance
-            SET finished_at = NOW()
+            SET finished_at = :finished_at
             WHERE id = :id;
         """
         cursor = self.db.session.execute(_text(query_string), {
-            "id": quiz_instance_id})
+            "finished_at": _utcnow(), "id": quiz_instance_id})
         self.db.session.commit()
         return cursor.rowcount
 
