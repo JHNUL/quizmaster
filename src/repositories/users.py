@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from src.repositories.utils import _text
+from src.repositories.utils import _text, _utcnow
 
 
 class UserRepository:
@@ -27,8 +27,19 @@ class UserRepository:
         return self._get_user("username", username, include_password)
 
     def create_new_user(self, username: str, password: str):
-        query_string = "INSERT INTO quizuser (username, pw) VALUES (:username, :pw)"
+        query_string = "INSERT INTO quizuser (username, pw, created_at) VALUES (:username, :pw, :created_at)"
         self.db.session.execute(_text(query_string), {
-                                "username": username, "pw": password})
+                                "username": username, "pw": password, "created_at": _utcnow()})
         self.db.session.commit()
         return username
+
+    def set_login_time(self, user_id: int):
+        query_string = """
+            UPDATE quizuser
+            SET logged_at = :logged_at
+            WHERE id = :id;
+        """
+        self.db.session.execute(_text(query_string), {
+                                "logged_at": _utcnow(), "id": user_id})
+        self.db.session.commit()
+        return user_id

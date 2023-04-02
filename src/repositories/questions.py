@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from src.repositories.utils import _text
+from src.repositories.utils import _text, _utcnow
 
 
 class QuestionRepository:
@@ -68,12 +68,12 @@ class QuestionRepository:
 
     def create_new_question_instance(self, quiz_instance_id: int, question_id: int, answer_id: int):
         query_string = """
-            INSERT INTO question_instance (quiz_instance_id, question_id, answer_id)
-            VALUES (:quiz_instance_id, :question_id, :answer_id)
+            INSERT INTO question_instance (quiz_instance_id, question_id, answer_id, answered_at)
+            VALUES (:quiz_instance_id, :question_id, :answer_id, :answered_at)
             RETURNING id;
         """
         cursor = self.db.session.execute(
-            _text(query_string), {"quiz_instance_id": quiz_instance_id, "question_id": question_id, "answer_id": answer_id})
+            _text(query_string), {"quiz_instance_id": quiz_instance_id, "question_id": question_id, "answer_id": answer_id, "answered_at": _utcnow()})
         self.db.session.commit()
         question_instance_id, = cursor.fetchone()
         return question_instance_id

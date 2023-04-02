@@ -5,8 +5,8 @@
   <div class="mb-4">
     <h2 class="text-2xl font-bold">{{ stats.quiz_title }}</h2>
     <p class="mt-2">{{ stats.quiz_description }}</p>
-    <p class="mt-2">Started {{ stats.started.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-    <p class="mt-2">Completed {{ stats.completed.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p class="mt-2" id="quiz_starttime">Started {{ JSDate(stats.started).to_locale_str() }}</p>
+    <p class="mt-2" id="quiz_endtime">Completed {{ JSDate(stats.completed).to_locale_str() }}</p>
     <p class="mt-2">Results</p>
   </div>
   {% for question in stats.questions %}
@@ -29,7 +29,7 @@
       </div>
       <div class="flex justify-between items-center">
         <p>Answer Time:</p>
-        <p>{{ question.answer_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p>{{ JSDate(question.answer_time).to_locale_str() }}</p>
       </div>
     </div>
   {% endfor %}

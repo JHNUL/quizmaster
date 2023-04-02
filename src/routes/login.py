@@ -22,6 +22,7 @@ def login():
     if check_password_hash(user.pw, password):
         session["username"] = username
         session["user_id"] = user.id
+        user_repo.set_login_time(user.id)
         return redirect("/")
 
     return render_template("views/login.html", message="Incorrect password!")
