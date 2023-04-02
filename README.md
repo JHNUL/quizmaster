@@ -4,7 +4,7 @@
 
 The application allows users to create, share and complete quizzes on various topics.
 
-The deployed application is available at https://quizmaster.fly.dev/. However, there is some instability with the database connection that so far has no resolution. Sometimes the connection drops with `psycopg2.OperationalError: server closed the connection unexpectedly` but without any changes (no changes in code, no redeployment) it suddenly works without problems. I don't know if this is application code or fly.io issue, but so far it's not guaranteed to work. For the intermediate submission of 2nd April, do try the deployed app but might be more stable to just run locally.
+The deployed application is available at https://quizmastah.herokuapp.com/.
 
 ## Documentation
 

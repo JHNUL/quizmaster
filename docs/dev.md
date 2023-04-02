@@ -1,4 +1,4 @@
-# Instructions for development
+# Instructions for developing and running locally
 
 ## Prerequisites
 
@@ -19,7 +19,6 @@ To get the project running locally, the easiest way is with Docker since that do
 ### Docker
 
 - [Docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/install/)
-- PostgreSQL command line tool `psql`.
 
 ## Starting the app
 
