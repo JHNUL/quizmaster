@@ -5,7 +5,6 @@ local/
 .pylintrc
 README.md
 requirements-dev.txt
-scripts/
 test-results/
 tests/
 .venv/

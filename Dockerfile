@@ -16,4 +16,4 @@ RUN python3 -m pip install --upgrade pip && \
   pip install --user -r requirements.txt --no-cache-dir && \
   pip cache purge
 
-CMD [ "python3", "-m", "gunicorn", "--access-logfile=-", "--workers=1", "--threads=2",  "--worker-class=gthread", "--bind=0.0.0.0", "src.app:app" ]
+CMD [ "python3", "-m", "gunicorn", "--access-logfile=-", "--workers=2", "--threads=3",  "--worker-class=gthread", "--bind=0.0.0.0:8000", "src.app:app" ]
