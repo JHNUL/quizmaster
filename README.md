@@ -19,9 +19,11 @@ Quizzes can consist of one to many questions each with two to five answer option
 
 ## Functionality
 
-High level functionality that can be tested by course reviewers. Everything looks awful because function takes priority over form at this point, styles are added in the end if time permits. Robot Framework test suite tags are there for convenience, should you want to run relevant tests and see things happening in the browser. As these are very high level, more techical and detailed tasks on how the development is going are recorded [here](docs/todos.md).
+*High level functionality* (i.e. it is rough around the edges, but testable) that the course reviewers should expect to be there when trying it out. The user experience is still somewhat awful at this point.
 
-List is likely to grow once development goes further but at least the non-optionals here are required for MVP.
+Robot Framework test suite tags are there for convenience, should you want to run relevant tests and see things happening in the browser.
+
+List is likely to grow once development goes further but at least the non-optionals here are required for MVP. As these are very high level, more techical and detailed tasks on how the development is going are recorded [here](docs/todos.md).
 
 |Optional|Role|Functionality|Status|Robot tags|
 |---|---|---|---|---|
@@ -29,7 +31,7 @@ List is likely to grow once development goes further but at least the non-option
 |No|User|login and logout|DONE|loginORlogout|
 |No|User|see list of quizzes|DONE|quiz_creationORquestion_creation|
 |No|User|create a new quiz|DONE|quiz_creationORquestion_creation|
-|No|User|complete a quiz||
+|No|User|complete a quiz|DONE|quiz_usage|
 |No|User|can filter and search quizzes by some categories||
 |No|User|edit or delete own quiz while it is not yet published||
 |No|User|see data about quizzes that they've completed||
