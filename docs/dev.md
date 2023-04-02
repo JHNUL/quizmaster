@@ -2,45 +2,58 @@
 
 ## Prerequisites
 
+To get the project running locally, the easiest way is with Docker since that does not require any project-specific dependencies to be installed. To install and start the whole project with python, follow the section `Development dependencies`.
+
+### Development dependencies
+
 - Python v3.9+
-- Create virtual environment with venv (optional but recommended)
+- Create virtual environment with venv
 - run `pip install -r requirements-dev.txt`
   <br>Note that `requirements.txt` is for production use and contains minimal dependencies.
-- [Docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/install/) (not required if you want to use PostgreSQL installed on your OS)
 - PostgreSQL command line tool `psql`.
-- create an `.env` file with the following content using your own passwords and secrets
-
-```
-PG_PASSWORD=<your_postgres_password_for_user_postgres>
-DATABASE_URL=postgresql+psycopg2://postgres:<PG_PASSWORD>@localhost:5432/quizdeveloper
-SECRET_KEY=cookie_signing_key
-```
-
-- Chrome browser (Optional, for testing)
-- [Chromedriver](https://chromedriver.chromium.org/downloads) with matching version, needs to be in path. (Optional, for testing)
-- Node.js v18+ (Optional, for building styles with tailwindcss)
+- (Optional) Chrome browser
+- (Optional) [Chromedriver](https://chromedriver.chromium.org/downloads) with matching version, needs to be in path.
+- (Optional) Node.js v18+
   - If building styles, run `npm install` in the `tailwind` folder, then `invoke styles` at the project root. This builds css stylesheets to `src/static/css` folder. Any change to css utility classes will require a rebuild of the style sheets with `invoke styles` to take effect.
+
+### Docker
+
+- [Docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/install/)
+- PostgreSQL command line tool `psql`.
 
 ## Starting the app
 
-First, postgres must be running and available at `localhost:5432`. Easy way is to run `docker compose up` in the root folder to start a postgresql container that is isolated from the rest or your system. If you want data persistence, the `data` folder inside the postgres container must be bound to a folder on the host. This is not enabled by default. For docker compose a directive like the following will accomplish this.
+### Common steps
 
-```yml
-# in the docker-compose.yml
-quizdb:
-  # ...
-  volumes:
-    - /folder/on/host:/var/lib/postgresql/data
+- First create a `.env` file to the project root with the following content
 ```
+PG_PASSWORD=<some_pg_password>
+DATABASE_URL=postgresql+psycopg2://postgres:<some_pg_password>@<host>:5432/quizdeveloper
+SECRET_KEY=<cookie_signing_key>
+```
+- Variables to set in the env-file:
+  - `<some_pg_password>`: Password to the postgres database
+  - `<host>`: If using the docker-compose method, replace with **quizdb** otherwise use **localhost**
+  - `<cookie_signing_key>`: Some secret key used to sign the cookie
 
-- Once the database service is running it must be initialized. Run the following command in the project root. Rerunning this will overwrite existing database.
+### a) Docker
 
+Run the following command in the project root, this starts the database and app.
 ```sh
-PGPASSWORD=your_postgres_password ./scripts/initialize_db.sh
+docker compose up
+```
+Docker compose will pull the required images and set up the resources, logs will stream to the terminal window where it was started. App should become available at `localhost:5000`. To shut it down gracefully, open another terminal window and run
+```sh
+docker compose down
 ```
 
-- Start the flask app with
+### b) Not Docker
 
+Make sure your preferred installation of postgres is running and accessible at `localhost:5432`. Use the schema from `scripts/schema.sql` to initialize the database.
+
+Db initialization could be done like this `psql -h localhost -p 5432 -U postgres < scripts/schema.sql`. This should be done before starting the app.
+
+Then start the flask app from project root with
 ```sh
 invoke dev
 ```

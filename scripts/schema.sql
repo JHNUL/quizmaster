@@ -1,5 +1,3 @@
-DROP DATABASE IF EXISTS quizdeveloper;
-
 CREATE DATABASE quizdeveloper;
 
 \c quizdeveloper;
