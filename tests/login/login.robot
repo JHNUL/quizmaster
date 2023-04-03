@@ -74,3 +74,12 @@ User Should Be Able To Logout From The Application
     Given User Is Logged In
     Then User Can Find Logout Button
     And Pressing Logout Button Logs User Out Of The Application
+
+Login Button Should Be Disabled If User Is Not Logged In
+    [Tags]    logout
+    Given User Navigates To Login Page
+    Then User Can Find Logout Button
+    And Logout Button Should Be Disabled
+    Then User Navigates To Register Page
+    And User Can Find Logout Button
+    And Logout Button Should Be Disabled

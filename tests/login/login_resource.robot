@@ -8,8 +8,9 @@ Resource        ../common_resource.robot
 
 
 *** Variables ***
-${REGISTER_LINK}    //a[@href='/register']
-${LOGIN_LINK}       //a[@href='/login']
+${REGISTER_LINK}            //a[@href='/register']
+${LOGIN_LINK}               //a[@href='/login']
+${LOGOUT_BTN_DISABLED}      //*[@id='appheader']/div//form/button[text()='Logout' and @disabled]
 
 
 *** Keywords ***
@@ -92,3 +93,6 @@ Pressing Logout Button Logs User Out Of The Application
     Login Page Should Be Open
     Go Back
     Login Page Should Be Open
+
+Logout Button Should Be Disabled
+    Page Should Contain Element    ${LOGOUT_BTN_DISABLED}

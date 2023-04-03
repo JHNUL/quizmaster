@@ -27,6 +27,8 @@ This is mainly to show progress below the main functionality level. These are no
   - integrate some style library DONE
   - save timestamps in ISO8601 format DONE
   - show timestamps in client local tz DONE
+  - logout button disabled when user not logged in DONE
+  - better UX at question creation
   - answers can be deleted, not just added
   - transactionality at logical level -> cannot create e.g. 3 out of 5 intended answers
     for a question, all succeed or none do
@@ -42,4 +44,6 @@ This is mainly to show progress below the main functionality level. These are no
   - errorhandler with not found tpl
   - change all urls to use url_for
   - comb through all todos in the code
+
+  - refine functionality documentation IN PROGRESS
   - make UI look better IN PROGRESS
