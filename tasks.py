@@ -1,4 +1,3 @@
-import sys
 from invoke import task
 
 
