@@ -15,7 +15,7 @@ class UserRepository:
                 f"SELECT {', '.join(basic_attributes)} FROM quizuser WHERE id = :value"
             )
         elif attribute == "username":
-            attrs = ', '.join(basic_attributes)
+            attrs = ", ".join(basic_attributes)
             query_string = f"SELECT {attrs} FROM quizuser WHERE username = :value"
         cursor = self.database.session.execute(_text(query_string), {"value": value})
         users = cursor.fetchall()
