@@ -10,8 +10,16 @@ User Should Be Able To Create A New Quiz
     ${quiz_desc}    Get Lorem Ipsum Text    words=${10}
     Input Text    quiztitle    ${quiz_title}
     Input Text    quizdescription    ${quiz_desc}
-    Click Button    ${ADD_QUIZ_BTN}
+    Click Ok Button
     Quiz Details Page Should Be Open
+
+User Should Be Able To Start And Cancel Quiz Creation
+    ${quiz_title}    Get Lorem Ipsum Text    words=${3}
+    ${quiz_desc}    Get Lorem Ipsum Text    words=${10}
+    Input Text    quiztitle    ${quiz_title}
+    Input Text    quizdescription    ${quiz_desc}
+    Click Cancel Button
+    Landing Page Should Be Open
 
 Add Maximum Number Of Answers
     ${answers}    Get Element Count    ${ANSWER_INPUTS}
@@ -35,6 +43,7 @@ Define Random Question As Correct
 
 User Should Be Able To Add A Question With Answer Options
     ${question_name}    Get Lorem Ipsum Text    as_question=${True}
+    Click Button    Add question
     Input Text    questionname    ${question_name}
     Add Maximum Number Of Answers
     Add Text To All Visible Empty Answers
@@ -60,3 +69,26 @@ Created Questions Are Visible On Page
         Page Should Contain    ${question}
     END
     Capture Page Screenshot
+
+User Has Created A Quiz
+    User Navigates To Quiz Page
+    Quiz Page Should Be Open
+    User Should Be Able To Create A New Quiz
+
+User Can Adjust The Amount Of Answer Options
+    Click Button    Add question
+    ${answers}    Get Element Count    ${ANSWER_INPUTS}
+    Should Be Equal As Integers    ${answers}    ${DEFAULT_ANSWER_OPTIONS}
+    Repeat Keyword    2 times    Click Button    ${ADD_ANSWER_BTN}
+    ${answers_after}    Get Element Count    ${ANSWER_INPUTS}
+    Should Be Equal As Integers    ${answers_after}    ${4}
+    Click Button    ${REMOVE_ANSWER_BTN}
+    ${answers_after}    Get Element Count    ${ANSWER_INPUTS}
+    Should Be Equal As Integers    ${answers_after}    ${3}
+
+User Can Cancel Question Creation
+    ${attr}    SeleniumLibrary.Get Element Attribute    id:add_question_form    style
+    Should Be Equal As Strings    ${attr}    display: block;
+    Click Cancel Button
+    ${attr}    SeleniumLibrary.Get Element Attribute    id:add_question_form    style
+    Should Be Equal As Strings    ${attr}    display: none;
