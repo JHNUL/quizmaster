@@ -4,6 +4,7 @@ from src.routes.utils import JSDate
 
 app = Flask(__name__, instance_relative_config=True)
 app.secret_key = getenv("SECRET_KEY")
+# pylint: disable=no-member
 app.jinja_env.globals['JSDate'] = JSDate
 
 # Must be after app initialization

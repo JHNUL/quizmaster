@@ -3,8 +3,8 @@ from src.repositories.utils import _text
 
 
 class AnswerRepository:
-    def __init__(self, db: 'SQLAlchemy'):
-        self.db = db
+    def __init__(self, database: "SQLAlchemy"):
+        self.database = database
 
     def create_new_answer(self, answer_text: str, is_correct=False) -> int:
         query_string = """
@@ -12,10 +12,11 @@ class AnswerRepository:
             VALUES (:answer_text, :is_correct)
             RETURNING id;
         """
-        cursor = self.db.session.execute(
-            _text(query_string), {"answer_text": answer_text, "is_correct": is_correct})
-        self.db.session.commit()
-        answer_id, = cursor.fetchone()
+        cursor = self.database.session.execute(
+            _text(query_string), {"answer_text": answer_text, "is_correct": is_correct}
+        )
+        self.database.session.commit()
+        (answer_id,) = cursor.fetchone()
         return answer_id
 
     def get_answers_linked_to_question(self, question_id: int):
@@ -24,6 +25,7 @@ class AnswerRepository:
             JOIN answer ans ON ans.id = question_answer.answer_id
             WHERE question_answer.question_id = :question_id;
         """
-        cursor = self.db.session.execute(
-            _text(query_string), {"question_id": question_id})
+        cursor = self.database.session.execute(
+            _text(query_string), {"question_id": question_id}
+        )
         return cursor.fetchall()
