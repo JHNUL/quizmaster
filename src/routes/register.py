@@ -20,5 +20,6 @@ def register():
         pass_hash = generate_password_hash(password)
         user_repo.create_new_user(username, pass_hash)
         return redirect("/login")
-    else:
-        return render_template("views/register.html", message=f"Username not available!")
+    return render_template(
+        "views/register.html", message="Username not available!"
+    )

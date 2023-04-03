@@ -3,7 +3,7 @@ from src.repositories.utils import _text, _utcnow
 
 
 class QuizRepository:
-    def __init__(self, database: 'SQLAlchemy'):
+    def __init__(self, database: "SQLAlchemy"):
         self.database = database
 
     def get_all_quizzes(self):
@@ -13,8 +13,7 @@ class QuizRepository:
 
     def get_quiz_by_id(self, quiz_id):
         query_string = "SELECT * FROM quiz WHERE id = :id"
-        cursor = self.database.session.execute(
-            _text(query_string), {"id": quiz_id})
+        cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
         quizzes = cursor.fetchall()
         if len(quizzes) == 0:
             return None
@@ -26,10 +25,17 @@ class QuizRepository:
             VALUES (:title, :quiz_description, :quizuser_id, :created_at)
             RETURNING id;
         """
-        cursor = self.database.session.execute(_text(query_string), {
-            "title": title, "quiz_description": description, "quizuser_id": user_id, "created_at": _utcnow()})
+        cursor = self.database.session.execute(
+            _text(query_string),
+            {
+                "title": title,
+                "quiz_description": description,
+                "quizuser_id": user_id,
+                "created_at": _utcnow(),
+            },
+        )
         self.database.session.commit()
-        quiz_id, = cursor.fetchone()
+        (quiz_id,) = cursor.fetchone()
         return quiz_id
 
     def get_quiz_instances(self, user_id: int, quiz_id: int, only_active=True):
@@ -45,14 +51,16 @@ class QuizRepository:
                 AND quiz_id = :quiz_id
                 AND finished_at IS NULL;
             """
-        cursor = self.database.session.execute(_text(query_string), {
-            "quizuser_id": user_id, "quiz_id": quiz_id})
+        cursor = self.database.session.execute(
+            _text(query_string), {"quizuser_id": user_id, "quiz_id": quiz_id}
+        )
         return cursor.fetchall()
 
     def get_quiz_instance_by_id(self, quiz_instance_id: int):
-        query_string = f"SELECT * FROM quiz_instance WHERE id = :id"
+        query_string = "SELECT * FROM quiz_instance WHERE id = :id"
         cursor = self.database.session.execute(
-            _text(query_string), {"id": quiz_instance_id})
+            _text(query_string), {"id": quiz_instance_id}
+        )
         instances = cursor.fetchall()
         if len(instances) == 0:
             return None
@@ -64,10 +72,12 @@ class QuizRepository:
             VALUES (:quizuser_id, :quiz_id, :started_at)
             RETURNING id;
         """
-        cursor = self.database.session.execute(_text(query_string), {
-            "quizuser_id": user_id, "quiz_id": quiz_id, "started_at": _utcnow()})
+        cursor = self.database.session.execute(
+            _text(query_string),
+            {"quizuser_id": user_id, "quiz_id": quiz_id, "started_at": _utcnow()},
+        )
         self.database.session.commit()
-        quiz_instance_id, = cursor.fetchone()
+        (quiz_instance_id,) = cursor.fetchone()
         return quiz_instance_id
 
     def complete_quiz_instance(self, quiz_instance_id: int):
@@ -76,8 +86,9 @@ class QuizRepository:
             SET finished_at = :finished_at
             WHERE id = :id;
         """
-        cursor = self.database.session.execute(_text(query_string), {
-            "finished_at": _utcnow(), "id": quiz_instance_id})
+        cursor = self.database.session.execute(
+            _text(query_string), {"finished_at": _utcnow(), "id": quiz_instance_id}
+        )
         self.database.session.commit()
         return cursor.rowcount
 
@@ -100,6 +111,7 @@ class QuizRepository:
             LEFT JOIN answer a ON a.id = qui.answer_id
             WHERE qi.quizuser_id = :quizuser_id AND qi.id = :id;
         """
-        cursor = self.database.session.execute(_text(query_string), {
-            "quizuser_id": user_id, "id": quiz_instance_id})
+        cursor = self.database.session.execute(
+            _text(query_string), {"quizuser_id": user_id, "id": quiz_instance_id}
+        )
         return cursor.fetchall()

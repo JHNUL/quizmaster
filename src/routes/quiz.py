@@ -1,5 +1,5 @@
-from flask import render_template, redirect, request, session
 from re import match
+from flask import render_template, redirect, request, session
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required
@@ -28,7 +28,7 @@ def quiz_detail(quiz_id: int):
         quiz_description=found_quiz[3],
         quiz_created=found_quiz[5],
         quiz_id=found_quiz[0],
-        questions=questions
+        questions=questions,
     )
 
 

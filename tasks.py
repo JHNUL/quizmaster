@@ -20,6 +20,7 @@ def start(ctx):
 
 @task
 def styles(ctx):
+    # pylint: disable=line-too-long
     ctx.run("cd tailwind && npx tailwindcss -i ../src/static/input.css -o ../src/static/css/output.css --minify && cd -")
 
 
@@ -29,5 +30,5 @@ def lint(ctx):
 
 
 @task
-def format(ctx):
+def prettify(ctx):
     ctx.run("black src/**/*.py")
