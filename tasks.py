@@ -1,3 +1,4 @@
+import sys
 from invoke import task
 
 
@@ -20,3 +21,13 @@ def start(ctx):
 @task
 def styles(ctx):
     ctx.run("cd tailwind && npx tailwindcss -i ../src/static/input.css -o ../src/static/css/output.css --minify && cd -")
+
+
+@task
+def lint(ctx):
+    ctx.run("pylint src/**/*.py")
+
+
+@task
+def format(ctx):
+    ctx.run("black src/**/*.py")

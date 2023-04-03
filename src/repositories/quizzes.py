@@ -3,17 +3,18 @@ from src.repositories.utils import _text, _utcnow
 
 
 class QuizRepository:
-    def __init__(self, db: 'SQLAlchemy'):
-        self.db = db
+    def __init__(self, database: 'SQLAlchemy'):
+        self.database = database
 
     def get_all_quizzes(self):
         query_string = "SELECT * FROM quiz;"
-        cursor = self.db.session.execute(_text(query_string))
+        cursor = self.database.session.execute(_text(query_string))
         return cursor.fetchall()
 
     def get_quiz_by_id(self, quiz_id):
-        query_string = f"SELECT * FROM quiz WHERE id = :id"
-        cursor = self.db.session.execute(_text(query_string), {"id": quiz_id})
+        query_string = "SELECT * FROM quiz WHERE id = :id"
+        cursor = self.database.session.execute(
+            _text(query_string), {"id": quiz_id})
         quizzes = cursor.fetchall()
         if len(quizzes) == 0:
             return None
@@ -25,9 +26,9 @@ class QuizRepository:
             VALUES (:title, :quiz_description, :quizuser_id, :created_at)
             RETURNING id;
         """
-        cursor = self.db.session.execute(_text(query_string), {
+        cursor = self.database.session.execute(_text(query_string), {
             "title": title, "quiz_description": description, "quizuser_id": user_id, "created_at": _utcnow()})
-        self.db.session.commit()
+        self.database.session.commit()
         quiz_id, = cursor.fetchone()
         return quiz_id
 
@@ -44,13 +45,13 @@ class QuizRepository:
                 AND quiz_id = :quiz_id
                 AND finished_at IS NULL;
             """
-        cursor = self.db.session.execute(_text(query_string), {
+        cursor = self.database.session.execute(_text(query_string), {
             "quizuser_id": user_id, "quiz_id": quiz_id})
         return cursor.fetchall()
 
     def get_quiz_instance_by_id(self, quiz_instance_id: int):
         query_string = f"SELECT * FROM quiz_instance WHERE id = :id"
-        cursor = self.db.session.execute(
+        cursor = self.database.session.execute(
             _text(query_string), {"id": quiz_instance_id})
         instances = cursor.fetchall()
         if len(instances) == 0:
@@ -63,9 +64,9 @@ class QuizRepository:
             VALUES (:quizuser_id, :quiz_id, :started_at)
             RETURNING id;
         """
-        cursor = self.db.session.execute(_text(query_string), {
+        cursor = self.database.session.execute(_text(query_string), {
             "quizuser_id": user_id, "quiz_id": quiz_id, "started_at": _utcnow()})
-        self.db.session.commit()
+        self.database.session.commit()
         quiz_instance_id, = cursor.fetchone()
         return quiz_instance_id
 
@@ -75,9 +76,9 @@ class QuizRepository:
             SET finished_at = :finished_at
             WHERE id = :id;
         """
-        cursor = self.db.session.execute(_text(query_string), {
+        cursor = self.database.session.execute(_text(query_string), {
             "finished_at": _utcnow(), "id": quiz_instance_id})
-        self.db.session.commit()
+        self.database.session.commit()
         return cursor.rowcount
 
     def get_quiz_instance_stats(self, quiz_instance_id: int, user_id: int):
@@ -99,6 +100,6 @@ class QuizRepository:
             LEFT JOIN answer a ON a.id = qui.answer_id
             WHERE qi.quizuser_id = :quizuser_id AND qi.id = :id;
         """
-        cursor = self.db.session.execute(_text(query_string), {
+        cursor = self.database.session.execute(_text(query_string), {
             "quizuser_id": user_id, "id": quiz_instance_id})
         return cursor.fetchall()
