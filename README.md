@@ -15,7 +15,7 @@ The deployed application is available at https://quizmastah.herokuapp.com/.
 
 ## About the application (Draft)
 
-Quizzes can consist of one to many questions each with two to five answer options, only one of which is correct. User can select the answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. One attempt of a quiz is a single instance, same quizzes can be filled many times each saving the results as a new instance of that quiz for the user. Quiz attempts are timed and some score on a quiz is calculated based on how many correct answers there were and how quick they were answered.
+Quizzes can consist of one to many questions each with two to five answer options. User can select the answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. One attempt of a quiz is a single instance, same quizzes can be filled many times each saving the results as a new instance of that quiz for the user. Quiz attempts are timed and some score on a quiz is calculated based on how many correct answers there were and how quick they were answered.
 
 ## Functionality
 
