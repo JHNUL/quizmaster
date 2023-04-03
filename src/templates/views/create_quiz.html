@@ -4,7 +4,7 @@ block content %}
   <div class="flex-grow">
     <h2 class="text-2xl">Create new quiz</h2>
   </div>
-  <form action="/quiz" method="post">
+  <form id="add_quiz_form" action="/quiz" method="post">
     <label for="quiztitle">Title</label>
     <input
       class="text-input"
@@ -22,8 +22,11 @@ block content %}
       autocomplete="off"
       required
     ></textarea>
-    <div class="flex items-center justify-center">
-      <button class="btn-primary" type="submit">Create</button>
+    <div class="flex items-center justify-between">
+      <a href="/">
+        <button id="cancel_quiz" class="btn-primary" type="button">Cancel</button>
+      </a>
+      <button class="btn-primary" type="submit">OK</button>
     </div>
   </form>
 </div>
