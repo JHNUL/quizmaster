@@ -37,6 +37,12 @@ User Navigates To ${target} Page
     ${url}=    Get From Dictionary    ${ROUTES_DICT}    ${target}
     Go To    ${url}
 
+Click Ok Button
+    Click Button    OK
+
+Click Cancel Button
+    Click Button    Cancel
+
 Open And Configure Browser
     ${options}=    Get Chrome Options
     Open Browser    browser=${BROWSER}    options=${options}
@@ -75,9 +81,10 @@ Create New Quiz
     ${quiz_desc}=    Get Lorem Ipsum Text    words=${10}
     Input Text    quiztitle    ${quiz_title}
     Input Text    quizdescription    ${quiz_desc}
-    Click Button    ${ADD_QUIZ_BTN}
+    Click Ok Button
     Quiz Details Page Should Be Open
     FOR    ${i}    IN RANGE    5
+        Click Button    Add question
         ${question_name}=    Get Lorem Ipsum Text    as_question=${True}
         Input Text    questionname    ${question_name}
         Repeat Keyword    ${MAX_ANSWER_OPTIONS} times    Click Button    ${ADD_ANSWER_BTN}

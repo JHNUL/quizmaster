@@ -1,6 +1,5 @@
-{% extends "layout/base.html" %}
-{% block title %}Quiz detail{% endblock %}
-{% block content %}
+{% extends "layout/base.html" %} {% block title %}Quiz detail{% endblock %} {%
+block content %}
 <div class="p-4 max-w-md mx-auto">
   <div class="flex-grow">
     <h2 class="text-2xl">{{ quiz_title }}</h2>
@@ -10,15 +9,26 @@
   </div>
   <div class="flex-grow">
     <p class="mt-2">Questions:</p>
-    {% if question|length == 0 %}
-      <p class="mt-2">No questions yet</p>
+    {% if questions|length == 0 %}
+    <p class="mt-2">No questions yet</p>
+    {% else %}
+    <ul>
+      {% for question in questions %}
+      <li class="mt-2">{{ question.question_name }}</li>
+      {% endfor %}
+    </ul>
     {% endif %}
-    {% for question in questions %}
-      <p class="mt-2">{{ question.question_name }}</p>
-    {% endfor %}
-    <p class="mt-2">Add questions</p>
+    <button class="btn-primary" id="add_question">Add question</button>
+    <a href="/">
+      <button class="btn-primary" id="finish_creation">Done</button>
+    </a>
   </div>
-  <form action="/quiz/{{ quiz_id }}/question" method="post">
+  <form
+    id="add_question_form"
+    action="/quiz/{{ quiz_id }}/question"
+    method="post"
+    style="display: none"
+  >
     <label for="questionname">Question</label>
     <textarea
       class="description-text-area"
@@ -29,10 +39,10 @@
     ></textarea>
     <div id="answeropts">
       <span id="answer_option1">
-        <label class="block mb-1 md:mb-0 pr-4" for="answeropt1">
+        <label class="block md:mb-0 pr-4" for="answeropt1">
           Answer option 1
         </label>
-        <div class="md:flex md:items-center mb-6">
+        <div class="md:flex md:items-center mt-1">
           <div class="md:w-11/12">
             <input
               class="text-input"
@@ -54,10 +64,10 @@
         </div>
       </span>
       <span id="answer_option2">
-        <label class="block mb-1 md:mb-0 pr-4" for="answeropt2">
+        <label class="block md:mb-0 pr-4" for="answeropt2">
           Answer option 2
         </label>
-        <div class="md:flex md:items-center mb-6">
+        <div class="md:flex md:items-center mt-1">
           <div class="md:w-11/12">
             <input
               class="text-input"
@@ -79,11 +89,15 @@
         </div>
       </span>
     </div>
-    <div>
-      <button class="btn-small" id="add_answeropt">+</button>
-    </div>
     <div class="flex items-center justify-center">
-      <button id="save_question" class="btn-primary" type="submit">Save question</button>
+      <button class="btn-small" id="remove_answeropt">&minus;</button>
+      <button class="btn-small" id="add_answeropt">&plus;</button>
+    </div>
+    <div class="flex items-center justify-between">
+      <button id="cancel_question" class="btn-primary">
+        Cancel
+      </button>
+      <button id="save_question" class="btn-primary" type="submit">OK</button>
     </div>
   </form>
 </div>
