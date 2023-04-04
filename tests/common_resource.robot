@@ -59,11 +59,13 @@ Create User And Login
     Status Should Be    200    ${res}
     Open And Configure Browser
     User Navigates To Login Page
-    Input Text    username    ${username}
-    Input Text    password    ${password}
+    Input Text    username    ${USERNAME}
+    Input Text    password    ${PASSWORD}
     Click Button    ${SUBMIT_BTN}
     Landing Page Should Be Open
-    RETURN    ${username}    ${password}
+    Set Suite Variable    ${USERNAME}
+    Set Suite Variable    ${PASSWORD}
+    RETURN    ${USERNAME}    ${PASSWORD}
 
 Get Lorem Ipsum Text
     [Arguments]    ${words}=${5}    ${as_question}=${False}

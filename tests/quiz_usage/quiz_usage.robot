@@ -32,3 +32,9 @@ Quiz Can Be Completed
     When User Clicks To Start Quiz
     Then User Can Click Through Questions
     And Final Page Shows Quiz Results
+
+Quiz Details Should Show Correct Creator For Quiz
+    [Tags]    quiz_usage
+    [Setup]    Create User And Login
+    When User Starts A Quiz Created By Another User
+    Then Quiz Front Page Should Show Correct Creator For Quiz
