@@ -19,6 +19,18 @@ class QuizRepository:
             return None
         return quizzes[0]
 
+    def get_quiz_by_id_attach_user(self, quiz_id):
+        query_string = """
+            SELECT q.*, qu.username as quiz_creator FROM quiz q
+            JOIN quizuser qu ON qu.id = q.quizuser_id
+            WHERE q.id = :id;
+        """
+        cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
+        quizzes = cursor.fetchall()
+        if len(quizzes) == 0:
+            return None
+        return quizzes[0]
+
     def create_new_quiz(self, user_id: int, title: str, description: str):
         query_string = """
             INSERT INTO quiz (title, quiz_description, quizuser_id, created_at)

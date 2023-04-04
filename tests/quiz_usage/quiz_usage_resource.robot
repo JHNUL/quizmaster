@@ -85,3 +85,11 @@ Final Page Shows Quiz Results
         Page Should Contain    ${answer}
     END
     Capture Page Screenshot
+
+User Starts A Quiz Created By Another User
+    User Clicks To Start Quiz
+    Quiz Start Page Should Be Open
+
+Quiz Front Page Should Show Correct Creator For Quiz
+    Page Should Contain    ${SUITE_USERNAME}
+    Page Should Not Contain    ${USERNAME}
