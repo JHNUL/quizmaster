@@ -106,3 +106,44 @@ class QuestionRepository:
         if len(instances) == 0:
             return None
         return instances[0]
+
+    def get_full_question(
+        self, quiz_instance_id: int, question_id: int, quizuser_id: int
+    ):
+        """Parameters:
+            quiz_instance_id: (int)
+            question_id: (int)
+            quizuser_id: (int)
+
+        Returns: question with answer options if question belongs to this
+        quiz instance and quiz instance belongs to this user. Also returns
+        given answer if question was already answered.
+        """
+        query_string = """
+            SELECT
+                qq.*,
+                q.question_name,
+                qui.id as question_instance_id,
+                qui.question_id as qui_question_id,
+                qui.answer_id,
+                qui.answered_at,
+                a.id as answer_option_id,
+                a.answer_text as answer_text,
+                a.is_correct as is_correct
+            FROM quiz_instance qi
+            LEFT JOIN quiz_question qq ON qq.quiz_id = qi.quiz_id
+            LEFT JOIN question q ON q.id = qq.question_id
+            LEFT JOIN question_instance qui ON qui.quiz_instance_id = qi.id AND qui.question_id = qq.question_id
+            LEFT JOIN question_answer qa ON qa.question_id = qq.question_id
+            LEFT JOIN answer a ON qa.answer_id = a.id
+            WHERE qi.id = :id AND qi.quizuser_id = :quizuser_id AND qq.question_id = :question_id;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string),
+            {
+                "id": quiz_instance_id,
+                "quizuser_id": quizuser_id,
+                "question_id": question_id,
+            },
+        )
+        return cursor.fetchall()

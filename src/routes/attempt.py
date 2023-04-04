@@ -4,7 +4,6 @@ from src.db import db
 from src.routes.decorators import login_required, no_cache
 from src.repositories.quizzes import QuizRepository
 from src.repositories.questions import QuestionRepository
-from src.repositories.answers import AnswerRepository
 
 
 @app.route("/attempt/<int:quiz_id>", methods=["GET"])
@@ -66,22 +65,24 @@ def create_quiz_instance(quiz_id: int):
 @login_required
 @no_cache
 def attempt_question(quiz_instance_id: int, question_id: int):
-    # TODO: common logic for checking that user_id from session has
-    # an active quiz instance with the parameter quiz_instance_id
-    # and that the question belongs to the quiz.
-
-    # This page should never be cached in the browser, so that
-    # when navigating back with the browser, a new GET request
-    # is fired.
-    question_instance = QuestionRepository(db).get_question_instance(
-        quiz_instance_id, question_id
+    user_id = session["user_id"]
+    question_instance = QuestionRepository(db).get_full_question(
+        quiz_instance_id, question_id, user_id
     )
+    if len(question_instance) == 0:
+        # TODO: show some error?
+        return redirect(url_for("landingpage"))
+    question = {}
+    question["question_name"] = question_instance[0].question_name
+    question["question_id"] = question_instance[0].question_id
+    question["answer_id"] = question_instance[0].answer_id
+    question["answer_options"] = [
+        (row.answer_option_id, row.answer_text) for row in question_instance
+    ]
     return render_template(
         "views/question.html",
         quiz_instance_id=quiz_instance_id,
-        question=QuestionRepository(db).get_question_by_id(question_id),
-        answer_opts=AnswerRepository(db).get_answers_linked_to_question(question_id),
-        question_instance=question_instance,
+        question=question,
     )
 
 
@@ -93,6 +94,8 @@ def save_question(quiz_instance_id: int, question_id: int):
     # TODO: common logic for checking that user_id from session has
     # an active quiz instance with the parameter quiz_instance_id
     # and that the question belongs to the quiz.
+
+    # Save only if question does not already have an instance
     skip_saving = "skipsaved" in request.form
     if not skip_saving:
         if "answeropt" in request.form:
