@@ -1,7 +1,7 @@
-from flask import render_template, redirect, url_for, request, session, make_response
+from flask import render_template, redirect, url_for, request, session
 from src.app import app
 from src.db import db
-from src.routes.decorators import login_required
+from src.routes.decorators import login_required, no_cache
 from src.repositories.quizzes import QuizRepository
 from src.repositories.questions import QuestionRepository
 from src.repositories.answers import AnswerRepository
@@ -9,27 +9,29 @@ from src.repositories.answers import AnswerRepository
 
 @app.route("/attempt/<int:quiz_id>", methods=["GET"])
 @login_required
+@no_cache
 def attempt(quiz_id: int):
     user_id = session["user_id"]
-    quiz = QuizRepository(db).get_quiz_by_id_attach_user(quiz_id)
-    questions = QuestionRepository(db).get_questions_linked_to_quiz(quiz_id)
+    full_quiz_rows = QuizRepository(db).get_full_quiz_by_id(quiz_id)
+    full_quiz = {}
+    if len(full_quiz_rows) > 0:
+        full_quiz["quiz_title"] = full_quiz_rows[0].title
+        full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
+        full_quiz["quiz_description"] = full_quiz_rows[0].quiz_description
+        full_quiz["quiz_created"] = full_quiz_rows[0].created_at
+        full_quiz["quiz_creator"] = full_quiz_rows[0].username
+        full_quiz["questions"] = len(
+            {q.question_name for q in full_quiz_rows if q.question_name is not None}
+        )
     active_instances = QuizRepository(db).get_quiz_instances(user_id, quiz_id)
-    if quiz is None or len(active_instances) > 1:
+    if len(full_quiz_rows) == 0 or len(active_instances) > 1:
         # TODO: show some error?
         return redirect(url_for("landingpage"))
-    # TODO: quiz with no questions cannot be attempted
-    response = make_response(
-        render_template(
-            "views/start_quiz.html",
-            quiz=quiz,
-            has_active_instance=len(active_instances) == 1,
-            empty_quiz=len(questions) == 0,
-        )
+    return render_template(
+        "views/start_quiz.html",
+        quiz=full_quiz,
+        has_active_instance=len(active_instances) == 1,
     )
-    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
-    response.headers.set("Pragma", "no-cache")
-    response.headers.set("Expires", 0)
-    return response
 
 
 @app.route("/attempt/<int:quiz_id>/instance", methods=["POST"])
@@ -79,6 +81,7 @@ def start_instance(quiz_id: int):
     "/attempt/<int:quiz_instance_id>/question/<int:question_id>", methods=["GET"]
 )
 @login_required
+@no_cache
 def attempt_question(quiz_instance_id: int, question_id: int):
     # TODO: common logic for checking that user_id from session has
     # an active quiz instance with the parameter quiz_instance_id
@@ -90,21 +93,13 @@ def attempt_question(quiz_instance_id: int, question_id: int):
     question_instance = QuestionRepository(db).get_question_instance(
         quiz_instance_id, question_id
     )
-    response = make_response(
-        render_template(
-            "views/question.html",
-            quiz_instance_id=quiz_instance_id,
-            question=QuestionRepository(db).get_question_by_id(question_id),
-            answer_opts=AnswerRepository(db).get_answers_linked_to_question(
-                question_id
-            ),
-            question_instance=question_instance,
-        )
+    return render_template(
+        "views/question.html",
+        quiz_instance_id=quiz_instance_id,
+        question=QuestionRepository(db).get_question_by_id(question_id),
+        answer_opts=AnswerRepository(db).get_answers_linked_to_question(question_id),
+        question_instance=question_instance,
     )
-    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
-    response.headers.set("Pragma", "no-cache")
-    response.headers.set("Expires", 0)
-    return response
 
 
 @app.route(
