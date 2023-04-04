@@ -42,8 +42,7 @@ class QuizRepository:
             WHERE q.id = :id;
         """
         cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
-        rows = cursor.fetchall()
-        return rows
+        return cursor.fetchall()
 
     def get_quiz_by_id_attach_user(self, quiz_id):
         query_string = """
@@ -91,6 +90,30 @@ class QuizRepository:
             """
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id, "quiz_id": quiz_id}
+        )
+        return cursor.fetchall()
+
+    def get_quiz_instance_progress(self, quiz_instance_id: int, quizuser_id: int):
+        """Parameters: (int) quiz_instance_id
+
+        Returns: quiz instance rows with all questions and question instances
+        """
+        query_string = """
+            SELECT
+                qi.*,
+                qq.*,
+                qui.id as question_instance_id,
+                qui.question_id as qui_question_id,
+                qui.answer_id,
+                qui.answered_at
+            FROM quiz_instance qi
+            LEFT JOIN quiz_question qq ON qq.quiz_id = qi.quiz_id
+            LEFT JOIN question_instance qui ON qui.quiz_instance_id = qi.id AND qui.question_id = qq.question_id
+            WHERE qi.id = :id AND qi.quizuser_id = :quizuser_id
+            ORDER BY question_id ASC;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string), {"id": quiz_instance_id, "quizuser_id": quizuser_id}
         )
         return cursor.fetchall()
 
