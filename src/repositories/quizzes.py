@@ -11,6 +11,16 @@ class QuizRepository:
         cursor = self.database.session.execute(_text(query_string))
         return cursor.fetchall()
 
+    def get_all_visible_quizzes(self, user_id: int):
+        query_string = """
+            SELECT * FROM quiz
+            WHERE public OR quizuser_id = :quizuser_id;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string), {"quizuser_id": user_id}
+        )
+        return cursor.fetchall()
+
     def get_quiz_by_id(self, quiz_id):
         query_string = "SELECT * FROM quiz WHERE id = :id"
         cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
@@ -120,6 +130,24 @@ class QuizRepository:
                 "quizuser_id": user_id,
                 "title": title,
                 "quiz_description": description,
+                "updated_at": _utcnow(),
+            },
+        )
+        self.database.session.commit()
+        return cursor.rowcount
+
+    def publish_quiz(self, quiz_id: int, user_id: int):
+        query_string = """
+            UPDATE quiz
+            SET public = TRUE,
+                updated_at = :updated_at
+            WHERE id = :id AND quizuser_id = :quizuser_id
+        """
+        cursor = self.database.session.execute(
+            _text(query_string),
+            {
+                "id": quiz_id,
+                "quizuser_id": user_id,
                 "updated_at": _utcnow(),
             },
         )

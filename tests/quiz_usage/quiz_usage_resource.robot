@@ -9,9 +9,15 @@ Quiz Usage Suite Setup
     ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User And Login
     ${SUITE_USER_QUIZ_NAMES}    Create List
     FOR    ${i}    IN RANGE    3
-        ${quiz_title}    ${quiz_desc}    Create New Quiz
+        ${quiz_title}    ${quiz_desc}    Create New Quiz    questions=${3}
         Append To List    ${SUITE_USER_QUIZ_NAMES}    ${quiz_title}
     END
+    ${UNPUBLISHED_QUIZZES}    Create List
+    FOR    ${i}    IN RANGE    3
+        ${quiz_title}    ${quiz_desc}    Create New Quiz    publish=${False}    questions=${1}
+        Append To List    ${UNPUBLISHED_QUIZZES}    ${quiz_title}
+    END
+    Set Suite Variable    ${UNPUBLISHED_QUIZZES}
     Set Suite Variable    ${SUITE_USERNAME}
     Set Suite Variable    ${SUITE_PASSWORD}
     Set Suite Variable    ${SUITE_USER_QUIZ_NAMES}
@@ -35,7 +41,7 @@ Quizzes Should Be Listed On Landing Page
     Capture Page Screenshot
 
 Quizzes Created By Other User Should Be Listed On Landing Page
-    ${quiz_title}    ${quiz_desc}    Create New Quiz
+    ${quiz_title}    ${quiz_desc}    Create New Quiz    questions=${1}
     ${names}    Copy List    ${SUITE_USER_QUIZ_NAMES}
     Append To List    ${names}    ${quiz_title}
     Quizzes Should Be Listed On Landing Page    ${names}
@@ -46,6 +52,18 @@ Quizzes Created By Other User Should Be Listed On Landing Page
     Click Button    ${SUBMIT_BTN}
     Landing Page Should Be Open
     Quizzes Should Be Listed On Landing Page    ${names}
+
+Unpublished Quizzes Created By Others Are Not Visible
+    Click Element    ${LOGOUT_BTN}
+    Login Page Should Be Open
+    Input Text    username    ${USERNAME}
+    Input Text    password    ${PASSWORD}
+    Click Button    ${SUBMIT_BTN}
+    Landing Page Should Be Open
+    ${visible_quizzes}    Get All Visible Quizzes From Landing Page
+    FOR    ${quiz}    IN    @{UNPUBLISHED_QUIZZES}
+        List Should Not Contain Value    ${visible_quizzes}    ${quiz}
+    END
 
 User Clicks To Start Quiz
     Start Quiz From Landing Page    ${SUITE_USER_QUIZ_NAMES}
@@ -104,11 +122,11 @@ Quiz Should Not Have Edit Button
     Page Should Contain Element    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Open']
     Page Should Not Contain Element    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Edit']
 
-User Should Only Be Able To Edit Own Quizzes
+User Should Only Be Able To Edit Own Unpublished Quizzes
     ${all_quizzes}    Get All Visible Quizzes From Landing Page
     ${total_count}    Set Variable    ${0}
     FOR    ${quiz}    IN    @{all_quizzes}
-        ${count}    Get Match Count    ${SUITE_USER_QUIZ_NAMES}    ${quiz}
+        ${count}    Get Match Count    ${UNPUBLISHED_QUIZZES}    ${quiz}
         IF    $count > 0
             Click Edit Quiz    ${quiz}
             ${total_count}    Evaluate    ${total_count}+1
@@ -118,11 +136,11 @@ User Should Only Be Able To Edit Own Quizzes
             Quiz Should Not Have Edit Button    ${quiz}
         END
     END
-    ${suite_user_expected_quiz_count}    Get Length    ${SUITE_USER_QUIZ_NAMES}
-    Should Be Equal As Integers    ${suite_user_expected_quiz_count}    ${total_count}
+    ${expected_unpublished_quiz_count}    Get Length    ${UNPUBLISHED_QUIZZES}
+    Should Be Equal As Integers    ${expected_unpublished_quiz_count}    ${total_count}
 
 User Clicks To Edit A Quiz They Created
-    ${own_quiz}    Get Random Element From List    ${SUITE_USER_QUIZ_NAMES}
+    ${own_quiz}    Get Random Element From List    ${UNPUBLISHED_QUIZZES}
     Click Edit Quiz    ${own_quiz}
 
 It Is Possible To Edit Title And Description

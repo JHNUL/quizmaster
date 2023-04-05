@@ -1,19 +1,31 @@
-{% extends "layout/base.html" %}
-{% block title %}Quizmaster{% endblock %}
-{% block content %}
+{% extends "layout/base.html" %} {% block title %}Quizmaster{% endblock %} {%
+block content %}
 <div id="quizlist">
   {% for quiz in quizzes %}
   <div class="p-4 max-w-md mx-auto flex items-center">
-    <div class="flex-grow">
+    <div class="flex flex-row flex-grow items-center">
+      {% if not quiz.public %}
+        <img
+          class="object-contain h-4 w-4 mr-2"
+          src="{{ url_for('static', filename='images/visibility_off24.png') }}"
+          alt="Closed eye image"
+          title="Quiz not published"
+        />
+      {% endif %}
       <h2 class="text-2xl">{{ quiz.title }}</h2>
     </div>
     <a href="/attempt/{{ quiz.id }}">
       <button class="btn-secondary">Open</button>
     </a>
-    {% if user_id == quiz.quizuser_id %}
+    {% if user_id == quiz.quizuser_id and not quiz.public %}
       <a href="/quiz/{{ quiz.id }}/edit">
         <button class="btn-secondary">Edit</button>
       </a>
+    {% endif %}
+    {% if user_id == quiz.quizuser_id and not quiz.public %}
+      <form action="/quiz/{{ quiz.id }}/publish" method="post">
+        <button class="btn-secondary" id="publish_quiz_{{ quiz.id }}" type="submit">Publish</button>
+      </form>
     {% endif %}
   </div>
   {% endfor %}

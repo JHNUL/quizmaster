@@ -17,6 +17,7 @@ Quizzes Created By Other Users Are Visible On Landing Page
     [Setup]    Create User And Login
     Given User Navigates To Landing Page
     Then Quizzes Created By Other User Should Be Listed On Landing Page
+    And Unpublished Quizzes Created By Others Are Not Visible
 
 Quiz Can Be Started
     [Tags]    quiz_usage
@@ -42,7 +43,7 @@ Quiz Details Should Show Correct Creator For Quiz
 User Can Edit Quiz That They Created
     [Tags]    quiz_usage    edit_quiz
     Given User Navigates To Landing Page
-    Then User Should Only Be Able To Edit Own Quizzes
+    Then User Should Only Be Able To Edit Own Unpublished Quizzes
 
 User Can Edit Title And Description Of Created Quiz
     [Tags]    quiz_usage    edit_quiz

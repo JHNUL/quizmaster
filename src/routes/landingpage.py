@@ -9,5 +9,5 @@ from src.repositories.quizzes import QuizRepository
 @login_required
 def landingpage():
     user_id = session["user_id"]
-    quizzes = QuizRepository(db).get_all_quizzes()
+    quizzes = QuizRepository(db).get_all_visible_quizzes(user_id)
     return render_template("views/index.html", quizzes=quizzes, user_id=user_id)

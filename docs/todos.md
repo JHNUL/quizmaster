@@ -31,6 +31,7 @@ This is mainly to show progress below the main functionality level. These are no
   - answers can be deleted, not just added DONE
   - possible to navigate away from quiz and question creation DONE
   - possible to edit existing quiz if not public DONE
+  - publish a quiz or keep it private DONE
   - possible to edit existing question along with its answers if not public in quiz
   - better UX at question creation
   - common error message logic
@@ -38,7 +39,6 @@ This is mainly to show progress below the main functionality level. These are no
   - more tests for users access to editing quizzes and seeing instance results
   - shorter session length
   - delete a quiz that belongs to the user (note that quiz might be used while deleting)
-  - publish a quiz or keep it private
   - user sees all quizzes that they have created, attempted and completed
   - errorhandler with not found tpl
   - change all urls to use url_for
