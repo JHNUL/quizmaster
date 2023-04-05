@@ -44,6 +44,36 @@ class QuizRepository:
         cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
         return cursor.fetchall()
 
+    def get_user_full_quiz_by_id(self, quiz_id, user_id):
+        """Parameters:
+            (int) quiz_id
+            (int) user_id
+
+        Returns: quiz joined with questions and their answers
+        only if that quiz was created by the user.
+        """
+        query_string = """
+            SELECT
+                q.id as quiz_id,
+                q.*,
+                qu.id as question_id,
+                qu.*,
+                a.id as answer_id,
+                a.*,
+                qz.username
+            FROM quiz q
+            LEFT JOIN quiz_question qq ON qq.quiz_id = q.id
+            LEFT JOIN quizuser qz ON qz.id = q.quizuser_id
+            LEFT JOIN question qu ON qq.question_id = qu.id
+            LEFT JOIN question_answer qa ON qa.question_id = qu.id
+            LEFT JOIN answer a ON qa.answer_id = a.id
+            WHERE q.id = :id AND q.quizuser_id = :quizuser_id;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string), {"id": quiz_id, "quizuser_id": user_id}
+        )
+        return cursor.fetchall()
+
     def get_quiz_by_id_attach_user(self, quiz_id):
         query_string = """
             SELECT q.*, qu.username as quiz_creator FROM quiz q

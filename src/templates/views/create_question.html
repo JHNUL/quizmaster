@@ -2,19 +2,19 @@
 block content %}
 <div class="p-4 max-w-md mx-auto">
   <div class="flex-grow">
-    <h2 class="text-2xl">{{ quiz_title }}</h2>
+    <h2 class="text-2xl">{{ quiz.quiz_title }}</h2>
   </div>
   <div class="flex-grow">
-    <p class="mt-2">{{ quiz_description }}</p>
+    <p class="mt-2">{{ quiz.quiz_description }}</p>
   </div>
   <div class="flex-grow">
     <p class="mt-2">Questions:</p>
-    {% if questions|length == 0 %}
+    {% if quiz.questions|length == 0 %}
     <p class="mt-2">No questions yet</p>
     {% else %}
     <ul>
-      {% for question in questions %}
-      <li class="mt-2">{{ question.question_name }}</li>
+      {% for id, question_name in quiz.questions %}
+      <li class="mt-2">{{ question_name }}</li>
       {% endfor %}
     </ul>
     {% endif %}
@@ -25,7 +25,7 @@ block content %}
   </div>
   <form
     id="add_question_form"
-    action="/quiz/{{ quiz_id }}/question"
+    action="/quiz/{{ quiz.quiz_id }}/question"
     method="post"
     style="display: none"
   >
