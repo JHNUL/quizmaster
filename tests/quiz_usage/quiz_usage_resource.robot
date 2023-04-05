@@ -7,14 +7,14 @@ Resource    ../common_resource.robot
 *** Keywords ***
 Quiz Usage Suite Setup
     ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User And Login
-    ${QUIZ_NAMES}    Create List
+    ${SUITE_USER_QUIZ_NAMES}    Create List
     FOR    ${i}    IN RANGE    3
         ${quiz_title}    ${quiz_desc}    Create New Quiz
-        Append To List    ${QUIZ_NAMES}    ${quiz_title}
+        Append To List    ${SUITE_USER_QUIZ_NAMES}    ${quiz_title}
     END
     Set Suite Variable    ${SUITE_USERNAME}
     Set Suite Variable    ${SUITE_PASSWORD}
-    Set Suite Variable    ${QUIZ_NAMES}
+    Set Suite Variable    ${SUITE_USER_QUIZ_NAMES}
     Click Element    ${LOGOUT_BTN}
     Close All Browsers
 
@@ -27,7 +27,7 @@ Login As Test User
     Landing Page Should Be Open
 
 Quizzes Should Be Listed On Landing Page
-    [Arguments]    ${expected_quizzes}=${QUIZ_NAMES}
+    [Arguments]    ${expected_quizzes}=${SUITE_USER_QUIZ_NAMES}
     User Navigates To Landing Page
     FOR    ${quiz}    IN    @{expected_quizzes}
         Page Should Contain    ${quiz}
@@ -36,7 +36,7 @@ Quizzes Should Be Listed On Landing Page
 
 Quizzes Created By Other User Should Be Listed On Landing Page
     ${quiz_title}    ${quiz_desc}    Create New Quiz
-    ${names}    Copy List    ${QUIZ_NAMES}
+    ${names}    Copy List    ${SUITE_USER_QUIZ_NAMES}
     Append To List    ${names}    ${quiz_title}
     Quizzes Should Be Listed On Landing Page    ${names}
     Click Element    ${LOGOUT_BTN}
@@ -48,7 +48,7 @@ Quizzes Created By Other User Should Be Listed On Landing Page
     Quizzes Should Be Listed On Landing Page    ${names}
 
 User Clicks To Start Quiz
-    Start Quiz From Landing Page    ${QUIZ_NAMES}
+    Start Quiz From Landing Page    ${SUITE_USER_QUIZ_NAMES}
 
 User Can See Quiz Front Page
     Quiz Start Page Should Be Open
@@ -93,3 +93,49 @@ User Starts A Quiz Created By Another User
 Quiz Front Page Should Show Correct Creator For Quiz
     Page Should Contain    ${SUITE_USERNAME}
     Page Should Not Contain    ${USERNAME}
+
+Click Edit Quiz
+    [Arguments]    ${quiz_name}
+    Click Button    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Edit']
+    Edit Quiz Page Should Be Open
+
+Quiz Should Not Have Edit Button
+    [Arguments]    ${quiz_name}
+    Page Should Contain Element    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Open']
+    Page Should Not Contain Element    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Edit']
+
+User Should Only Be Able To Edit Own Quizzes
+    ${all_quizzes}    Get All Visible Quizzes From Landing Page
+    ${total_count}    Set Variable    ${0}
+    FOR    ${quiz}    IN    @{all_quizzes}
+        ${count}    Get Match Count    ${SUITE_USER_QUIZ_NAMES}    ${quiz}
+        IF    $count > 0
+            Click Edit Quiz    ${quiz}
+            ${total_count}    Evaluate    ${total_count}+1
+            User Navigates To Landing Page
+            Capture Page Screenshot
+        ELSE
+            Quiz Should Not Have Edit Button    ${quiz}
+        END
+    END
+    ${suite_user_expected_quiz_count}    Get Length    ${SUITE_USER_QUIZ_NAMES}
+    Should Be Equal As Integers    ${suite_user_expected_quiz_count}    ${total_count}
+
+User Clicks To Edit A Quiz They Created
+    ${own_quiz}    Get Random Element From List    ${SUITE_USER_QUIZ_NAMES}
+    Click Edit Quiz    ${own_quiz}
+
+It Is Possible To Edit Title And Description
+    ${old_title}    Get Value    //*[@id="quiztitle"]
+    ${old_desc}    Get Text    //*[@id="quizdescription"]
+    ${new_title}    Get Lorem Ipsum Text    words=${3}
+    ${new_desc}    Get Lorem Ipsum Text    words=${10}
+    Input Text    quiztitle    ${new_title}
+    Input Text    quizdescription    ${new_desc}
+    Click Ok Button
+    Quiz Details Page Should Be Open
+    Page Should Contain    ${new_title}
+    Page Should Contain    ${new_desc}
+    Page Should Not Contain    ${old_title}
+    Page Should Not Contain    ${old_desc}
+    Capture Page Screenshot
