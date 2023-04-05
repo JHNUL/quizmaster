@@ -75,8 +75,18 @@ class QuestionRepository:
         self, quiz_instance_id: int, question_id: int, answer_id: int
     ):
         query_string = """
-            INSERT INTO question_instance (quiz_instance_id, question_id, answer_id, answered_at)
-            VALUES (:quiz_instance_id, :question_id, :answer_id, :answered_at)
+            INSERT INTO question_instance (
+                quiz_instance_id,
+                question_id,
+                answer_id,
+                answered_at
+            )
+            VALUES (
+                :quiz_instance_id,
+                :question_id,
+                :answer_id,
+                :answered_at
+            )
             RETURNING id;
         """
         cursor = self.database.session.execute(

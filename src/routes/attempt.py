@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, request, session
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required, no_cache
+from src.routes.utils import _get_next_unanswered_question
 from src.repositories.quizzes import QuizRepository
 from src.repositories.questions import QuestionRepository
 
@@ -45,11 +46,9 @@ def create_quiz_instance(quiz_id: int):
     quiz_progress = QuizRepository(db).get_quiz_instance_progress(
         quiz_instance_id, user_id
     )
-    question_id = quiz_progress[0].question_id
-    for row in quiz_progress:
-        if row.qui_question_id is None:
-            question_id = row.question_id
-            break
+    question_id = _get_next_unanswered_question(quiz_progress)
+    if question_id is None:
+        question_id = quiz_progress[0].question_id
     return redirect(
         url_for(
             "attempt_question",
@@ -91,15 +90,21 @@ def attempt_question(quiz_instance_id: int, question_id: int):
 )
 @login_required
 def save_question(quiz_instance_id: int, question_id: int):
-    # TODO: common logic for checking that user_id from session has
-    # an active quiz instance with the parameter quiz_instance_id
-    # and that the question belongs to the quiz.
+    user_id = session["user_id"]
+    question_instance = QuestionRepository(db).get_full_question(
+        quiz_instance_id, question_id, user_id
+    )
+    if len(question_instance) == 0:
+        # TODO: show some error?
+        return redirect(url_for("landingpage"))
 
-    # Save only if question does not already have an instance
-    skip_saving = "skipsaved" in request.form
-    if not skip_saving:
+    already_saved = question_instance[0].answer_id is not None
+    if not already_saved:
         if "answeropt" in request.form:
             answer_id = request.form["answeropt"]
+            QuestionRepository(db).create_new_question_instance(
+                quiz_instance_id, question_id, answer_id
+            )
         else:
             return redirect(
                 url_for(
@@ -108,32 +113,18 @@ def save_question(quiz_instance_id: int, question_id: int):
                     question_id=question_id,
                 )
             )
-        QuestionRepository(db).create_new_question_instance(
-            quiz_instance_id, question_id, answer_id
-        )
-    answered_questions = QuestionRepository(db).get_question_instances_by_quiz_instance(
-        quiz_instance_id
+    quiz_progress = QuizRepository(db).get_quiz_instance_progress(
+        quiz_instance_id, user_id
     )
-    all_questions = QuestionRepository(
-        db
-    ).get_questions_linked_to_quiz_by_quiz_instance_id(quiz_instance_id)
-    question = None
-    for elem in all_questions:
-        if len([aq for aq in answered_questions if aq.question_id == elem.id]) == 0:
-            question = elem
-            break
-    if question is None and len(all_questions) > 0:
+    next_question_id = _get_next_unanswered_question(quiz_progress)
+    if next_question_id is None:
         QuizRepository(db).complete_quiz_instance(quiz_instance_id)
         return redirect(url_for("quiz_stats", quiz_instance_id=quiz_instance_id))
-    # If attempting to post to quiz with no questions
-    if question is None or len(all_questions) == 0:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
     return redirect(
         url_for(
             "attempt_question",
             quiz_instance_id=quiz_instance_id,
-            question_id=question.id,
+            question_id=next_question_id,
         )
     )
 
