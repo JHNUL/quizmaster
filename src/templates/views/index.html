@@ -10,6 +10,11 @@
     <a href="/attempt/{{ quiz.id }}">
       <button class="btn-secondary">Open</button>
     </a>
+    {% if user_id == quiz.quizuser_id %}
+      <a href="/quiz/{{ quiz.id }}/edit">
+        <button class="btn-secondary">Edit</button>
+      </a>
+    {% endif %}
   </div>
   {% endfor %}
 </div>

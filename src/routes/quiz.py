@@ -15,6 +15,49 @@ def quiz():
     return render_template("views/create_quiz.html")
 
 
+@app.route("/quiz", methods=["POST"])
+@login_required
+def new_quiz():
+    title = request.form["quiztitle"]
+    description = request.form["quizdescription"]
+    user_id = session["user_id"]
+    quiz_id = QuizRepository(db).create_new_quiz(user_id, title, description)
+    return redirect(f"/quiz/{quiz_id}")
+
+
+@app.route("/quiz/<int:quiz_id>/edit", methods=["GET"])
+@login_required
+def edit_quiz_view(quiz_id: int):
+    user_id = session["user_id"]
+    full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
+    if len(full_quiz_rows) == 0:
+        return redirect("/")  # TODO: not found page
+    full_quiz = {}
+    full_quiz["quiz_title"] = full_quiz_rows[0].title
+    full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
+    full_quiz["quiz_description"] = full_quiz_rows[0].quiz_description
+    full_quiz["quiz_created"] = full_quiz_rows[0].created_at
+    full_quiz["quiz_creator"] = full_quiz_rows[0].username
+    full_quiz["questions"] = list(
+        {
+            (q.question_id, q.question_name)
+            for q in full_quiz_rows
+            if q.question_name is not None
+        }
+    )
+    return render_template("views/edit_quiz.html", quiz=full_quiz)
+
+
+@app.route("/quiz/<int:quiz_id>/edit", methods=["POST"])
+@login_required
+def edit_quiz(quiz_id: int):
+    user_id = session["user_id"]
+    title = request.form["quiztitle"]
+    description = request.form["quizdescription"]
+    QuizRepository(db).update_quiz(quiz_id, title, description, user_id)
+    return redirect(f"/quiz/{quiz_id}")
+
+
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
 @login_required
 def create_question(quiz_id: int):
@@ -59,14 +102,4 @@ def quiz_question(quiz_id: int):
     for answer, is_correct in answers:
         answer_id = answer_repo.create_new_answer(answer, is_correct)
         conn_repo.link_answer_to_question(answer_id, question_id)
-    return redirect(f"/quiz/{quiz_id}")
-
-
-@app.route("/quiz", methods=["POST"])
-@login_required
-def new_quiz():
-    title = request.form["quiztitle"]
-    description = request.form["quizdescription"]
-    user_id = session["user_id"]
-    quiz_id = QuizRepository(db).create_new_quiz(user_id, title, description)
     return redirect(f"/quiz/{quiz_id}")

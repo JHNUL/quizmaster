@@ -105,6 +105,27 @@ class QuizRepository:
         (quiz_id,) = cursor.fetchone()
         return quiz_id
 
+    def update_quiz(self, quiz_id: int, title: str, description: str, user_id: int):
+        query_string = """
+            UPDATE quiz
+            SET title = :title,
+                quiz_description = :quiz_description,
+                updated_at = :updated_at
+            WHERE id = :id AND quizuser_id = :quizuser_id
+        """
+        cursor = self.database.session.execute(
+            _text(query_string),
+            {
+                "id": quiz_id,
+                "quizuser_id": user_id,
+                "title": title,
+                "quiz_description": description,
+                "updated_at": _utcnow(),
+            },
+        )
+        self.database.session.commit()
+        return cursor.rowcount
+
     def get_quiz_instances(self, user_id: int, quiz_id: int, only_active=True):
         query_string = """
             SELECT * FROM quiz_instance
