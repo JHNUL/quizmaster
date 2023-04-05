@@ -21,6 +21,9 @@ Landing Page Should Be Open
 Quiz Page Should Be Open
     Title Should Be    New quiz
 
+Edit Quiz Page Should Be Open
+    Title Should Be    Edit quiz
+
 Quiz Details Page Should Be Open
     Title Should Be    Quiz detail
 

@@ -8,6 +8,6 @@ from src.repositories.quizzes import QuizRepository
 @app.route("/", methods=["GET"])
 @login_required
 def landingpage():
-    username = session["username"]
+    user_id = session["user_id"]
     quizzes = QuizRepository(db).get_all_quizzes()
-    return render_template("views/index.html", quizzes=quizzes, username=username)
+    return render_template("views/index.html", quizzes=quizzes, user_id=user_id)

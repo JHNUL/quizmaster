@@ -30,12 +30,10 @@ This is mainly to show progress below the main functionality level. These are no
   - logout button disabled when user not logged in DONE
   - answers can be deleted, not just added DONE
   - possible to navigate away from quiz and question creation DONE
-  - better UX at question creation
-  - transactionality at logical level -> cannot create e.g. 3 out of 5 intended answers
-    for a question, all succeed or none do
-  - common error message logic
-  - possible to edit existing quiz if not public
+  - possible to edit existing quiz if not public DONE
   - possible to edit existing question along with its answers if not public in quiz
+  - better UX at question creation
+  - common error message logic
   - unique constraint to connection tables based on compound key
   - more tests for users access to editing quizzes and seeing instance results
   - shorter session length
