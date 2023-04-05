@@ -24,6 +24,7 @@ SUBMIT_BTN = "//*[@id='content']/form//button[@type='submit']"
 ADD_ANSWER_BTN = "id:add_answeropt"
 REMOVE_ANSWER_BTN = "id:remove_answeropt"
 SAVE_QUESTION_BTN = "id:save_question"
+QUIZ_DONE_BTN = "id:finish_creation"
 ADD_QUIZ_BTN = "Create"
 START_QUIZ_BUTTON = "Start quiz"
 

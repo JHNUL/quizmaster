@@ -24,7 +24,7 @@ block content %}
     {% endif %}
     {% if user_id == quiz.quizuser_id and not quiz.public %}
       <form action="/quiz/{{ quiz.id }}/publish" method="post">
-        <button class="btn-secondary" type="submit">Publish</button>
+        <button class="btn-secondary" id="publish_quiz_{{ quiz.id }}" type="submit">Publish</button>
       </form>
     {% endif %}
   </div>

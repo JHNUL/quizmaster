@@ -80,6 +80,7 @@ Get Lorem Ipsum Text
     RETURN    ${txt}
 
 Create New Quiz
+    [Arguments]    ${publish}=${True}    ${questions}=${5}
     User Navigates To Quiz Page
     Quiz Page Should Be Open
     ${quiz_title}=    Get Lorem Ipsum Text    words=${3}
@@ -88,7 +89,7 @@ Create New Quiz
     Input Text    quizdescription    ${quiz_desc}
     Click Ok Button
     Quiz Details Page Should Be Open
-    FOR    ${i}    IN RANGE    5
+    FOR    ${i}    IN RANGE    ${questions}
         Click Button    Add question
         ${question_name}=    Get Lorem Ipsum Text    as_question=${True}
         Input Text    questionname    ${question_name}
@@ -102,6 +103,10 @@ Create New Quiz
         ${correct}    Get Random Element From List    ${checkboxes}
         Click Element    ${correct}
         Click Button    ${SAVE_QUESTION_BTN}
+    END
+    Click Button    ${QUIZ_DONE_BTN}
+    IF    $publish == True
+        Click Button    //*[@id='quizlist']/div//h2[text()='${quiz_title}']/../../form/button[text()='Publish']
     END
     RETURN    ${quiz_title}    ${quiz_desc}
 
