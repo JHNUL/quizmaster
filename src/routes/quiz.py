@@ -17,24 +17,34 @@ def quiz():
 
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
 @login_required
-def quiz_detail(quiz_id: int):
-    found_quiz = QuizRepository(db).get_quiz_by_id(quiz_id)
-    if found_quiz is None:
-        redirect("/")  # TODO: not found page
-    questions = QuestionRepository(db).get_questions_linked_to_quiz(quiz_id)
-    return render_template(
-        "views/create_question.html",
-        quiz_title=found_quiz[2],
-        quiz_description=found_quiz[3],
-        quiz_created=found_quiz[5],
-        quiz_id=found_quiz[0],
-        questions=questions,
+def create_question(quiz_id: int):
+    user_id = session["user_id"]
+    full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
+    if len(full_quiz_rows) == 0:
+        return redirect("/")  # TODO: not found page
+    full_quiz = {}
+    full_quiz["quiz_title"] = full_quiz_rows[0].title
+    full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
+    full_quiz["quiz_description"] = full_quiz_rows[0].quiz_description
+    full_quiz["quiz_created"] = full_quiz_rows[0].created_at
+    full_quiz["quiz_creator"] = full_quiz_rows[0].username
+    full_quiz["questions"] = list(
+        {
+            (q.question_id, q.question_name)
+            for q in full_quiz_rows
+            if q.question_name is not None
+        }
     )
+    return render_template("views/create_question.html", quiz=full_quiz)
 
 
 @app.route("/quiz/<int:quiz_id>/question", methods=["POST"])
 @login_required
 def quiz_question(quiz_id: int):
+    user_id = session["user_id"]
+    full_quiz = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
+    if len(full_quiz) == 0:
+        return redirect("/")  # TODO: show error?
     question_name = request.form["questionname"]
     corrects = request.form.getlist("iscorrect")
     fields = request.form.items()

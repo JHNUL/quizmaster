@@ -5,26 +5,21 @@
     <div class="flex-grow">
       <h2 class="text-2xl">{{ question.question_name }}</h2>
     </div>
-    <form action="/attempt/{{ quiz_instance_id }}/question/{{ question.id }}" method="post">
-      {% for answer in answer_opts %}
+    <form action="/attempt/{{ quiz_instance_id }}/question/{{ question.question_id }}" method="post">
+      {% for answer_id, answer_text in question.answer_options %}
       <div>
         <label>
-          {% if question_instance %}
-            {% if question_instance.answer_id == answer.id %}
-              <input type="radio" name="answeropt" value="{{answer.id}}" checked disabled>
-              {% else %}
-              <input type="radio" name="answeropt" value="{{answer.id}}" disabled>
-            {% endif %}
-            {% else %}
-            <input type="radio" name="answeropt" value="{{answer.id}}">
+          {% if question.answer_id == answer_id %}
+            <input type="radio" name="answeropt" value="{{answer_id}}" checked disabled>
+          {% elif question.answer_id %}
+            <input type="radio" name="answeropt" value="{{answer_id}}" disabled>
+          {% else %}
+            <input type="radio" name="answeropt" value="{{answer_id}}">
           {% endif %}
-          <span>{{ answer.answer_text }}</span>
+          <span>{{ answer_text }}</span>
         </label>
       </div>
       {% endfor %}
-      {% if question_instance %}
-        <input type="hidden" name="skipsaved" value="skipsaved">
-      {% endif %}
       <button class="btn-primary" type="submit">Next</button>
     </form>
   </div>

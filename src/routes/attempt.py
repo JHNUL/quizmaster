@@ -1,76 +1,59 @@
-from flask import render_template, redirect, url_for, request, session, make_response
+from flask import render_template, redirect, url_for, request, session
 from src.app import app
 from src.db import db
-from src.routes.decorators import login_required
+from src.routes.decorators import login_required, no_cache
+from src.routes.utils import _get_next_unanswered_question
 from src.repositories.quizzes import QuizRepository
 from src.repositories.questions import QuestionRepository
-from src.repositories.answers import AnswerRepository
 
 
 @app.route("/attempt/<int:quiz_id>", methods=["GET"])
 @login_required
-def attempt(quiz_id: int):
+@no_cache
+def start_quiz(quiz_id: int):
     user_id = session["user_id"]
-    quiz = QuizRepository(db).get_quiz_by_id_attach_user(quiz_id)
-    questions = QuestionRepository(db).get_questions_linked_to_quiz(quiz_id)
-    active_instances = QuizRepository(db).get_quiz_instances(user_id, quiz_id)
-    if quiz is None or len(active_instances) > 1:
+    full_quiz_rows = QuizRepository(db).get_full_quiz_by_id(quiz_id)
+    if len(full_quiz_rows) == 0:
         # TODO: show some error?
         return redirect(url_for("landingpage"))
-    # TODO: quiz with no questions cannot be attempted
-    response = make_response(
-        render_template(
-            "views/start_quiz.html",
-            quiz=quiz,
-            has_active_instance=len(active_instances) == 1,
-            empty_quiz=len(questions) == 0,
-        )
+    full_quiz = {}
+    full_quiz["quiz_title"] = full_quiz_rows[0].title
+    full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
+    full_quiz["quiz_description"] = full_quiz_rows[0].quiz_description
+    full_quiz["quiz_created"] = full_quiz_rows[0].created_at
+    full_quiz["quiz_creator"] = full_quiz_rows[0].username
+    full_quiz["questions"] = len(
+        {q.question_name for q in full_quiz_rows if q.question_name is not None}
     )
-    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
-    response.headers.set("Pragma", "no-cache")
-    response.headers.set("Expires", 0)
-    return response
+    active_instances = QuizRepository(db).get_quiz_instances(user_id, quiz_id)
+    return render_template(
+        "views/start_quiz.html",
+        quiz=full_quiz,
+        has_active_instance=len(active_instances) == 1,
+    )
 
 
 @app.route("/attempt/<int:quiz_id>/instance", methods=["POST"])
 @login_required
-def start_instance(quiz_id: int):
-    quiz = QuizRepository(db).get_quiz_by_id(quiz_id)
-    if quiz is None:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
+def create_quiz_instance(quiz_id: int):
     user_id = session["user_id"]
     active_instances = QuizRepository(db).get_quiz_instances(user_id, quiz_id)
-    if len(active_instances) > 1:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
-    if len(active_instances) == 1:
+    if len(active_instances) > 0:
         quiz_instance_id = active_instances[0].id
     else:
         quiz_instance_id = QuizRepository(db).create_new_quiz_instance(user_id, quiz_id)
-    answered_questions = QuestionRepository(db).get_question_instances_by_quiz_instance(
-        quiz_instance_id
+
+    quiz_progress = QuizRepository(db).get_quiz_instance_progress(
+        quiz_instance_id, user_id
     )
-    all_questions = QuestionRepository(db).get_questions_linked_to_quiz(quiz_id)
-    question = None
-    for elem in all_questions:
-        print("Finding first unanswered question")
-        if len([aq for aq in answered_questions if aq.question_id == elem.id]) == 0:
-            print("Selected", elem.id)
-            question = elem
-            break
-    if question is None and len(all_questions > 0):
-        # Should not be able to start quiz in this scenario (no unanswered questions left)
-        # but for now just show the first one again.
-        question = all_questions[0]
-    if len(all_questions) == 0:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
+    question_id = _get_next_unanswered_question(quiz_progress)
+    if question_id is None:
+        question_id = quiz_progress[0].question_id
     return redirect(
         url_for(
             "attempt_question",
             quiz_instance_id=quiz_instance_id,
-            question_id=question.id,
+            question_id=question_id,
         )
     )
 
@@ -79,32 +62,27 @@ def start_instance(quiz_id: int):
     "/attempt/<int:quiz_instance_id>/question/<int:question_id>", methods=["GET"]
 )
 @login_required
+@no_cache
 def attempt_question(quiz_instance_id: int, question_id: int):
-    # TODO: common logic for checking that user_id from session has
-    # an active quiz instance with the parameter quiz_instance_id
-    # and that the question belongs to the quiz.
-
-    # This page should never be cached in the browser, so that
-    # when navigating back with the browser, a new GET request
-    # is fired.
-    question_instance = QuestionRepository(db).get_question_instance(
-        quiz_instance_id, question_id
+    user_id = session["user_id"]
+    question_instance = QuestionRepository(db).get_full_question(
+        quiz_instance_id, question_id, user_id
     )
-    response = make_response(
-        render_template(
-            "views/question.html",
-            quiz_instance_id=quiz_instance_id,
-            question=QuestionRepository(db).get_question_by_id(question_id),
-            answer_opts=AnswerRepository(db).get_answers_linked_to_question(
-                question_id
-            ),
-            question_instance=question_instance,
-        )
+    if len(question_instance) == 0:
+        # TODO: show some error?
+        return redirect(url_for("landingpage"))
+    question = {}
+    question["question_name"] = question_instance[0].question_name
+    question["question_id"] = question_instance[0].question_id
+    question["answer_id"] = question_instance[0].answer_id
+    question["answer_options"] = [
+        (row.answer_option_id, row.answer_text) for row in question_instance
+    ]
+    return render_template(
+        "views/question.html",
+        quiz_instance_id=quiz_instance_id,
+        question=question,
     )
-    response.headers.set("Cache-Control", "no-cache, no-store, must-revalidate")
-    response.headers.set("Pragma", "no-cache")
-    response.headers.set("Expires", 0)
-    return response
 
 
 @app.route(
@@ -112,13 +90,21 @@ def attempt_question(quiz_instance_id: int, question_id: int):
 )
 @login_required
 def save_question(quiz_instance_id: int, question_id: int):
-    # TODO: common logic for checking that user_id from session has
-    # an active quiz instance with the parameter quiz_instance_id
-    # and that the question belongs to the quiz.
-    skip_saving = "skipsaved" in request.form
-    if not skip_saving:
+    user_id = session["user_id"]
+    question_instance = QuestionRepository(db).get_full_question(
+        quiz_instance_id, question_id, user_id
+    )
+    if len(question_instance) == 0:
+        # TODO: show some error?
+        return redirect(url_for("landingpage"))
+
+    already_saved = question_instance[0].answer_id is not None
+    if not already_saved:
         if "answeropt" in request.form:
             answer_id = request.form["answeropt"]
+            QuestionRepository(db).create_new_question_instance(
+                quiz_instance_id, question_id, answer_id
+            )
         else:
             return redirect(
                 url_for(
@@ -127,32 +113,18 @@ def save_question(quiz_instance_id: int, question_id: int):
                     question_id=question_id,
                 )
             )
-        QuestionRepository(db).create_new_question_instance(
-            quiz_instance_id, question_id, answer_id
-        )
-    answered_questions = QuestionRepository(db).get_question_instances_by_quiz_instance(
-        quiz_instance_id
+    quiz_progress = QuizRepository(db).get_quiz_instance_progress(
+        quiz_instance_id, user_id
     )
-    all_questions = QuestionRepository(
-        db
-    ).get_questions_linked_to_quiz_by_quiz_instance_id(quiz_instance_id)
-    question = None
-    for elem in all_questions:
-        if len([aq for aq in answered_questions if aq.question_id == elem.id]) == 0:
-            question = elem
-            break
-    if question is None and len(all_questions) > 0:
+    next_question_id = _get_next_unanswered_question(quiz_progress)
+    if next_question_id is None:
         QuizRepository(db).complete_quiz_instance(quiz_instance_id)
         return redirect(url_for("quiz_stats", quiz_instance_id=quiz_instance_id))
-    # If attempting to post to quiz with no questions
-    if question is None or len(all_questions) == 0:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
     return redirect(
         url_for(
             "attempt_question",
             quiz_instance_id=quiz_instance_id,
-            question_id=question.id,
+            question_id=next_question_id,
         )
     )
 
