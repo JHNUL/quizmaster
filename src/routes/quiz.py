@@ -1,5 +1,5 @@
 from re import match
-from flask import render_template, redirect, request, session
+from flask import render_template, redirect, request, session, url_for
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required
@@ -56,6 +56,14 @@ def edit_quiz(quiz_id: int):
     description = request.form["quizdescription"]
     QuizRepository(db).update_quiz(quiz_id, title, description, user_id)
     return redirect(f"/quiz/{quiz_id}")
+
+
+@app.route("/quiz/<int:quiz_id>/publish", methods=["POST"])
+@login_required
+def publish_quiz(quiz_id: int):
+    user_id = session["user_id"]
+    QuizRepository(db).publish_quiz(quiz_id, user_id)
+    return redirect(url_for("landingpage"))
 
 
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
