@@ -41,6 +41,10 @@ def create_question(quiz_id: int):
 @app.route("/quiz/<int:quiz_id>/question", methods=["POST"])
 @login_required
 def quiz_question(quiz_id: int):
+    user_id = session["user_id"]
+    full_quiz = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
+    if len(full_quiz) == 0:
+        return redirect("/")  # TODO: show error?
     question_name = request.form["questionname"]
     corrects = request.form.getlist("iscorrect")
     fields = request.form.items()

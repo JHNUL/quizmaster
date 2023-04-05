@@ -28,15 +28,16 @@ This is mainly to show progress below the main functionality level. These are no
   - save timestamps in ISO8601 format DONE
   - show timestamps in client local tz DONE
   - logout button disabled when user not logged in DONE
+  - answers can be deleted, not just added DONE
+  - possible to navigate away from quiz and question creation DONE
   - better UX at question creation
-  - answers can be deleted, not just added
   - transactionality at logical level -> cannot create e.g. 3 out of 5 intended answers
     for a question, all succeed or none do
   - common error message logic
-  - possible to navigate away from quiz and question creation
   - possible to edit existing quiz if not public
   - possible to edit existing question along with its answers if not public in quiz
   - unique constraint to connection tables based on compound key
+  - more tests for users access to editing quizzes and seeing instance results
   - shorter session length
   - delete a quiz that belongs to the user (note that quiz might be used while deleting)
   - publish a quiz or keep it private
