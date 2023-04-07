@@ -72,7 +72,7 @@ Create User And Login
 
 Get Lorem Ipsum Text
     [Arguments]    ${words}=${5}    ${as_question}=${False}
-    @{text_list}=    FakerLibrary.Words    nb=${words}
+    ${text_list}=    FakerLibrary.Words    nb=${words}
     ${txt}=    Catenate    @{text_list}
     IF    '${as_question}'=='${True}'
         ${txt}=    Set Variable    ${txt}?
