@@ -96,10 +96,10 @@ class QuizRepository:
             return None
         return quizzes[0]
 
-    def create_new_quiz(self, user_id: int, title: str, description: str):
+    def create_new_quiz(self, user_id: int, title: str, description: str, public: bool):
         query_string = """
-            INSERT INTO quiz (title, quiz_description, quizuser_id, created_at)
-            VALUES (:title, :quiz_description, :quizuser_id, :created_at)
+            INSERT INTO quiz (title, quiz_description, quizuser_id, created_at, public)
+            VALUES (:title, :quiz_description, :quizuser_id, :created_at, :public)
             RETURNING id;
         """
         cursor = self.database.session.execute(
@@ -109,6 +109,7 @@ class QuizRepository:
                 "quiz_description": description,
                 "quizuser_id": user_id,
                 "created_at": _utcnow(),
+                "public": public,
             },
         )
         self.database.session.commit()

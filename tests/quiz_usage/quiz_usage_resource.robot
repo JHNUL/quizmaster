@@ -6,23 +6,25 @@ Resource    ../common_resource.robot
 
 *** Keywords ***
 Quiz Usage Suite Setup
-    ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User And Login
+    ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User
     ${SUITE_USER_QUIZ_NAMES}    Create List
-    FOR    ${i}    IN RANGE    3
-        ${quiz_title}    ${quiz_desc}    Create New Quiz    questions=${3}
-        Append To List    ${SUITE_USER_QUIZ_NAMES}    ${quiz_title}
-    END
     ${UNPUBLISHED_QUIZZES}    Create List
-    FOR    ${i}    IN RANGE    3
-        ${quiz_title}    ${quiz_desc}    Create New Quiz    publish=${False}    questions=${1}
-        Append To List    ${UNPUBLISHED_QUIZZES}    ${quiz_title}
+    FOR    ${i}    IN RANGE    6
+        ${do_publish}    Evaluate    ${i} > 2
+        ${quiz}    Create Quiz With Api
+        ...    ${SUITE_USERNAME}
+        ...    ${SUITE_PASSWORD}
+        ...    publish=${do_publish}
+        IF    $do_publish == True
+            Append To List    ${SUITE_USER_QUIZ_NAMES}    ${quiz["quiz_title"]}
+        ELSE
+            Append To List    ${UNPUBLISHED_QUIZZES}    ${quiz["quiz_title"]}
+        END
     END
     Set Suite Variable    ${UNPUBLISHED_QUIZZES}
     Set Suite Variable    ${SUITE_USERNAME}
     Set Suite Variable    ${SUITE_PASSWORD}
     Set Suite Variable    ${SUITE_USER_QUIZ_NAMES}
-    Click Element    ${LOGOUT_BTN}
-    Close All Browsers
 
 Login As Test User
     Open And Configure Browser

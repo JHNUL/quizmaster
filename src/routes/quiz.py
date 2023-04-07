@@ -20,8 +20,9 @@ def quiz():
 def new_quiz():
     title = request.form["quiztitle"]
     description = request.form["quizdescription"]
+    publish = False if "publish" not in request.form else request.form["publish"]
     user_id = session["user_id"]
-    quiz_id = QuizRepository(db).create_new_quiz(user_id, title, description)
+    quiz_id = QuizRepository(db).create_new_quiz(user_id, title, description, publish)
     return redirect(f"/quiz/{quiz_id}")
 
 
