@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, request, session
+from werkzeug.exceptions import NotFound
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required, no_cache
@@ -14,8 +15,7 @@ def start_quiz(quiz_id: int):
     user_id = session["user_id"]
     full_quiz_rows = QuizRepository(db).get_full_quiz_by_id(quiz_id)
     if len(full_quiz_rows) == 0:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
+        raise NotFound
     full_quiz = {}
     full_quiz["quiz_title"] = full_quiz_rows[0].title
     full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
@@ -69,8 +69,7 @@ def attempt_question(quiz_instance_id: int, question_id: int):
         quiz_instance_id, question_id, user_id
     )
     if len(question_instance) == 0:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
+        raise NotFound
     question = {}
     question["question_name"] = question_instance[0].question_name
     question["question_id"] = question_instance[0].question_id
@@ -95,8 +94,7 @@ def save_question(quiz_instance_id: int, question_id: int):
         quiz_instance_id, question_id, user_id
     )
     if len(question_instance) == 0:
-        # TODO: show some error?
-        return redirect(url_for("landingpage"))
+        raise NotFound
 
     already_saved = question_instance[0].answer_id is not None
     if not already_saved:
