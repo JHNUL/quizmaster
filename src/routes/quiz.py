@@ -1,5 +1,6 @@
 from re import match
 from flask import render_template, redirect, request, session, url_for
+from werkzeug.exceptions import NotFound, BadRequest
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required
@@ -32,7 +33,7 @@ def edit_quiz_view(quiz_id: int):
     user_id = session["user_id"]
     full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
     if len(full_quiz_rows) == 0:
-        return redirect("/")  # TODO: not found page
+        raise NotFound
     full_quiz = {}
     full_quiz["quiz_title"] = full_quiz_rows[0].title
     full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
@@ -73,7 +74,7 @@ def create_question(quiz_id: int):
     user_id = session["user_id"]
     full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
     if len(full_quiz_rows) == 0:
-        return redirect("/")  # TODO: not found page
+        raise NotFound
     full_quiz = {}
     full_quiz["quiz_title"] = full_quiz_rows[0].title
     full_quiz["quiz_id"] = full_quiz_rows[0].quiz_id
@@ -96,14 +97,16 @@ def quiz_question(quiz_id: int):
     user_id = session["user_id"]
     full_quiz = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
     if len(full_quiz) == 0:
-        return redirect("/")  # TODO: show error?
+        raise NotFound
     question_name = request.form["questionname"]
     corrects = request.form.getlist("iscorrect")
     fields = request.form.items()
-    answers = []  # TODO: fail if request has > max accepted amount of answers
+    answers = []
     for name, val in fields:
         if match("^answeropt", name) is not None:
             answers.append((val, len([c for c in corrects if c == name]) > 0))
+    if len(answers) > 5:
+        raise BadRequest("Maximum allowed questions is 5")
     question_id = QuestionRepository(db).create_new_question(question_name)
     conn_repo = ConnectionRepository(db)
     conn_repo.link_question_to_quiz(question_id, quiz_id)

@@ -36,6 +36,10 @@ Quiz Question Page Should Be Open
 Quiz Results Page Should Be Open
     Title Should Be    Quiz stats
 
+Not Found Page Should Be Open
+    Title Should Be    Not found
+    Page Should Contain    404 Not Found
+
 User Navigates To ${target} Page
     ${url}=    Get From Dictionary    ${ROUTES_DICT}    ${target}
     Go To    ${url}
@@ -99,8 +103,8 @@ Create New Quiz
             ${answer}=    Get Lorem Ipsum Text
             Input Text    ${input}    ${answer}
         END
-        ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
-        ${correct}    Get Random Element From List    ${checkboxes}
+        ${checkboxes}=    Get WebElements    ${ANSWER_CHECKBOXES}
+        ${correct}=    Get Random Element From List    ${checkboxes}
         Click Element    ${correct}
         Click Button    ${SAVE_QUESTION_BTN}
     END
