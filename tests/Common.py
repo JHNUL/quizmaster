@@ -89,3 +89,11 @@ class Common:
                 )
 
         return quiz
+
+    @keyword("Get Quiz Id From Url")
+    def get_quiz_id_from_url(self, url: str):
+        return url.split("/")[-1].strip()
+
+    @keyword("Map List Of Dictionaries To Value")
+    def map_list_of_dictionaries_to_value(self, coll: list, key: str):
+        return [elem[key] for elem in coll]

@@ -2,7 +2,7 @@
 block content %}
 <div id="quizlist">
   {% for quiz in quizzes %}
-  <div class="p-4 max-w-md mx-auto flex items-center">
+  <div class="px-4 pl-4 max-w-lg mx-auto flex items-center">
     <div class="flex flex-row flex-grow items-center">
       {% if not quiz.public %}
         <img
@@ -12,19 +12,27 @@ block content %}
           title="Quiz not published"
         />
       {% endif %}
-      <h2 class="text-2xl">{{ quiz.title }}</h2>
+      <h2 class="text-2xl" id="{{ quiz.id }}">{{ quiz.title }}</h2>
     </div>
+  </div>
+  <div class="px-4 max-w-lg mx-auto flex items-start">
+    <p class="mt-2">{{ quiz.quiz_description }}</p>
+  </div>
+  <div class="px-4 pt-1 max-w-lg mx-auto flex items-center justify-between">
     <a href="/attempt/{{ quiz.id }}">
-      <button class="btn-secondary">Open</button>
+      <button id="open_quiz_{{ quiz.id }}" class="btn-secondary">Open</button>
     </a>
     {% if user_id == quiz.quizuser_id and not quiz.public %}
       <a href="/quiz/{{ quiz.id }}/edit">
-        <button class="btn-secondary">Edit</button>
+        <button id="edit_quiz_{{ quiz.id }}" class="btn-secondary">Edit</button>
       </a>
     {% endif %}
     {% if user_id == quiz.quizuser_id and not quiz.public %}
       <form action="/quiz/{{ quiz.id }}/publish" method="post">
         <button class="btn-secondary" id="publish_quiz_{{ quiz.id }}" type="submit">Publish</button>
+      </form>
+      <form action="/quiz/{{ quiz.id }}/delete" method="post">
+        <button class="btn-secondary" id="delete_quiz_{{ quiz.id }}" type="submit">Delete</button>
       </form>
     {% endif %}
   </div>

@@ -26,7 +26,7 @@ CREATE TABLE question (id SERIAL PRIMARY KEY, question_name TEXT);
 CREATE TABLE quiz_question (
   quiz_id INTEGER NOT NULL,
   question_id INTEGER NOT NULL,
-  FOREIGN KEY(quiz_id) REFERENCES quiz(id),
+  FOREIGN KEY(quiz_id) REFERENCES quiz(id) ON DELETE CASCADE,
   FOREIGN KEY(question_id) REFERENCES question(id)
 );
 
