@@ -7,7 +7,7 @@ Resource    ../common_resource.robot
 *** Keywords ***
 Quiz Usage Suite Setup
     ${SUITE_USERNAME}    ${SUITE_PASSWORD}    Create User
-    ${SUITE_USER_QUIZ_NAMES}    Create List
+    ${SUITE_USER_QUIZZES}    Create List
     ${UNPUBLISHED_QUIZZES}    Create List
     FOR    ${i}    IN RANGE    6
         ${do_publish}    Evaluate    ${i} > 2
@@ -16,15 +16,15 @@ Quiz Usage Suite Setup
         ...    ${SUITE_PASSWORD}
         ...    publish=${do_publish}
         IF    $do_publish == True
-            Append To List    ${SUITE_USER_QUIZ_NAMES}    ${quiz["quiz_title"]}
+            Append To List    ${SUITE_USER_QUIZZES}    ${quiz}
         ELSE
-            Append To List    ${UNPUBLISHED_QUIZZES}    ${quiz["quiz_title"]}
+            Append To List    ${UNPUBLISHED_QUIZZES}    ${quiz}
         END
     END
     Set Suite Variable    ${UNPUBLISHED_QUIZZES}
     Set Suite Variable    ${SUITE_USERNAME}
     Set Suite Variable    ${SUITE_PASSWORD}
-    Set Suite Variable    ${SUITE_USER_QUIZ_NAMES}
+    Set Suite Variable    ${SUITE_USER_QUIZZES}
 
 Login As Test User
     Open And Configure Browser
@@ -35,25 +35,25 @@ Login As Test User
     Landing Page Should Be Open
 
 Quizzes Should Be Listed On Landing Page
-    [Arguments]    ${expected_quizzes}=${SUITE_USER_QUIZ_NAMES}
+    [Arguments]    ${expected_quizzes}=${SUITE_USER_QUIZZES}
     User Navigates To Landing Page
     FOR    ${quiz}    IN    @{expected_quizzes}
-        Page Should Contain    ${quiz}
+        Page Should Contain    ${quiz["quiz_title"]}
     END
     Capture Page Screenshot
 
 Quizzes Created By Other User Should Be Listed On Landing Page
-    ${quiz_title}    ${quiz_desc}    Create New Quiz    questions=${1}
-    ${names}    Copy List    ${SUITE_USER_QUIZ_NAMES}
-    Append To List    ${names}    ${quiz_title}
-    Quizzes Should Be Listed On Landing Page    ${names}
+    ${quiz}    Create New Quiz    questions=${1}
+    ${quizzes}    Copy List    ${SUITE_USER_QUIZZES}
+    Append To List    ${quizzes}    ${quiz}
+    Quizzes Should Be Listed On Landing Page    ${quizzes}
     Click Element    ${LOGOUT_BTN}
     Login Page Should Be Open
     Input Text    username    ${SUITE_USERNAME}
     Input Text    password    ${SUITE_PASSWORD}
     Click Button    ${SUBMIT_BTN}
     Landing Page Should Be Open
-    Quizzes Should Be Listed On Landing Page    ${names}
+    Quizzes Should Be Listed On Landing Page    ${quizzes}
 
 Unpublished Quizzes Created By Others Are Not Visible
     Click Element    ${LOGOUT_BTN}
@@ -64,11 +64,11 @@ Unpublished Quizzes Created By Others Are Not Visible
     Landing Page Should Be Open
     ${visible_quizzes}    Get All Visible Quizzes From Landing Page
     FOR    ${quiz}    IN    @{UNPUBLISHED_QUIZZES}
-        List Should Not Contain Value    ${visible_quizzes}    ${quiz}
+        List Should Not Contain Value    ${visible_quizzes}    ${quiz["quiz_title"]}
     END
 
 User Clicks To Start Quiz
-    Start Quiz From Landing Page    ${SUITE_USER_QUIZ_NAMES}
+    Start Quiz From Landing Page    ${SUITE_USER_QUIZZES}
 
 User Can See Quiz Front Page
     Quiz Start Page Should Be Open
@@ -114,32 +114,26 @@ Quiz Front Page Should Show Correct Creator For Quiz
     Page Should Contain    ${SUITE_USERNAME}
     Page Should Not Contain    ${USERNAME}
 
+Click Delete Quiz
+    [Arguments]    ${quiz}
+    Click Button    id:delete_quiz_${quiz["quiz_id"]}
+
 Click Edit Quiz
-    [Arguments]    ${quiz_name}
-    Click Button    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Edit']
+    [Arguments]    ${quiz}
+    Click Button    id:edit_quiz_${quiz["quiz_id"]}
     Edit Quiz Page Should Be Open
 
 Quiz Should Not Have Edit Button
-    [Arguments]    ${quiz_name}
-    Page Should Contain Element    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Open']
-    Page Should Not Contain Element    //*[@id='quizlist']/div//h2[text()='${quiz_name}']/../../a/button[text()='Edit']
+    [Arguments]    ${quiz}
+    Page Should Contain Element    id:open_quiz_${quiz["quiz_id"]}
+    Page Should Not Contain Element    id:edit_quiz_${quiz["quiz_id"]}
 
 User Should Only Be Able To Edit Own Unpublished Quizzes
-    ${all_quizzes}    Get All Visible Quizzes From Landing Page
-    ${total_count}    Set Variable    ${0}
-    FOR    ${quiz}    IN    @{all_quizzes}
-        ${count}    Get Match Count    ${UNPUBLISHED_QUIZZES}    ${quiz}
-        IF    $count > 0
-            Click Edit Quiz    ${quiz}
-            ${total_count}    Evaluate    ${total_count}+1
-            User Navigates To Landing Page
-            Capture Page Screenshot
-        ELSE
-            Quiz Should Not Have Edit Button    ${quiz}
-        END
+    FOR    ${quiz}    IN    @{UNPUBLISHED_QUIZZES}
+        Click Edit Quiz    ${quiz}
+        Capture Page Screenshot
+        User Navigates To Landing Page
     END
-    ${expected_unpublished_quiz_count}    Get Length    ${UNPUBLISHED_QUIZZES}
-    Should Be Equal As Integers    ${expected_unpublished_quiz_count}    ${total_count}
 
 User Clicks To Edit A Quiz They Created
     ${own_quiz}    Get Random Element From List    ${UNPUBLISHED_QUIZZES}
@@ -159,3 +153,12 @@ It Is Possible To Edit Title And Description
     Page Should Not Contain    ${old_title}
     Page Should Not Contain    ${old_desc}
     Capture Page Screenshot
+
+User Has An Unpublished Quiz
+    ${DELETABLE_QUIZ}    Get Random Element From List    ${UNPUBLISHED_QUIZZES}
+    Set Test Variable    ${DELETABLE_QUIZ}
+
+User Is Able To Delete Quiz
+    Page Should Contain    ${DELETABLE_QUIZ["quiz_title"]}
+    Click Delete Quiz    ${DELETABLE_QUIZ}
+    Wait Until Page Does Not Contain    ${DELETABLE_QUIZ["quiz_title"]}    timeout=1 second

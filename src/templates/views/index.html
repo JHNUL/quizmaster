@@ -12,7 +12,7 @@ block content %}
           title="Quiz not published"
         />
       {% endif %}
-      <h2 class="text-2xl">{{ quiz.title }}</h2>
+      <h2 class="text-2xl" id="{{ quiz.id }}">{{ quiz.title }}</h2>
     </div>
   </div>
   <div class="px-4 max-w-lg mx-auto flex items-start">
@@ -20,11 +20,11 @@ block content %}
   </div>
   <div class="px-4 pt-1 max-w-lg mx-auto flex items-center justify-between">
     <a href="/attempt/{{ quiz.id }}">
-      <button class="btn-secondary">Open</button>
+      <button id="open_quiz_{{ quiz.id }}" class="btn-secondary">Open</button>
     </a>
     {% if user_id == quiz.quizuser_id and not quiz.public %}
       <a href="/quiz/{{ quiz.id }}/edit">
-        <button class="btn-secondary">Edit</button>
+        <button id="edit_quiz_{{ quiz.id }}" class="btn-secondary">Edit</button>
       </a>
     {% endif %}
     {% if user_id == quiz.quizuser_id and not quiz.public %}

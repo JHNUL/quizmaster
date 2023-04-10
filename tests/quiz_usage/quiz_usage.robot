@@ -50,3 +50,9 @@ User Can Edit Title And Description Of Created Quiz
     Given User Navigates To Landing Page
     And User Clicks To Edit A Quiz They Created
     Then It Is Possible To Edit Title And Description
+
+User Can Delete Own Unpublished Quiz
+    [Tags]    quiz_usage    delete_quiz
+    Given User Has An Unpublished Quiz
+    When User Navigates To Landing Page
+    Then User Is Able To Delete Quiz

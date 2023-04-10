@@ -32,18 +32,19 @@ This is mainly to show progress below the main functionality level. These are no
   - possible to navigate away from quiz and question creation DONE
   - possible to edit existing quiz if not public DONE
   - publish a quiz or keep it private DONE
-  - improve quiz creation in tests IN PROG
-  - min and max length for inputs, both client and server side
-  - common error message logic
+  - improve quiz creation in tests DONE
+  - min and max length for inputs, both client and server side DONE
+  - common error message logic DONE
+  - possible to edit existing question along with its answers if not public in quiz DONE
+  - delete a quiz that belongs to the user (note that quiz might be used while deleting) DONE
+  - errorhandler with not found tpl DONE
+  - show answer times at quiz stats page
   - better UX at question creation
-  - possible to edit existing question along with its answers if not public in quiz
   - special stats page where user can see info about quizzes
   - unique constraint to connection tables based on compound key
   - more tests for users access to editing quizzes and seeing instance results
   - shorter session length
-  - delete a quiz that belongs to the user (note that quiz might be used while deleting)
   - user sees all quizzes that they have created, attempted and completed
-  - errorhandler with not found tpl
   - change all urls to use url_for
   - comb through all todos in the code
 

@@ -93,6 +93,12 @@ Create New Quiz
     Input Text    quizdescription    ${quiz_desc}
     Click Ok Button
     Quiz Details Page Should Be Open
+    ${url}    Get Location
+    ${quiz_id}    Get Quiz Id From Url    ${url}
+    ${quiz}    Create Dictionary
+    ...    quiz_id=${quiz_id}
+    ...    quiz_title=${quiz_title}
+    ...    quiz_description=${quiz_desc}
     FOR    ${i}    IN RANGE    ${questions}
         Click Button    Add question
         ${question_name}=    Get Lorem Ipsum Text    as_question=${True}
@@ -110,9 +116,9 @@ Create New Quiz
     END
     Click Button    ${QUIZ_DONE_BTN}
     IF    $publish == True
-        Click Button    //*[@id='quizlist']/div//h2[text()='${quiz_title}']/../../form/button[text()='Publish']
+        Click Button    id:publish_quiz_${quiz_id}
     END
-    RETURN    ${quiz_title}    ${quiz_desc}
+    RETURN    ${quiz}
 
 Get All Visible Quizzes From Landing Page
     User Navigates To Landing Page
@@ -125,11 +131,8 @@ Get All Visible Quizzes From Landing Page
     RETURN    ${quizzes_text}
 
 Start Quiz From Landing Page
-    [Arguments]    ${selectable_quizzes}=${None}
+    [Arguments]    ${selectable_quizzes}
     User Navigates To Landing Page
     Landing Page Should Be Open
-    IF    $selectable_quizzes==${None}
-        ${selectable_quizzes}=    Get All Visible Quizzes From Landing Page
-    END
     ${quiz}=    Get Random Element From List    ${selectable_quizzes}
-    Click Button    //*[@id='quizlist']/div//h2[text()='${quiz}']/../../a/button[text()='Open']
+    Click Button    id:open_quiz_${quiz["quiz_id"]}
