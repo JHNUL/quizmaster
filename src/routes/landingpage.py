@@ -16,7 +16,7 @@ def landingpage():
 
 @app.errorhandler(BadRequest)
 def bad_request(error):
-    return render_template("views/400.html")
+    return render_template("views/400.html", description=str(error))
 
 
 @app.errorhandler(Unauthorized)

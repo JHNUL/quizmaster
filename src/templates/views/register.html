@@ -1,6 +1,10 @@
 {% extends "layout/base.html" %} {% block title %}Register{% endblock %}
 {% block content %}
-<form action="/register" method="post" class="w-full max-w-sm mx-auto my-4">
+<form
+  action="/register"
+  method="post"
+  class="w-full max-w-sm mx-auto my-4"
+>
   <div class="md:flex md:items-center mb-6">
     <div class="md:w-1/3">
       <label class="block md:text-right mb-1 md:mb-0 pr-4" for="username">
@@ -34,20 +38,27 @@
         type="password"
         autocomplete="off"
         title="Min 6 max 50 alphanumeric characters, can include _!&#"
-        required
         pattern="^[a-zA-Z0-9_!&#]{6,50}$"
+        required
       />
     </div>
   </div>
-  <div class="md:flex md:items-center mb-6">
+  <div class="md:flex md:items-center {{ 'mb-6' if not message }}">
     <div class="md:w-1/3"></div>
     <div class="md:w-2/3">
       <button class="btn-primary" type="submit">Register</button>
-      {% if message %}
-        <span>{{ message }}</span>
-      {% endif %}
     </div>
   </div>
+  {% if message %}
+    <div class="md:flex md:items-center">
+      <div class="md:w-1/3"></div>
+      <div class="md:w-2/3">
+        {% if message %}
+          <span>{{ message }}</span>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
   <div class="md:flex md:items-center">
     <div class="md:w-1/3"></div>
     <div class="md:w-2/3">
@@ -56,5 +67,4 @@
     </div>
   </div>
 </form>
-
 {% endblock %}

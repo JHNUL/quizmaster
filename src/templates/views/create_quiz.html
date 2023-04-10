@@ -4,7 +4,12 @@ block content %}
   <div class="flex-grow">
     <h2 class="text-2xl">Create new quiz</h2>
   </div>
-  <form id="add_quiz_form" action="/quiz" method="post">
+  <form
+    id="add_quiz_form"
+    class="w-full mx-auto my-4"
+    action="/quiz"
+    method="post"
+  >
     <label for="quiztitle">Title</label>
     <input
       class="text-input"
@@ -12,6 +17,7 @@ block content %}
       name="quiztitle"
       id="quiztitle"
       autocomplete="off"
+      maxlength="{{ QUIZ_TITLE_MAX_LEN }}"
       required
     />
     <label for="quizdescription">Description</label>
@@ -20,6 +26,7 @@ block content %}
       name="quizdescription"
       id="quizdescription"
       autocomplete="off"
+      maxlength="{{ QUIZ_DESC_MAX_LEN }}"
       required
     ></textarea>
     <div class="flex items-center justify-between">
