@@ -155,6 +155,23 @@ class QuizRepository:
         self.database.session.commit()
         return cursor.rowcount
 
+    def delete_quiz(self, quiz_id: int, user_id: int):
+        query_string = """
+            DELETE FROM quiz
+            WHERE id = :id
+            AND quizuser_id = :quizuser_id
+            AND public = FALSE;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string),
+            {
+                "id": quiz_id,
+                "quizuser_id": user_id
+            },
+        )
+        self.database.session.commit()
+        return cursor.rowcount
+
     def get_quiz_instances(self, user_id: int, quiz_id: int, only_active=True):
         query_string = """
             SELECT * FROM quiz_instance

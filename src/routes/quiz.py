@@ -64,6 +64,14 @@ def publish_quiz(quiz_id: int):
     return redirect(url_for("landingpage"))
 
 
+@app.route("/quiz/<int:quiz_id>/delete", methods=["POST"])
+@login_required
+def delete_quiz(quiz_id: int):
+    user_id = session["user_id"]
+    QuizRepository(db).delete_quiz(quiz_id, user_id)
+    return redirect(url_for("landingpage"))
+
+
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
 @login_required
 def create_question(quiz_id: int):
