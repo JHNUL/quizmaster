@@ -58,7 +58,9 @@ class Common:
         url = ROUTES_DICT["Quiz"]
         res = post(url, quiz_data, timeout=3, cookies=cookie)
         if res.status_code != 200 or match(".+/quiz/\d+", res.url) is None:
-            raise ValueError("Unable to create quiz")
+            raise ValueError(
+                f"Unable to create quiz, status {res.status_code}, {res.text}"
+            )
         quiz_id = res.url.split("/")[-1].strip()
         quiz["quiz_id"] = quiz_id
         quiz["questions"] = []
@@ -82,6 +84,8 @@ class Common:
                 cookies=cookie,
             )
             if question_res.status_code != 302:
-                raise ValueError("Unable to create question")
+                raise ValueError(
+                    f"Unable to create question, status {question_res.status_code}, {question_res.text}"
+                )
 
         return quiz

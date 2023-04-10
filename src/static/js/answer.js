@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             name="answeropt${index}"
             id="answeropt${index}"
             autocomplete="off"
+            maxlength="100"
             required
           />
         </div>
