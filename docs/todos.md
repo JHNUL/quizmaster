@@ -38,6 +38,7 @@ This is mainly to show progress below the main functionality level. These are no
   - possible to edit existing question along with its answers if not public in quiz DONE
   - delete a quiz that belongs to the user (note that quiz might be used while deleting) DONE
   - errorhandler with not found tpl DONE
+  - deleting an unpublished quiz that has results should work
   - show answer times at quiz stats page
   - better UX at question creation
   - special stats page where user can see info about quizzes

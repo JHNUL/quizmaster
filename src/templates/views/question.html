@@ -1,26 +1,26 @@
 {% extends "layout/base.html" %}
 {% block title %}Question time!{% endblock %}
 {% block content %}
-  <div class="p-4 max-w-md mx-auto">
-    <div class="flex-grow">
-      <h2 class="text-2xl">{{ question.question_name }}</h2>
-    </div>
+<div class="max-w-lg bg-gray-100 py-6 px-4 lg:px-8 rounded-md shadow-md mx-auto">
+  <h2 class="text-lg font-semibold mb-4">{{ question.question_name }}</h2>
+  <div class="space-y-4">
     <form action="/attempt/{{ quiz_instance_id }}/question/{{ question.question_id }}" method="post">
       {% for answer_id, answer_text in question.answer_options %}
-      <div>
-        <label>
+        <div class="py-2 border-b border-gray-300">
           {% if question.answer_id == answer_id %}
-            <input type="radio" name="answeropt" value="{{answer_id}}" checked disabled>
+            <input type="radio" class="form-radio mr-2" name="answeropt" id="answer_{{answer_id}}" value="{{answer_id}}" checked disabled>
           {% elif question.answer_id %}
-            <input type="radio" name="answeropt" value="{{answer_id}}" disabled>
+            <input type="radio" class="form-radio mr-2" name="answeropt" id="answer_{{answer_id}}" value="{{answer_id}}" disabled>
           {% else %}
-            <input type="radio" name="answeropt" value="{{answer_id}}">
+            <input type="radio" class="form-radio mr-2" name="answeropt" id="answer_{{answer_id}}" value="{{answer_id}}">
           {% endif %}
-          <span>{{ answer_text }}</span>
-        </label>
-      </div>
+          <label class="cursor-pointer" for="answer_{{answer_id}}">
+            <span class="text-lg text-gray-600 hover:text-gray-900 transition duration-300">{{ answer_text }}</span>
+          </label>
+        </div>
       {% endfor %}
-      <button class="btn-primary" type="submit">Next</button>
+      <button class="mt-4 btn-primary" type="submit">Next</button>
     </form>
   </div>
+</div>
 {% endblock %}
