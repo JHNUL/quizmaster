@@ -50,7 +50,7 @@ CREATE TABLE quiz_instance (
   started_at TIMESTAMPTZ NOT NULL,
   finished_at TIMESTAMPTZ,
   FOREIGN KEY(quizuser_id) REFERENCES quizuser(id),
-  FOREIGN KEY(quiz_id) REFERENCES quiz(id)
+  FOREIGN KEY(quiz_id) REFERENCES quiz(id) ON DELETE CASCADE
 );
 
 CREATE TABLE question_instance (
@@ -59,7 +59,7 @@ CREATE TABLE question_instance (
   question_id INTEGER NOT NULL,
   answer_id INTEGER NOT NULL,
   answered_at TIMESTAMPTZ NOT NULL,
-  FOREIGN KEY(quiz_instance_id) REFERENCES quiz_instance(id),
+  FOREIGN KEY(quiz_instance_id) REFERENCES quiz_instance(id) ON DELETE CASCADE,
   FOREIGN KEY(question_id) REFERENCES question(id),
   FOREIGN KEY(answer_id) REFERENCES answer(id),
   UNIQUE (quiz_instance_id, question_id)

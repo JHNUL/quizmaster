@@ -130,9 +130,15 @@ Get All Visible Quizzes From Landing Page
     END
     RETURN    ${quizzes_text}
 
-Start Quiz From Landing Page
+Start Random Quiz From Landing Page
     [Arguments]    ${selectable_quizzes}
     User Navigates To Landing Page
     Landing Page Should Be Open
     ${quiz}=    Get Random Element From List    ${selectable_quizzes}
+    Click Button    id:open_quiz_${quiz["quiz_id"]}
+
+Start Quiz From Landing Page
+    [Arguments]    ${quiz}
+    User Navigates To Landing Page
+    Landing Page Should Be Open
     Click Button    id:open_quiz_${quiz["quiz_id"]}

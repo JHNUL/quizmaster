@@ -68,7 +68,7 @@ Unpublished Quizzes Created By Others Are Not Visible
     END
 
 User Clicks To Start Quiz
-    Start Quiz From Landing Page    ${SUITE_USER_QUIZZES}
+    Start Random Quiz From Landing Page    ${SUITE_USER_QUIZZES}
 
 User Can See Quiz Front Page
     Quiz Start Page Should Be Open
@@ -155,10 +155,16 @@ It Is Possible To Edit Title And Description
     Capture Page Screenshot
 
 User Has An Unpublished Quiz
-    ${DELETABLE_QUIZ}    Get Random Element From List    ${UNPUBLISHED_QUIZZES}
+    ${DELETABLE_QUIZ}    Create New Quiz    questions=${1}    publish=${False}
     Set Test Variable    ${DELETABLE_QUIZ}
 
 User Is Able To Delete Quiz
     Page Should Contain    ${DELETABLE_QUIZ["quiz_title"]}
     Click Delete Quiz    ${DELETABLE_QUIZ}
     Wait Until Page Does Not Contain    ${DELETABLE_QUIZ["quiz_title"]}    timeout=1 second
+    Landing Page Should Be Open
+
+User Has Filled That Quiz
+    Start Quiz From Landing Page    ${DELETABLE_QUIZ}
+    User Can Click Through Questions
+    User Navigates To Landing Page
