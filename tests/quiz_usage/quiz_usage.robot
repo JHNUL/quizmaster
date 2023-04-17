@@ -52,7 +52,13 @@ User Can Edit Title And Description Of Created Quiz
     Then It Is Possible To Edit Title And Description
 
 User Can Delete Own Unpublished Quiz
-    [Tags]    quiz_usage    delete_quiz
+    [Tags]    delete_quiz
     Given User Has An Unpublished Quiz
     When User Navigates To Landing Page
+    Then User Is Able To Delete Quiz
+
+Unpublished Quiz Can Be Deleted When It Has Been Filled
+    [Tags]    delete_quiz
+    Given User Has An Unpublished Quiz
+    When User Has Filled That Quiz
     Then User Is Able To Delete Quiz
