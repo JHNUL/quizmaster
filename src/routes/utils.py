@@ -1,3 +1,4 @@
+from datetime import datetime
 from jinja2.utils import markupsafe
 from werkzeug.exceptions import BadRequest
 from src.constants import (
@@ -85,3 +86,28 @@ def _check_quiz_fields(title: str, description: str):
     if len(description) == 0 or len(description) > QUIZ_DESC_MAX_LEN:
         message = f"Description can be max {QUIZ_DESC_MAX_LEN} characters long"
         raise BadRequest(description=message)
+
+
+def _create_time_diff_text(time1: 'datetime', time2: 'datetime') -> str:
+    delta = time2 - time1
+    seconds = delta.total_seconds()
+    days = int(seconds // 86400)
+    hours = int((seconds % 86400) // 3600)
+    mins = int(((seconds % 86400) % 3600) // 60)
+    sec = int(((seconds % 86400) % 3600) % 60)
+    days_txt = f"{days} days"
+    hours_txt = f"{hours} hours"
+    mins_txt = f"{mins} minutes"
+    sec_txt = f"{sec} seconds"
+    final_txt = ""
+
+    if days > 0:
+        final_txt += f"{days_txt}, {hours_txt}, {mins_txt}, {sec_txt}"
+    elif hours > 0:
+        final_txt += f"{hours_txt}, {mins_txt}, {sec_txt}"
+    elif mins > 0:
+        final_txt += f"{mins_txt}, {sec_txt}"
+    else:
+        final_txt += f"{sec_txt}"
+
+    return final_txt
