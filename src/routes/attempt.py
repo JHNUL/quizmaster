@@ -3,7 +3,7 @@ from werkzeug.exceptions import NotFound
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required, no_cache
-from src.routes.utils import _get_next_unanswered_question
+from src.routes.utils import _get_next_unanswered_question, _create_time_diff_text
 from src.repositories.quizzes import QuizRepository
 from src.repositories.questions import QuestionRepository
 
@@ -139,15 +139,20 @@ def quiz_stats(quiz_instance_id: int):
         stats["quiz_title"] = quiz_instance_stats[0][0]
         stats["quiz_description"] = quiz_instance_stats[0][1]
         stats["started"] = quiz_instance_stats[0][3]
-        stats["completed"] = quiz_instance_stats[0][4]
+        stats["timedelta"] = _create_time_diff_text(
+            quiz_instance_stats[0][3], quiz_instance_stats[0][4]
+        )
         stats["questions"] = []
-        for row in quiz_instance_stats:
+        for i, row in enumerate(quiz_instance_stats):
             stats["questions"].append(
                 {
                     "question_name": row[5],
                     "answer": row[6],
                     "is_correct": row[7],
-                    "answer_time": row[8],
+                    "timedelta": _create_time_diff_text(
+                        stats["started"] if i == 0 else quiz_instance_stats[i - 1][8],
+                        row[8],
+                    ),
                 }
             )
     return render_template("views/quiz_stats.html", stats=stats)

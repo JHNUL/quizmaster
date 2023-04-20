@@ -2,7 +2,7 @@
 
 This is mainly to show progress below the main functionality level. These are not refined or prioritized, and serve mostly as a way to keep track of what details still need to be implemented.
 
- - create username and password DONE
+  - create username and password DONE
   - log in DONE
   - unauthenticated user should be redirected to login page when trying to go to
     landing page DONE
@@ -39,9 +39,9 @@ This is mainly to show progress below the main functionality level. These are no
   - delete a quiz that belongs to the user (note that quiz might be used while deleting) DONE
   - errorhandler with not found tpl DONE
   - deleting an unpublished quiz that has results should work DONE
-  - show answer times at quiz stats page
-  - better UX at question creation
+  - show answer times at quiz stats page DONE
   - special stats page where user can see info about quizzes
+  - better UX at question creation
   - unique constraint to connection tables based on compound key
   - more tests for users access to editing quizzes and seeing instance results
   - shorter session length
