@@ -101,7 +101,7 @@ def save_question(quiz_instance_id: int, question_id: int):
         if "answeropt" in request.form:
             answer_id = request.form["answeropt"]
             QuestionRepository(db).create_new_question_instance(
-                quiz_instance_id, question_id, answer_id
+                quiz_instance_id, question_id, answer_id, user_id
             )
         else:
             return redirect(
@@ -139,20 +139,18 @@ def quiz_stats(quiz_instance_id: int):
         stats["quiz_title"] = quiz_instance_stats[0][0]
         stats["quiz_description"] = quiz_instance_stats[0][1]
         stats["started"] = quiz_instance_stats[0][3]
-        stats["timedelta"] = _create_time_diff_text(
-            quiz_instance_stats[0][3], quiz_instance_stats[0][4]
-        )
+        delta = quiz_instance_stats[0][4] - quiz_instance_stats[0][3]
+        stats["timedelta"] = _create_time_diff_text(delta.total_seconds())
         stats["questions"] = []
         for i, row in enumerate(quiz_instance_stats):
+            started = stats["started"] if i == 0 else quiz_instance_stats[i - 1][8]
+            qdelta = row[8] - started
             stats["questions"].append(
                 {
                     "question_name": row[5],
                     "answer": row[6],
                     "is_correct": row[7],
-                    "timedelta": _create_time_diff_text(
-                        stats["started"] if i == 0 else quiz_instance_stats[i - 1][8],
-                        row[8],
-                    ),
+                    "timedelta": _create_time_diff_text(qdelta.total_seconds()),
                 }
             )
     return render_template("views/quiz_stats.html", stats=stats)

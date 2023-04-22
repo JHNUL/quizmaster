@@ -16,3 +16,4 @@ import src.routes.login
 import src.routes.logout
 import src.routes.quiz
 import src.routes.attempt
+import src.routes.stats

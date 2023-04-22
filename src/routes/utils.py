@@ -88,9 +88,7 @@ def _check_quiz_fields(title: str, description: str):
         raise BadRequest(description=message)
 
 
-def _create_time_diff_text(time1: 'datetime', time2: 'datetime') -> str:
-    delta = time2 - time1
-    seconds = delta.total_seconds()
+def _create_time_diff_text(seconds: int) -> str:
     days = int(seconds // 86400)
     hours = int((seconds % 86400) // 3600)
     mins = int(((seconds % 86400) % 3600) // 60)

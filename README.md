@@ -32,8 +32,8 @@ List is likely to grow once development goes further but at least the non-option
 |No|User|see list of quizzes|DONE|quiz_creationORquestion_creation|
 |No|User|create a new quiz|DONE|quiz_creationORquestion_creation|
 |No|User|complete a quiz|DONE|quiz_usage|
-|No|User|can filter and search quizzes by some categories||
 |No|User|edit or delete own quiz while it is not yet published|DONE|quiz_usageORdelete_quiz|
-|No|User|see data about quizzes that they've completed||
+|No|User|see data about quizzes that they've completed|DONE||
+|Yes|User|can filter and search quizzes by some categories||
 |Yes|User|can give score to a quiz||
 |Yes|User|can comment on a quiz||
