@@ -55,10 +55,12 @@ CREATE TABLE quiz_instance (
 
 CREATE TABLE question_instance (
   id SERIAL PRIMARY KEY,
+  quizuser_id INTEGER NOT NULL,
   quiz_instance_id INTEGER NOT NULL,
   question_id INTEGER NOT NULL,
   answer_id INTEGER NOT NULL,
   answered_at TIMESTAMPTZ NOT NULL,
+  FOREIGN KEY(quizuser_id) REFERENCES quizuser(id),
   FOREIGN KEY(quiz_instance_id) REFERENCES quiz_instance(id) ON DELETE CASCADE,
   FOREIGN KEY(question_id) REFERENCES question(id),
   FOREIGN KEY(answer_id) REFERENCES answer(id),

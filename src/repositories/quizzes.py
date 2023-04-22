@@ -156,6 +156,7 @@ class QuizRepository:
         return cursor.rowcount
 
     def delete_quiz(self, quiz_id: int, user_id: int):
+        # TODO: set is_active to False, don't remove
         query_string = """
             DELETE FROM quiz
             WHERE id = :id
@@ -164,10 +165,7 @@ class QuizRepository:
         """
         cursor = self.database.session.execute(
             _text(query_string),
-            {
-                "id": quiz_id,
-                "quizuser_id": user_id
-            },
+            {"id": quiz_id, "quizuser_id": user_id},
         )
         self.database.session.commit()
         return cursor.rowcount
@@ -223,6 +221,17 @@ class QuizRepository:
         if len(instances) == 0:
             return None
         return instances[0]
+
+    def get_all_quiz_instances_by_user(self, user_id: int):
+        query_string = """
+            SELECT * FROM quiz_instance
+            WHERE quizuser_id = :quizuser_id
+            AND finished_at IS NOT NULL;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string), {"quizuser_id": user_id}
+        )
+        return cursor.fetchall()
 
     def create_new_quiz_instance(self, user_id: int, quiz_id: int):
         query_string = """

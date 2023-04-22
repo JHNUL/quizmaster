@@ -40,7 +40,8 @@ This is mainly to show progress below the main functionality level. These are no
   - errorhandler with not found tpl DONE
   - deleting an unpublished quiz that has results should work DONE
   - show answer times at quiz stats page DONE
-  - special stats page where user can see info about quizzes
+  - special stats page where user can see info about quizzes DONE
+  - quizzes, questions and answers have is_active property that is False when deleted
   - better UX at question creation
   - unique constraint to connection tables based on compound key
   - more tests for users access to editing quizzes and seeing instance results

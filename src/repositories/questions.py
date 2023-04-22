@@ -72,16 +72,18 @@ class QuestionRepository:
         return cursor.fetchall()
 
     def create_new_question_instance(
-        self, quiz_instance_id: int, question_id: int, answer_id: int
+        self, quiz_instance_id: int, question_id: int, answer_id: int, user_id: int
     ):
         query_string = """
             INSERT INTO question_instance (
+                quizuser_id,
                 quiz_instance_id,
                 question_id,
                 answer_id,
                 answered_at
             )
             VALUES (
+                :quizuser_id,
                 :quiz_instance_id,
                 :question_id,
                 :answer_id,
@@ -92,6 +94,7 @@ class QuestionRepository:
         cursor = self.database.session.execute(
             _text(query_string),
             {
+                "quizuser_id": user_id,
                 "quiz_instance_id": quiz_instance_id,
                 "question_id": question_id,
                 "answer_id": answer_id,
@@ -157,3 +160,29 @@ class QuestionRepository:
             },
         )
         return cursor.fetchall()
+
+    def get_count_of_question_instances_by_user(self, user_id: int):
+        query_string = """
+            SELECT COUNT(*) FROM question_instance qi
+            JOIN answer a ON qi.answer_id = a.id
+            WHERE quizuser_id = :quizuser_id;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string), {"quizuser_id": user_id}
+        )
+        return cursor.fetchone()[0]
+
+    def get_correct_answer_percentage(self, user_id: int):
+        query_string = """
+            SELECT 100.0*SUM(CAST(a.is_correct AS INTEGER)) / NULLIF(COUNT(*), 0) AS PERCENTAGE
+            FROM question_instance qi
+            JOIN answer a ON qi.answer_id = a.id
+            WHERE quizuser_id = :quizuser_id;
+        """
+        cursor = self.database.session.execute(
+            _text(query_string), {"quizuser_id": user_id}
+        )
+        res = cursor.fetchone()
+        if res[0] is None:
+            return 0.0
+        return res[0]
