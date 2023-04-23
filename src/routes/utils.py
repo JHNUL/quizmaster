@@ -1,4 +1,3 @@
-from datetime import datetime
 from jinja2.utils import markupsafe
 from werkzeug.exceptions import BadRequest
 from src.constants import (
@@ -45,6 +44,11 @@ def _create_full_quiz_object(full_quiz_rows):
             if q.question_name is not None
         }
     )
+    full_quiz["answers"] = {}
+    for row in full_quiz_rows:
+        if row.question_id not in full_quiz["answers"]:
+            full_quiz["answers"][row.question_id] = []
+        full_quiz["answers"][row.question_id].append((row.answer_text, row.is_correct))
     return full_quiz
 
 

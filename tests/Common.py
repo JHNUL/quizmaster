@@ -66,15 +66,7 @@ class Common:
         quiz["questions"] = []
         question_url = f"{ROUTES_DICT['Quiz']}/{quiz_id}/question"
         for _i in range(questions):
-            question_data = {
-                "questionname": f"{self.faker.text(max_nb_chars=60)}?",
-                "answeropt1": self.faker.text(max_nb_chars=60),
-                "answeropt2": self.faker.text(max_nb_chars=60),
-                "answeropt3": self.faker.text(max_nb_chars=60),
-                "answeropt4": self.faker.text(max_nb_chars=60),
-                "answeropt5": self.faker.text(max_nb_chars=60),
-                "iscorrect": f"answeropt{randint(1,5)}",
-            }
+            question_data = self._create_question_data()
             quiz["questions"].append(question_data)
             question_res = post(
                 question_url,
@@ -97,3 +89,14 @@ class Common:
     @keyword("Map List Of Dictionaries To Value")
     def map_list_of_dictionaries_to_value(self, coll: list, key: str):
         return [elem[key] for elem in coll]
+
+    def _create_question_data(self):
+        return {
+            "questionname": f"{self.faker.text(max_nb_chars=60).replace('.', '')}?",
+            "answeropt1": self.faker.text(max_nb_chars=60),
+            "answeropt2": self.faker.text(max_nb_chars=60),
+            "answeropt3": self.faker.text(max_nb_chars=60),
+            "answeropt4": self.faker.text(max_nb_chars=60),
+            "answeropt5": self.faker.text(max_nb_chars=60),
+            "iscorrect": f"answeropt{randint(1,5)}",
+        }
