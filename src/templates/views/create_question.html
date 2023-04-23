@@ -1,108 +1,119 @@
 {% extends "layout/base.html" %} {% block title %}Quiz detail{% endblock %} {%
 block content %}
-<div class="p-4 max-w-lg mx-auto">
-  <div class="flex-grow">
-    <h2 class="text-2xl">{{ quiz.quiz_title }}</h2>
+<div class="flex flex-row mt-2">
+  <div class="basis-1/12"></div>
+  <div class="basis-4/12">
+    <div class="flex-grow">
+      <h2 class="text-2xl">{{ quiz.quiz_title }}</h2>
+    </div>
+    <div class="flex-grow">
+      <p class="mt-2">{{ quiz.quiz_description }}</p>
+    </div>
+    <div class="flex-grow">
+      <button class="btn-primary" id="add_question">Add question</button>
+      <a href="/">
+        <button class="btn-primary" id="finish_creation">Done</button>
+      </a>
+    </div>
+    <form
+      id="add_question_form"
+      action="/quiz/{{ quiz.quiz_id }}/question"
+      method="post"
+      style="display: none"
+    >
+      <textarea
+        class="description-text-area"
+        name="questionname"
+        id="questionname"
+        autocomplete="off"
+        maxlength="{{ QUESTION_MAX_LEN }}"
+        placeholder="Question text"
+        required
+      ></textarea>
+      <div id="answeropts">
+        <em>Create answer options, enable checkbox for correct option(s)</em>
+        <span id="answer_option1">
+          <div class="md:flex md:items-center mb-2">
+            <div class="md:w-1/12 flex items-center justify-center">
+              <button class="btn-small" id="remove_answeropt">&minus;</button>
+            </div>
+            <div class="md:w-10/12">
+              <input
+                class="text-input"
+                type="text"
+                name="answeropt1"
+                id="answeropt1"
+                autocomplete="off"
+                maxlength="{{ ANSWER_MAX_LEN }}"
+                required
+              />
+            </div>
+            <div class="md:w-1/12 flex items-center justify-center">
+              <input
+                type="checkbox"
+                class="w-5 h-5 rounded-full"
+                id="iscorrect1"
+                name="iscorrect"
+                value="answeropt1"
+              />
+            </div>
+          </div>
+        </span>
+        <span id="answer_option2">
+          <div class="md:flex md:items-center mb-2">
+            <div class="md:w-1/12 flex items-center justify-center">
+              <button class="btn-small" id="add_answeropt">&plus;</button>
+            </div>
+            <div class="md:w-10/12">
+              <input
+                class="text-input"
+                type="text"
+                name="answeropt2"
+                id="answeropt2"
+                autocomplete="off"
+                maxlength="{{ ANSWER_MAX_LEN }}"
+                required
+              />
+            </div>
+            <div class="md:w-1/12 flex items-center justify-center">
+              <input
+                type="checkbox"
+                class="w-5 h-5 rounded-full"
+                id="iscorrect2"
+                name="iscorrect"
+                value="answeropt2"
+              />
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="flex items-center justify-between">
+        <button id="cancel_question" class="btn-primary">
+          Cancel
+        </button>
+        <button id="save_question" class="btn-primary" type="submit">OK</button>
+      </div>
+    </form>
   </div>
-  <div class="flex-grow">
-    <p class="mt-2">{{ quiz.quiz_description }}</p>
-  </div>
-  <div class="flex-grow">
-    <p class="mt-2">Questions:</p>
-    {% if quiz.questions|length == 0 %}
-    <p class="mt-2">No questions yet</p>
-    {% else %}
-    <ul>
+  <div class="basis-1/12"></div>
+  <div class="basis-4/12">
+    <div class="flex-grow">
+      <h2 class="text-2xl">Question Flow</h2>
       {% for id, question_name in quiz.questions %}
-      <li class="mt-2">{{ question_name }}</li>
+        <div class="bg-white rounded-md shadow-md p-4">
+          <div class="text-xl mb-2">{{question_name}}</div>
+          <div class="flex flex-col justify-between">
+            {% for answer_text, is_correct in quiz.answers[id] %}
+            <div class="mr-4">
+              <p>{{ answer_text }}{% if is_correct %} (Correct){% endif %}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
       {% endfor %}
-    </ul>
-    {% endif %}
-    <button class="btn-primary" id="add_question">Add question</button>
-    <a href="/">
-      <button class="btn-primary" id="finish_creation">Done</button>
-    </a>
+    </div>
   </div>
-  <form
-    id="add_question_form"
-    action="/quiz/{{ quiz.quiz_id }}/question"
-    method="post"
-    style="display: none"
-  >
-    <label for="questionname">Question</label>
-    <textarea
-      class="description-text-area"
-      name="questionname"
-      id="questionname"
-      autocomplete="off"
-      maxlength="{{ QUESTION_MAX_LEN }}"
-      required
-    ></textarea>
-    <div id="answeropts">
-      <span id="answer_option1">
-        <label class="block md:mb-0 pr-4" for="answeropt1">
-          Answer option 1
-        </label>
-        <div class="md:flex md:items-center mt-1">
-          <div class="md:w-11/12">
-            <input
-              class="text-input"
-              type="text"
-              name="answeropt1"
-              id="answeropt1"
-              autocomplete="off"
-              maxlength="{{ ANSWER_MAX_LEN }}"
-              required
-            />
-          </div>
-          <div class="md:w-1/12 flex items-center justify-center">
-            <input
-              type="checkbox"
-              id="iscorrect1"
-              name="iscorrect"
-              value="answeropt1"
-            />
-          </div>
-        </div>
-      </span>
-      <span id="answer_option2">
-        <label class="block md:mb-0 pr-4" for="answeropt2">
-          Answer option 2
-        </label>
-        <div class="md:flex md:items-center mt-1">
-          <div class="md:w-11/12">
-            <input
-              class="text-input"
-              type="text"
-              name="answeropt2"
-              id="answeropt2"
-              autocomplete="off"
-              maxlength="{{ ANSWER_MAX_LEN }}"
-              required
-            />
-          </div>
-          <div class="md:w-1/12 flex items-center justify-center">
-            <input
-              type="checkbox"
-              id="iscorrect2"
-              name="iscorrect"
-              value="answeropt2"
-            />
-          </div>
-        </div>
-      </span>
-    </div>
-    <div class="flex items-center justify-center">
-      <button class="btn-small" id="remove_answeropt">&minus;</button>
-      <button class="btn-small" id="add_answeropt">&plus;</button>
-    </div>
-    <div class="flex items-center justify-between">
-      <button id="cancel_question" class="btn-primary">
-        Cancel
-      </button>
-      <button id="save_question" class="btn-primary" type="submit">OK</button>
-    </div>
-  </form>
+  <div class="basis-1/12"></div>
 </div>
 <script
   src="{{ url_for('static', filename='js/answer.js') }}"

@@ -15,25 +15,25 @@ The deployed application is available at https://quizmastah.herokuapp.com/.
 
 ## About the application (Draft)
 
-Quizzes can consist of one to many questions each with two to five answer options. User can select the answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. One attempt of a quiz is a single instance, same quizzes can be filled many times each saving the results as a new instance of that quiz for the user. Quiz attempts are timed and some score on a quiz is calculated based on how many correct answers there were and how quick they were answered.
+Quizzes can consist of one to many questions each with two to five answer options. User can create a quiz and test it before making it public to other users. Published quizzes cannot be deleted or edited anymore. User can select the answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. One attempt of a quiz is a single instance, same quizzes can be filled many times, each saving the results as a new instance of that quiz for the user. Quiz attempts are timed and the results are shown to the user when finishing a quiz, including the time it took to answer the questions. There is a special statistics page where user can see overall stats about how many quizzes they have completed and what is the percentage of correctly answered questions.
 
-## Functionality
+## Functionality (updated 23 Apr)
 
-*High level functionality* (i.e. it is rough around the edges, but testable) that the course reviewers should expect to be there when trying it out. The user experience is still somewhat awful at this point.
+*High level functionality* that the course reviewers should expect to be there when trying it out. The user experience is still somewhat awful at this point.
 
 Robot Framework test suite tags are there for convenience, should you want to run relevant tests and see things happening in the browser.
 
-List is likely to grow once development goes further but at least the non-optionals here are required for MVP. As these are very high level, more techical and detailed tasks on how the development is going are recorded [here](docs/todos.md).
+As these are very high level, more techical and detailed tasks on how the development is going are recorded [here](docs/todos.md).
 
-|Optional|Role|Functionality|Status|Robot tags|
+|MVP|Role|Functionality|Status|Robot tags|
 |---|---|---|---|---|
-|No|User|create username and password|DONE|registerORlogin|
-|No|User|login and logout|DONE|loginORlogout|
-|No|User|see list of quizzes|DONE|quiz_creationORquestion_creation|
-|No|User|create a new quiz|DONE|quiz_creationORquestion_creation|
-|No|User|complete a quiz|DONE|quiz_usage|
-|No|User|edit or delete own quiz while it is not yet published|DONE|quiz_usageORdelete_quiz|
-|No|User|see data about quizzes that they've completed|DONE||
-|Yes|User|can filter and search quizzes by some categories||
-|Yes|User|can give score to a quiz||
-|Yes|User|can comment on a quiz||
+|Yes|User|create username and password|DONE|registerORlogin|
+|Yes|User|login and logout|DONE|loginORlogout|
+|Yes|User|see list of quizzes|DONE|quiz_creationORquestion_creation|
+|Yes|User|create a new quiz|DONE|quiz_creationORquestion_creation|
+|Yes|User|complete a quiz|DONE|quiz_usage|
+|Yes|User|edit or delete own quiz while it is not yet published|DONE|quiz_usageORdelete_quiz|
+|Yes|User|see data about quizzes that they've completed|DONE||
+|No|User|can filter and search quizzes by some categories||
+|No|User|can give score to a quiz||
+|No|User|can comment on a quiz||

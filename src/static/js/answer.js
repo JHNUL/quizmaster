@@ -25,11 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const span = document.createElement("span");
     span.setAttribute("id", `answer_option${index}`);
     span.innerHTML = `
-      <label class="block md:mb-0 pr-4" for="answeropt${index}">
-        Answer option ${index}
-      </label>
-      <div class="md:flex md:items-center mt-1">
-        <div class="md:w-11/12">
+      <div class="md:flex md:items-center mb-2">
+        <div class="md:w-1/12"></div>
+        <div class="md:w-10/12">
           <input
             class="text-input"
             type="text"
@@ -43,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="md:w-1/12 flex items-center justify-center">
           <input
             type="checkbox"
+            class="w-5 h-5 rounded-full"
             id="iscorrect${index}"
             name="iscorrect"
             value="answeropt${index}"
