@@ -1,3 +1,4 @@
+from random import randbytes
 from flask import render_template, request, redirect, session
 from werkzeug.security import check_password_hash
 from src.app import app
@@ -22,6 +23,7 @@ def login():
     if check_password_hash(user.pw, password):
         session["username"] = username
         session["user_id"] = user.id
+        session["csrf_token"] = randbytes(16).hex()
         user_repo.set_login_time(user.id)
         return redirect("/")
 

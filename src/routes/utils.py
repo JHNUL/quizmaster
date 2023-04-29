@@ -37,13 +37,13 @@ def _create_full_quiz_object(full_quiz_rows):
     full_quiz["quiz_description"] = full_quiz_rows[0].quiz_description
     full_quiz["quiz_created"] = full_quiz_rows[0].created_at
     full_quiz["quiz_creator"] = full_quiz_rows[0].username
-    full_quiz["questions"] = list(
+    full_quiz["questions"] = sorted(list(
         {
             (q.question_id, q.question_name)
             for q in full_quiz_rows
             if q.question_name is not None
         }
-    )
+    ))
     full_quiz["answers"] = {}
     for row in full_quiz_rows:
         if row.question_id not in full_quiz["answers"]:

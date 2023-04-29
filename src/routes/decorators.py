@@ -1,5 +1,6 @@
 from functools import wraps
-from flask import redirect, url_for, session, make_response
+from flask import redirect, url_for, session, make_response, request
+from werkzeug.exceptions import Forbidden
 from src.db import db
 from src.repositories.users import UserRepository
 
@@ -25,5 +26,24 @@ def no_cache(func):
         response.headers.set("Pragma", "no-cache")
         response.headers.set("Expires", 0)
         return response
+
+    return decorated_function
+
+
+def csrf(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if "csrf_token" not in session:
+            if "username" in session:
+                del session["username"]
+            if "user_id" in session:
+                del session["user_id"]
+            return redirect("/login")
+        if (
+            "csrf_token" not in request.form
+            or session["csrf_token"] != request.form["csrf_token"]
+        ):
+            raise Forbidden
+        return func(*args, **kwargs)
 
     return decorated_function

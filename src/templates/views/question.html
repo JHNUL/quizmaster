@@ -19,6 +19,7 @@
           </label>
         </div>
       {% endfor %}
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <button class="mt-4 btn-primary" type="submit">Next</button>
     </form>
   </div>

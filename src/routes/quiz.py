@@ -3,7 +3,7 @@ from flask import render_template, redirect, request, session, url_for
 from werkzeug.exceptions import NotFound
 from src.app import app
 from src.db import db
-from src.routes.decorators import login_required, no_cache
+from src.routes.decorators import login_required, no_cache, csrf
 from src.routes.utils import (
     _create_full_quiz_object,
     _check_question_fields,
@@ -24,6 +24,7 @@ def quiz():
 
 @app.route("/quiz", methods=["POST"])
 @login_required
+@csrf
 def new_quiz():
     title = request.form["quiztitle"]
     description = request.form["quizdescription"]
@@ -47,6 +48,7 @@ def edit_quiz_view(quiz_id: int):
 
 @app.route("/quiz/<int:quiz_id>/edit", methods=["POST"])
 @login_required
+@csrf
 def edit_quiz(quiz_id: int):
     user_id = session["user_id"]
     title = request.form["quiztitle"]
@@ -58,6 +60,7 @@ def edit_quiz(quiz_id: int):
 
 @app.route("/quiz/<int:quiz_id>/publish", methods=["POST"])
 @login_required
+@csrf
 def publish_quiz(quiz_id: int):
     user_id = session["user_id"]
     QuizRepository(db).publish_quiz(quiz_id, user_id)
@@ -66,6 +69,7 @@ def publish_quiz(quiz_id: int):
 
 @app.route("/quiz/<int:quiz_id>/delete", methods=["POST"])
 @login_required
+@csrf
 def delete_quiz(quiz_id: int):
     user_id = session["user_id"]
     if QuizRepository(db).is_user_quiz(quiz_id, user_id):
@@ -86,6 +90,7 @@ def create_question(quiz_id: int):
 
 @app.route("/quiz/<int:quiz_id>/question", methods=["POST"])
 @login_required
+@csrf
 def quiz_question(quiz_id: int):
     user_id = session["user_id"]
     full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
