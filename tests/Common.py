@@ -1,8 +1,8 @@
 # pylint: disable=invalid-name
 from random import randbytes, choice, randint
-from re import match
+from re import match, search
 from faker import Faker
-from requests import post, Session
+from requests import post, get, Session
 from robot.api.deco import keyword
 from variables import ROUTES_DICT
 
@@ -21,6 +21,16 @@ class Common:
                 f"Status code should have been 302, was {login_res.status_code}"
             )
         return session.cookies.get_dict()
+
+    def _get_csrf_token(self, cookie):
+        create_quiz_url = ROUTES_DICT["Quiz"]
+        login_res = get(create_quiz_url, cookies=cookie, timeout=3, allow_redirects=False)
+        if login_res.status_code != 200:
+            raise ValueError(
+                f"Status code should have been 200, was {login_res.status_code}"
+            )
+        res = search("name=\"csrf_token\" value=\"(.+?)\"", str(login_res.content))
+        return res.groups()[0]
 
     @keyword("Generate Random Username And Password")
     def generate_random_username_and_password(self) -> tuple:
@@ -46,15 +56,17 @@ class Common:
     def create_quiz_with_api(
         self, username: str, password: str, questions=5, publish=True
     ):
+        cookie = self._get_cookie(username, password)
+        csrf_token = self._get_csrf_token(cookie)
         quiz = {}
         quiz_data = {
             "quiztitle": self.faker.text(max_nb_chars=60),
             "quizdescription": self.faker.text(max_nb_chars=250),
             "publish": publish,
+            "csrf_token": csrf_token,
         }
         quiz["quiz_title"] = quiz_data["quiztitle"]
         quiz["quiz_description"] = quiz_data["quizdescription"]
-        cookie = self._get_cookie(username, password)
         url = ROUTES_DICT["Quiz"]
         res = post(url, quiz_data, timeout=3, cookies=cookie)
         if res.status_code != 200 or match(".+/quiz/\d+", res.url) is None:
@@ -66,7 +78,7 @@ class Common:
         quiz["questions"] = []
         question_url = f"{ROUTES_DICT['Quiz']}/{quiz_id}/question"
         for _i in range(questions):
-            question_data = self._create_question_data()
+            question_data = self._create_question_data(csrf_token)
             quiz["questions"].append(question_data)
             question_res = post(
                 question_url,
@@ -90,7 +102,7 @@ class Common:
     def map_list_of_dictionaries_to_value(self, coll: list, key: str):
         return [elem[key] for elem in coll]
 
-    def _create_question_data(self):
+    def _create_question_data(self, csrf_token):
         return {
             "questionname": f"{self.faker.text(max_nb_chars=60).replace('.', '')}?",
             "answeropt1": self.faker.text(max_nb_chars=60),
@@ -99,4 +111,5 @@ class Common:
             "answeropt4": self.faker.text(max_nb_chars=60),
             "answeropt5": self.faker.text(max_nb_chars=60),
             "iscorrect": f"answeropt{randint(1,5)}",
+            "csrf_token": csrf_token,
         }
