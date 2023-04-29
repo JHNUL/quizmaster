@@ -16,24 +16,30 @@ CREATE TABLE quiz (
   title VARCHAR(255) NOT NULL,
   quiz_description TEXT,
   public BOOLEAN NOT NULL DEFAULT FALSE,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL,
   updated_at TIMESTAMPTZ,
   FOREIGN KEY(quizuser_id) REFERENCES quizuser(id)
 );
 
-CREATE TABLE question (id SERIAL PRIMARY KEY, question_name TEXT);
+CREATE TABLE question (
+  id SERIAL PRIMARY KEY,
+  question_name TEXT,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE
+);
 
 CREATE TABLE quiz_question (
   quiz_id INTEGER NOT NULL,
   question_id INTEGER NOT NULL,
-  FOREIGN KEY(quiz_id) REFERENCES quiz(id) ON DELETE CASCADE,
+  FOREIGN KEY(quiz_id) REFERENCES quiz(id),
   FOREIGN KEY(question_id) REFERENCES question(id)
 );
 
 CREATE TABLE answer (
   id SERIAL PRIMARY KEY,
   answer_text TEXT NOT NULL,
-  is_correct BOOLEAN
+  is_correct BOOLEAN,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE question_answer (
@@ -50,7 +56,7 @@ CREATE TABLE quiz_instance (
   started_at TIMESTAMPTZ NOT NULL,
   finished_at TIMESTAMPTZ,
   FOREIGN KEY(quizuser_id) REFERENCES quizuser(id),
-  FOREIGN KEY(quiz_id) REFERENCES quiz(id) ON DELETE CASCADE
+  FOREIGN KEY(quiz_id) REFERENCES quiz(id)
 );
 
 CREATE TABLE question_instance (
@@ -61,7 +67,7 @@ CREATE TABLE question_instance (
   answer_id INTEGER NOT NULL,
   answered_at TIMESTAMPTZ NOT NULL,
   FOREIGN KEY(quizuser_id) REFERENCES quizuser(id),
-  FOREIGN KEY(quiz_instance_id) REFERENCES quiz_instance(id) ON DELETE CASCADE,
+  FOREIGN KEY(quiz_instance_id) REFERENCES quiz_instance(id),
   FOREIGN KEY(question_id) REFERENCES question(id),
   FOREIGN KEY(answer_id) REFERENCES answer(id),
   UNIQUE (quiz_instance_id, question_id)

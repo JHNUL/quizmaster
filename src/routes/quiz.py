@@ -68,7 +68,8 @@ def publish_quiz(quiz_id: int):
 @login_required
 def delete_quiz(quiz_id: int):
     user_id = session["user_id"]
-    QuizRepository(db).delete_quiz(quiz_id, user_id)
+    if QuizRepository(db).is_user_quiz(quiz_id, user_id):
+        QuizRepository(db).delete_quiz(quiz_id, user_id)
     return redirect(url_for("landingpage"))
 
 

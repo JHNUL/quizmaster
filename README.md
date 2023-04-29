@@ -15,7 +15,15 @@ The deployed application is available at https://quizmastah.herokuapp.com/.
 
 ## About the application (Draft)
 
-Quizzes can consist of one to many questions each with two to five answer options. User can create a quiz and test it before making it public to other users. Published quizzes cannot be deleted or edited anymore. User can select the answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. One attempt of a quiz is a single instance, same quizzes can be filled many times, each saving the results as a new instance of that quiz for the user. Quiz attempts are timed and the results are shown to the user when finishing a quiz, including the time it took to answer the questions. There is a special statistics page where user can see overall stats about how many quizzes they have completed and what is the percentage of correctly answered questions.
+
+### Creating a quiz
+Quizzes can consist of one to many questions each with two to five answer options. User can create a quiz and test it before making it public to other users. An unpublished quiz is not accessible to any other user that its author. Published quizzes are visible to everyone and cannot be deleted or edited anymore.
+
+### Filling a quiz
+User can attempt any quiz that is visible in the list of quizzes. While in the quiz, user can select an answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. If user navigates away from the quiz without completing it, the next time they start that same quiz it continues from the same place.
+
+### Quiz results
+One attempt of a quiz is a single instance, same quizzes can be filled many times, each saving the results as a new instance of that quiz for the user. Quiz attempts are timed and the results are shown to the user when finishing a quiz, including the time it took to answer the questions. There is a special statistics page where user can see overall stats about how many quizzes they have completed and what is the percentage of correctly answered questions.
 
 ## Functionality (updated 23 Apr)
 
