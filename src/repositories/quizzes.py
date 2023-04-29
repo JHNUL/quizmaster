@@ -6,15 +6,11 @@ class QuizRepository:
     def __init__(self, database: "SQLAlchemy"):
         self.database = database
 
-    def get_all_quizzes(self):
-        query_string = "SELECT * FROM quiz;"
-        cursor = self.database.session.execute(_text(query_string))
-        return cursor.fetchall()
-
     def get_all_visible_quizzes(self, user_id: int):
         query_string = """
             SELECT * FROM quiz
-            WHERE public OR quizuser_id = :quizuser_id;
+            WHERE is_active = TRUE
+            AND (public OR quizuser_id = :quizuser_id);
         """
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id}
@@ -22,12 +18,24 @@ class QuizRepository:
         return cursor.fetchall()
 
     def get_quiz_by_id(self, quiz_id):
-        query_string = "SELECT * FROM quiz WHERE id = :id"
+        query_string = "SELECT * FROM quiz WHERE id = :id AND is_active = TRUE"
         cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
         quizzes = cursor.fetchall()
         if len(quizzes) == 0:
             return None
         return quizzes[0]
+
+    def is_user_quiz(self, quiz_id, user_id, public=False):
+        query_string = """
+            SELECT 1 FROM quiz
+            WHERE id = :id
+            AND quizuser_id = :quizuser_id
+        """
+        query_string += " AND public = TRUE;" if public else " AND public = FALSE;"
+        cursor = self.database.session.execute(
+            _text(query_string), {"id": quiz_id, "quizuser_id": user_id}
+        )
+        return cursor.fetchone() is not None
 
     def get_full_quiz_by_id(self, quiz_id):
         """Parameters: (int) quiz_id
@@ -49,7 +57,7 @@ class QuizRepository:
             LEFT JOIN question qu ON qq.question_id = qu.id
             LEFT JOIN question_answer qa ON qa.question_id = qu.id
             LEFT JOIN answer a ON qa.answer_id = a.id
-            WHERE q.id = :id;
+            WHERE q.id = :id AND q.is_active = TRUE;
         """
         cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
         return cursor.fetchall()
@@ -77,7 +85,7 @@ class QuizRepository:
             LEFT JOIN question qu ON qq.question_id = qu.id
             LEFT JOIN question_answer qa ON qa.question_id = qu.id
             LEFT JOIN answer a ON qa.answer_id = a.id
-            WHERE q.id = :id AND q.quizuser_id = :quizuser_id;
+            WHERE q.id = :id AND q.quizuser_id = :quizuser_id AND q.is_active = TRUE;
         """
         cursor = self.database.session.execute(
             _text(query_string), {"id": quiz_id, "quizuser_id": user_id}
@@ -88,7 +96,7 @@ class QuizRepository:
         query_string = """
             SELECT q.*, qu.username as quiz_creator FROM quiz q
             JOIN quizuser qu ON qu.id = q.quizuser_id
-            WHERE q.id = :id;
+            WHERE q.id = :id AND q.is_active = TRUE;
         """
         cursor = self.database.session.execute(_text(query_string), {"id": quiz_id})
         quizzes = cursor.fetchall()
@@ -142,7 +150,7 @@ class QuizRepository:
             UPDATE quiz
             SET public = TRUE,
                 updated_at = :updated_at
-            WHERE id = :id AND quizuser_id = :quizuser_id
+            WHERE id = :id AND quizuser_id = :quizuser_id AND is_active = TRUE;
         """
         cursor = self.database.session.execute(
             _text(query_string),
@@ -156,33 +164,52 @@ class QuizRepository:
         return cursor.rowcount
 
     def delete_quiz(self, quiz_id: int, user_id: int):
-        # TODO: set is_active to False, don't remove
-        query_string = """
-            DELETE FROM quiz
+        """
+        Sets quiz with associated questions and answers as inactive.
+        Note that user access to quiz has to be checked before.
+        """
+        query_string_quiz = """
+            UPDATE quiz
+            SET is_active = FALSE
             WHERE id = :id
-            AND quizuser_id = :quizuser_id
             AND public = FALSE;
         """
-        cursor = self.database.session.execute(
-            _text(query_string),
+        query_string_question = """
+            UPDATE question
+            SET is_active = FALSE
+            WHERE id IN (SELECT question_id FROM quiz_question WHERE quiz_id = :quiz_id);
+        """
+        query_string_answer = """
+            UPDATE answer a
+            SET is_active = FALSE
+            WHERE a.id IN (
+                SELECT answer_id FROM question_answer qa WHERE qa.question_id IN
+                (SELECT question_id FROM quiz_question qq WHERE qq.quiz_id = :quiz_id)
+            );
+        """
+        self.database.session.execute(
+            _text(query_string_quiz),
             {"id": quiz_id, "quizuser_id": user_id},
         )
+        self.database.session.execute(
+            _text(query_string_question),
+            {"quiz_id": quiz_id},
+        )
+        self.database.session.execute(
+            _text(query_string_answer),
+            {"quiz_id": quiz_id},
+        )
         self.database.session.commit()
-        return cursor.rowcount
+        return True
 
     def get_quiz_instances(self, user_id: int, quiz_id: int, only_active=True):
         query_string = """
             SELECT * FROM quiz_instance
             WHERE quizuser_id = :quizuser_id
-            AND quiz_id = :quiz_id;
+            AND quiz_id = :quiz_id
         """
         if only_active:
-            query_string = """
-                SELECT * FROM quiz_instance
-                WHERE quizuser_id = :quizuser_id
-                AND quiz_id = :quiz_id
-                AND finished_at IS NULL;
-            """
+            query_string += " AND finished_at IS NULL;"
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id, "quiz_id": quiz_id}
         )
