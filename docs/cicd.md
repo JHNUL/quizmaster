@@ -10,7 +10,7 @@ The test-runner container only supports headless.
 docker run --network="host" \
  --volume ./tests:/home/testrunner/tests \
  --volume ./test-results:/home/testrunner/test-results \
- juhanir/test-runner:0.1.2
+ juhanir/test-runner:0.1.3
 ```
 
 The tests are run on every pull request made in from another branch in the source repository (not forks). Target is to always keep it green.
