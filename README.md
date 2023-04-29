@@ -17,7 +17,7 @@ The deployed application is available at https://quizmastah.herokuapp.com/.
 
 
 ### Creating a quiz
-Quizzes can consist of one to many questions each with two to five answer options. User can create a quiz and test it before making it public to other users. An unpublished quiz is not accessible to any other user that its author. Published quizzes are visible to everyone and cannot be deleted or edited anymore.
+Quizzes can consist of one to many questions each with two to five answer options. User can create a quiz and test it before making it public to other users. An unpublished quiz is not accessible to any other user than its author. Published quizzes are visible to everyone and cannot be deleted or edited anymore.
 
 ### Filling a quiz
 User can attempt any quiz that is visible in the list of quizzes. While in the quiz, user can select an answer and change it while still viewing that question. When navigating to the next question the answer is locked. User can only progress linearly through a quiz, already saved answers cannot be changed. If user navigates away from the quiz without completing it, the next time they start that same quiz it continues from the same place.
