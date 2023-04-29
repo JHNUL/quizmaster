@@ -44,8 +44,9 @@ This is mainly to show progress below the main functionality level. These are no
   - better UX at question creation DONE
   - quizzes, questions and answers have is_active property that is False when deleted DONE
     - enables deleting questions that are in private quizzes that have been answered already
-  - unique constraint to connection tables based on compound key
-  - fix CSRF vulnerability
+  - unique constraint to connection tables based on compound key DONE
+  - question flow in correct order DONE
+  - fix CSRF vulnerability DONE
   - already created questions can be deleted
   - more tests for users access to editing quizzes and seeing instance results
   - shorter session length

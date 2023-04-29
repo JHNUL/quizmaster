@@ -29,6 +29,7 @@ block content %}
       maxlength="{{ QUIZ_DESC_MAX_LEN }}"
       required
     ></textarea>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <div class="flex items-center justify-between">
       <a href="/">
         <button id="cancel_quiz" class="btn-primary" type="button">Cancel</button>

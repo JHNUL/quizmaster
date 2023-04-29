@@ -30,8 +30,10 @@ block content %}
     {% if user_id == quiz.quizuser_id and not quiz.public %}
       <form action="/quiz/{{ quiz.id }}/publish" method="post">
         <button class="btn-secondary" id="publish_quiz_{{ quiz.id }}" type="submit">Publish</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       </form>
       <form action="/quiz/{{ quiz.id }}/delete" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <button class="btn-secondary" id="delete_quiz_{{ quiz.id }}" type="submit">Delete</button>
       </form>
     {% endif %}

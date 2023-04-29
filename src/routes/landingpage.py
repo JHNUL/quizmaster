@@ -1,5 +1,11 @@
 from flask import render_template, session
-from werkzeug.exceptions import NotFound, BadRequest, Unauthorized, InternalServerError
+from werkzeug.exceptions import (
+    NotFound,
+    BadRequest,
+    Unauthorized,
+    InternalServerError,
+    Forbidden,
+)
 from src.app import app
 from src.db import db
 from src.routes.decorators import login_required
@@ -22,6 +28,11 @@ def bad_request(error):
 @app.errorhandler(Unauthorized)
 def unauthorized(error):
     return render_template("views/401.html")
+
+
+@app.errorhandler(Forbidden)
+def forbidden(error):
+    return render_template("views/403.html")
 
 
 @app.errorhandler(NotFound)

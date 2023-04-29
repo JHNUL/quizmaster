@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request, session
 from werkzeug.exceptions import NotFound
 from src.app import app
 from src.db import db
-from src.routes.decorators import login_required, no_cache
+from src.routes.decorators import login_required, no_cache, csrf
 from src.routes.utils import _get_next_unanswered_question, _create_time_diff_text
 from src.repositories.quizzes import QuizRepository
 from src.repositories.questions import QuestionRepository
@@ -35,6 +35,7 @@ def start_quiz(quiz_id: int):
 
 @app.route("/attempt/<int:quiz_id>/instance", methods=["POST"])
 @login_required
+@csrf
 def create_quiz_instance(quiz_id: int):
     user_id = session["user_id"]
     active_instances = QuizRepository(db).get_quiz_instances(user_id, quiz_id)
@@ -88,6 +89,7 @@ def attempt_question(quiz_instance_id: int, question_id: int):
     "/attempt/<int:quiz_instance_id>/question/<int:question_id>", methods=["POST"]
 )
 @login_required
+@csrf
 def save_question(quiz_instance_id: int, question_id: int):
     user_id = session["user_id"]
     question_instance = QuestionRepository(db).get_full_question(

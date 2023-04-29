@@ -93,6 +93,7 @@ block content %}
         </button>
         <button id="save_question" class="btn-primary" type="submit">OK</button>
       </div>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
   </div>
   <div class="basis-1/12"></div>
