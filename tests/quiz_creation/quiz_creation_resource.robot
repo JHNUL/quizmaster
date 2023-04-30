@@ -38,7 +38,7 @@ Add Text To All Visible Empty Answers
 
 Define Random Answer As Correct
     ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
-    ${correct}    Get Random Element From List    ${checkboxes}
+    ${correct}    ${index}    Get Random Element From List    ${checkboxes}
     Click Element    ${correct}
 
 Define Specific Answer As Correct

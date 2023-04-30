@@ -36,6 +36,9 @@ Quiz Question Page Should Be Open
 Quiz Results Page Should Be Open
     Title Should Be    Quiz stats
 
+Stats Page Should Be Open
+    Title Should Be    User stats
+
 Not Found Page Should Be Open
     Title Should Be    Not found
     Page Should Contain    404 Not Found
@@ -95,6 +98,8 @@ Create New Quiz
     Quiz Details Page Should Be Open
     ${url}    Get Location
     ${quiz_id}    Get Quiz Id From Url    ${url}
+    ${answer_list}    Create List
+    ${question_list}    Create List
     ${quiz}    Create Dictionary
     ...    quiz_id=${quiz_id}
     ...    quiz_title=${quiz_title}
@@ -110,7 +115,9 @@ Create New Quiz
             Input Text    ${input}    ${answer}
         END
         ${checkboxes}=    Get WebElements    ${ANSWER_CHECKBOXES}
-        ${correct}=    Get Random Element From List    ${checkboxes}
+        ${correct}    ${indx}    Get Random Element From List    ${checkboxes}
+        Append To List    ${answer_list}    ${indx}
+        Append To List    ${question_list}    ${question_name}
         Click Element    ${correct}
         Click Button    ${SAVE_QUESTION_BTN}
     END
@@ -118,6 +125,9 @@ Create New Quiz
     IF    $publish == True
         Click Button    id:publish_quiz_${quiz_id}
     END
+    Set To Dictionary    ${quiz}
+    ...    correct_answers=${answer_list}
+    ...    questions=${question_list}
     RETURN    ${quiz}
 
 Get All Visible Quizzes From Landing Page
@@ -134,7 +144,7 @@ Start Random Quiz From Landing Page
     [Arguments]    ${selectable_quizzes}
     User Navigates To Landing Page
     Landing Page Should Be Open
-    ${quiz}=    Get Random Element From List    ${selectable_quizzes}
+    ${quiz}    ${index}    Get Random Element From List    ${selectable_quizzes}
     Click Button    id:open_quiz_${quiz["quiz_id"]}
 
 Start Quiz From Landing Page

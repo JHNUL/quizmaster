@@ -76,7 +76,7 @@ User Can See Quiz Front Page
 
 Choose Answer Option
     ${all_options}    Get WebElements    ${ANSWER_OPTIONS}
-    ${selected_option}    Get Random Element From List    ${all_options}
+    ${selected_option}    ${index}    Get Random Element From List    ${all_options}
     Click Element    ${selected_option}
     ${option_text}    Get Text    ${selected_option}
     RETURN    ${option_text}
@@ -136,7 +136,7 @@ User Should Only Be Able To Edit Own Unpublished Quizzes
     END
 
 User Clicks To Edit A Quiz They Created
-    ${own_quiz}    Get Random Element From List    ${UNPUBLISHED_QUIZZES}
+    ${own_quiz}    ${index}    Get Random Element From List    ${UNPUBLISHED_QUIZZES}
     Click Edit Quiz    ${own_quiz}
 
 It Is Possible To Edit Title And Description
