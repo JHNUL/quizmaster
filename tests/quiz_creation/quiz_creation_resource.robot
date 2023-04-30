@@ -36,18 +36,29 @@ Add Text To All Visible Empty Answers
         Input Text    ${input}    ${answer}
     END
 
-Define Random Question As Correct
+Define Random Answer As Correct
     ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
     ${correct}    Get Random Element From List    ${checkboxes}
     Click Element    ${correct}
 
+Define Specific Answer As Correct
+    [Arguments]    ${index}
+    ${checkboxes}    Get WebElements    ${ANSWER_CHECKBOXES}
+    ${correct}    Get From List    ${checkboxes}    ${index}
+    Click Element    ${correct}
+
 User Should Be Able To Add A Question With Answer Options
+    [Arguments]    ${correct_index}=${-1}
     ${question_name}    Get Lorem Ipsum Text    as_question=${True}
     Click Button    Add question
     Input Text    questionname    ${question_name}
     Add Maximum Number Of Answers
     Add Text To All Visible Empty Answers
-    Define Random Question As Correct
+    IF    $correct_index >= 0
+        Define Specific Answer As Correct    ${correct_index}
+    ELSE
+        Define Random Answer As Correct
+    END
     Capture Page Screenshot
     Click Button    ${SAVE_QUESTION_BTN}
     RETURN    ${question_name}
@@ -92,3 +103,49 @@ User Can Cancel Question Creation
     Click Cancel Button
     ${attr}    SeleniumLibrary.Get Element Attribute    id:add_question_form    style
     Should Be Equal As Strings    ${attr}    display: none;
+
+User Adds Questions To Quiz
+    User Has Created A Quiz
+    ${q1}    User Should Be Able To Add A Question With Answer Options
+    ...    correct_index=${0}
+    ${q2}    User Should Be Able To Add A Question With Answer Options
+    ...    correct_index=${1}
+    ${q3}    User Should Be Able To Add A Question With Answer Options
+    ...    correct_index=${4}
+    ${FLOW_QUESTIONS}    Create List    ${None}    ${q1}    ${q2}    ${q3}
+    ${CORRECT_ANSWERS}    Create List    ${None}    ${0}    ${1}    ${4}
+    Set Test Variable    ${FLOW_QUESTIONS}
+    Set Test Variable    ${CORRECT_ANSWERS}
+
+Get Visible Questions From Question Flow
+    ${count}    Get Element Count    //*[@id="question_flow"]/div[@class='bg-white rounded-md shadow-md p-4']
+    ${names}    Create List
+    FOR    ${i}    IN RANGE    ${1}    ${count+1}
+        ${question_elem}    Get WebElement
+        ...    //*[@id="question_flow"]/div[@class='bg-white rounded-md shadow-md p-4'][${i}]/div[1]
+        Append To List    ${names}    ${question_elem.text}
+    END
+    RETURN    ${names}
+
+Questions Show In The Question Flow
+    ${count}    Get Element Count    //*[@id="question_flow"]/div[@class='bg-white rounded-md shadow-md p-4']
+    FOR    ${i}    IN RANGE    ${1}    ${count+1}
+        ${question_elem}    Get WebElement
+        ...    //*[@id="question_flow"]/div[@class='bg-white rounded-md shadow-md p-4'][${i}]/div[1]
+        ${question}    Get From List    ${FLOW_QUESTIONS}    ${i}
+        Should Be Equal As Strings    ${question}    ${question_elem.text}
+        ${answer_idx}    Get From List    ${CORRECT_ANSWERS}    ${i}
+        ${correct_answer}    Get WebElement
+        ...    //*[@id="question_flow"]/div[@class='bg-white rounded-md shadow-md p-4'][${i}]/div[1]/following-sibling::div/p[${answer_idx+1}]
+        String Should Contain Substring    ${correct_answer.text}    (Correct)
+    END
+
+Questions Can Be Deleted From Question Flow
+    ${names}    Get Visible Questions From Question Flow
+    Length Should Be    ${names}    ${3}
+    Click Button
+    ...    //*[@id="question_flow"]/div[@class='bg-white rounded-md shadow-md p-4'][2]/div[1]/following-sibling::div//button
+    ${names}    Get Visible Questions From Question Flow
+    Length Should Be    ${names}    ${2}
+    Should Be Equal As Strings    ${FLOW_QUESTIONS[1]}    ${names[0]}
+    Should Be Equal As Strings    ${FLOW_QUESTIONS[3]}    ${names[1]}

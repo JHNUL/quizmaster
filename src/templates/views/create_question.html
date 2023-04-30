@@ -98,7 +98,7 @@ block content %}
   </div>
   <div class="basis-1/12"></div>
   <div class="basis-4/12">
-    <div class="flex-grow">
+    <div class="flex-grow" id="question_flow">
       <h2 class="text-2xl">Question Flow</h2>
       {% for id, question_name in quiz.questions %}
         <div class="bg-white rounded-md shadow-md p-4">
@@ -109,7 +109,7 @@ block content %}
             {% endfor %}
             <div class="flex flex-row">
               <form action="/quiz/{{ quiz.quiz_id }}/question/{{ id }}/delete" method="post">
-                <button id="delete_question" type="submit">
+                <button id="delete_question_{{id}}" type="submit">
                   <img
                     class="object-contain h-5 w-5 mr-2"
                     src="{{ url_for('static', filename='images/delete24.png') }}"

@@ -10,7 +10,7 @@ class QuizRepository:
         query_string = """
             SELECT * FROM quiz
             WHERE is_active = TRUE
-            AND (public OR quizuser_id = :quizuser_id);
+            AND (public = TRUE OR quizuser_id = :quizuser_id);
         """
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id}
