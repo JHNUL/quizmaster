@@ -32,7 +32,8 @@ CREATE TABLE quiz_question (
   quiz_id INTEGER NOT NULL,
   question_id INTEGER NOT NULL,
   FOREIGN KEY(quiz_id) REFERENCES quiz(id),
-  FOREIGN KEY(question_id) REFERENCES question(id)
+  FOREIGN KEY(question_id) REFERENCES question(id),
+  UNIQUE (quiz_id, question_id)
 );
 
 CREATE TABLE answer (
@@ -46,7 +47,8 @@ CREATE TABLE question_answer (
   question_id INTEGER NOT NULL,
   answer_id INTEGER NOT NULL,
   FOREIGN KEY(question_id) REFERENCES question(id),
-  FOREIGN KEY(answer_id) REFERENCES answer(id)
+  FOREIGN KEY(answer_id) REFERENCES answer(id),
+  UNIQUE (question_id, answer_id)
 );
 
 CREATE TABLE quiz_instance (

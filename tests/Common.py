@@ -40,9 +40,57 @@ class Common:
         password = randbytes(8).hex()
         return f"{username}@quiztester.dev", password
 
+    @keyword("Shuffle Every Other Value")
+    def shuffle_every_other_value(self, nums: list, lower=1) -> list:
+        """Shuffles every other value in a list of integers. Starting from the first.
+
+        Args:
+            nums list(int): list of integers
+            lower (int): lower bound of the possible integer values
+        Returns:
+            list (int): a copy of the original list
+        """
+        result_list = []
+        for i, num in enumerate(nums):
+            if i % 2 == 0:
+                if num > lower:
+                    result_list.append(num - 1)
+                else:
+                    result_list.append(num + 1)
+            else:
+                result_list.append(num)
+        return result_list
+
+    @keyword("Shuffle Every Value")
+    def shuffle_every_value(self, nums: list, lower=1) -> list:
+        """Shuffles every value in a list of integers.
+
+        Args:
+            nums list(int): list of integers
+            lower (int): lower bound of the possible integer values
+        Returns:
+            list (int): a copy of the original list
+        """
+        result_list = []
+        for num in nums:
+            if num > lower:
+                result_list.append(num - 1)
+            else:
+                result_list.append(num + 1)
+        return result_list
+
     @keyword("Get Random Element From List")
-    def get_random_element_from_list(self, elements: list):
-        return choice(elements)
+    def get_random_element_from_list(self, elements: list) -> tuple:
+        """Gets a random element from elements
+
+        Args:
+            elements (list): a list of any elements
+
+        Returns:
+            tuple: the selected element and its index in the original list
+        """
+        selection = choice(elements)
+        return selection, elements.index(selection)
 
     @keyword("Create User")
     def create_user(self):
