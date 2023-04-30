@@ -15,18 +15,23 @@ def stats():
     user_id = session["user_id"]
     username = session["username"]
     instances = QuizRepository(db).get_all_quiz_instances_by_user(user_id)
-    durations = []
-    for instance in instances:
-        delta = instance[4] - instance[3]
-        durations.append(delta.total_seconds())
-    avg_duration = 0 if len(durations) == 0 else sum(durations) / len(durations)
-    answers_count = QuestionRepository(db).get_count_of_question_instances_by_user(
-        user_id
-    )
-    correct_percentage = QuestionRepository(db).get_correct_answer_percentage(user_id)
+    total_quizzes = len(instances)
+    total_answers = 0
+    correct_percentage = 0.0
+    avg_duration = 0
+    if total_quizzes > 0:
+        durations = []
+        for instance in instances:
+            delta = instance[4] - instance[3]
+            durations.append(delta.total_seconds())
+        avg_duration = 0 if len(durations) == 0 else sum(durations) / len(durations)
+        total_answers = QuestionRepository(db).get_count_of_question_instances_by_user(
+            user_id
+        )
+        correct_percentage = QuestionRepository(db).get_correct_answer_percentage(user_id)
     statistics = {
-        "total_quizzes": len(instances),
-        "total_answers": answers_count,
+        "total_quizzes": total_quizzes,
+        "total_answers": total_answers,
         "correct_percentage": f"{correct_percentage:.1f}%",
         "average_duration": _create_time_diff_text(avg_duration),
     }

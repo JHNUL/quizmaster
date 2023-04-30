@@ -47,7 +47,8 @@ This is mainly to show progress below the main functionality level. These are no
   - unique constraint to connection tables based on compound key DONE
   - question flow in correct order DONE
   - fix CSRF vulnerability DONE
-  - already created questions can be deleted
+  - published quiz cannot be edited DONE
+  - already created questions can be deleted DONE
   - more tests for users access to editing quizzes and seeing instance results
   - shorter session length
   - user sees all quizzes that they have created, attempted and completed

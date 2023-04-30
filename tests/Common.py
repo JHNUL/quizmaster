@@ -24,12 +24,14 @@ class Common:
 
     def _get_csrf_token(self, cookie):
         create_quiz_url = ROUTES_DICT["Quiz"]
-        login_res = get(create_quiz_url, cookies=cookie, timeout=3, allow_redirects=False)
+        login_res = get(
+            create_quiz_url, cookies=cookie, timeout=3, allow_redirects=False
+        )
         if login_res.status_code != 200:
             raise ValueError(
                 f"Status code should have been 200, was {login_res.status_code}"
             )
-        res = search("name=\"csrf_token\" value=\"(.+?)\"", str(login_res.content))
+        res = search('name="csrf_token" value="(.+?)"', str(login_res.content))
         return res.groups()[0]
 
     @keyword("Generate Random Username And Password")
@@ -62,7 +64,6 @@ class Common:
         quiz_data = {
             "quiztitle": self.faker.text(max_nb_chars=60),
             "quizdescription": self.faker.text(max_nb_chars=250),
-            "publish": publish,
             "csrf_token": csrf_token,
         }
         quiz["quiz_title"] = quiz_data["quiztitle"]
@@ -71,7 +72,7 @@ class Common:
         res = post(url, quiz_data, timeout=3, cookies=cookie)
         if res.status_code != 200 or match(".+/quiz/\d+", res.url) is None:
             raise ValueError(
-                f"Unable to create quiz, status {res.status_code}, {res.text}"
+                f"Unable to create quiz, status {res.status_code}, {res.url}"
             )
         quiz_id = res.url.split("/")[-1].strip()
         quiz["quiz_id"] = quiz_id
@@ -91,7 +92,14 @@ class Common:
                 raise ValueError(
                     f"Unable to create question, status {question_res.status_code}, {question_res.text}"
                 )
-
+        if publish:
+            post(
+                f"{url}/{quiz_id}/publish",
+                {"csrf_token": csrf_token},
+                allow_redirects=False,
+                timeout=3,
+                cookies=cookie,
+            )
         return quiz
 
     @keyword("Get Quiz Id From Url")
@@ -101,6 +109,13 @@ class Common:
     @keyword("Map List Of Dictionaries To Value")
     def map_list_of_dictionaries_to_value(self, coll: list, key: str):
         return [elem[key] for elem in coll]
+
+    @keyword("String Should Contain Substring")
+    def string_should_contain_substring(self, string: str, substring: str):
+        if substring not in string:
+            raise ValueError(
+                f"'{string}' was supposed to contain '{substring}' but did not"
+            )
 
     def _create_question_data(self, csrf_token):
         return {

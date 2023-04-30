@@ -22,24 +22,24 @@ def landingpage():
 
 @app.errorhandler(BadRequest)
 def bad_request(error):
-    return render_template("views/400.html", description=str(error))
+    return render_template("views/400.html", description=str(error)), 400
 
 
 @app.errorhandler(Unauthorized)
 def unauthorized(error):
-    return render_template("views/401.html")
+    return render_template("views/401.html"), 401
 
 
 @app.errorhandler(Forbidden)
 def forbidden(error):
-    return render_template("views/403.html")
+    return render_template("views/403.html"), 403
 
 
 @app.errorhandler(NotFound)
 def not_found(error):
-    return render_template("views/404.html")
+    return render_template("views/404.html"), 404
 
 
 @app.errorhandler(InternalServerError)
 def internal_error(error):
-    return render_template("views/500.html")
+    return render_template("views/500.html"), 500

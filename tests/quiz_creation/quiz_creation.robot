@@ -35,3 +35,13 @@ Answer Options Can Be Added And Removed
     Given User Has Created A Quiz
     Then User Can Adjust The Amount Of Answer Options
     And User Can Cancel Question Creation
+
+Question Flow Is Shown
+    [Tags]    quiz_creation    question_creation
+    When User Adds Questions To Quiz
+    Then Questions Show In The Question Flow
+
+Question Can Be Deleted
+    [Tags]    quiz_creation    question_creation
+    When User Adds Questions To Quiz
+    Then Questions Can Be Deleted From Question Flow
