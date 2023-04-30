@@ -105,10 +105,21 @@ block content %}
           <div class="text-xl mb-2">{{question_name}}</div>
           <div class="flex flex-col justify-between">
             {% for answer_text, is_correct in quiz.answers[id] %}
-            <div class="mr-4">
-              <p>{{ answer_text }}{% if is_correct %} (Correct){% endif %}</p>
-            </div>
+            <p>{{ answer_text }}{% if is_correct %} (Correct){% endif %}</p>
             {% endfor %}
+            <div class="flex flex-row">
+              <form action="/quiz/{{ quiz.quiz_id }}/question/{{ id }}/delete" method="post">
+                <button id="delete_question" type="submit">
+                  <img
+                    class="object-contain h-5 w-5 mr-2"
+                    src="{{ url_for('static', filename='images/delete24.png') }}"
+                    alt="Trash can"
+                    title="Delete question"
+                  />
+                </button>
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+              </form>
+            </div>
           </div>
         </div>
       {% endfor %}

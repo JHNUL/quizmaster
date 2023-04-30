@@ -37,6 +37,7 @@ def new_quiz():
 
 @app.route("/quiz/<int:quiz_id>/edit", methods=["GET"])
 @login_required
+@no_cache
 def edit_quiz_view(quiz_id: int):
     user_id = session["user_id"]
     full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
@@ -79,6 +80,7 @@ def delete_quiz(quiz_id: int):
 
 @app.route("/quiz/<int:quiz_id>", methods=["GET"])
 @login_required
+@no_cache
 def create_question(quiz_id: int):
     user_id = session["user_id"]
     full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
@@ -110,4 +112,19 @@ def quiz_question(quiz_id: int):
     for answer, is_correct in answers:
         answer_id = answer_repo.create_new_answer(answer, is_correct)
         conn_repo.link_answer_to_question(answer_id, question_id)
+    return redirect(f"/quiz/{quiz_id}")
+
+
+@app.route("/quiz/<int:quiz_id>/question/<int:question_id>/delete", methods=["POST"])
+@login_required
+@csrf
+def delete_question(quiz_id: int, question_id: int):
+    user_id = session["user_id"]
+    full_quiz_rows = QuizRepository(db).get_user_full_quiz_by_id(quiz_id, user_id)
+    if len(full_quiz_rows) == 0:
+        raise NotFound
+    full_quiz = _create_full_quiz_object(full_quiz_rows)
+    if len([q for q in full_quiz["questions"] if q[0] == question_id]) == 0:
+        raise NotFound
+    QuestionRepository(db).delete_question(question_id)
     return redirect(f"/quiz/{quiz_id}")

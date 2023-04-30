@@ -73,10 +73,13 @@ class QuizRepository:
         query_string = """
             SELECT
                 q.id as quiz_id,
+				q.is_active as quiz_active,
                 q.*,
                 qu.id as question_id,
+				qu.is_active as question_active,
                 qu.*,
                 a.id as answer_id,
+				a.is_active as answer_active,
                 a.*,
                 qz.username
             FROM quiz q
@@ -85,7 +88,10 @@ class QuizRepository:
             LEFT JOIN question qu ON qq.question_id = qu.id
             LEFT JOIN question_answer qa ON qa.question_id = qu.id
             LEFT JOIN answer a ON qa.answer_id = a.id
-            WHERE q.id = :id AND q.quizuser_id = :quizuser_id AND q.is_active = TRUE;
+            WHERE q.id = :id
+                AND q.quizuser_id = :quizuser_id
+                AND q.is_active = TRUE
+                AND q.public = FALSE;
         """
         cursor = self.database.session.execute(
             _text(query_string), {"id": quiz_id, "quizuser_id": user_id}
@@ -251,9 +257,11 @@ class QuizRepository:
 
     def get_all_quiz_instances_by_user(self, user_id: int):
         query_string = """
-            SELECT * FROM quiz_instance
-            WHERE quizuser_id = :quizuser_id
-            AND finished_at IS NOT NULL;
+            SELECT * FROM quiz_instance qi
+            JOIN quiz q ON qi.quiz_id = q.id
+            WHERE qi.quizuser_id = :quizuser_id
+            AND qi.finished_at IS NOT NULL
+            AND q.is_active = TRUE;
         """
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id}

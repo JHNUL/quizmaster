@@ -35,6 +35,29 @@ class QuestionRepository:
         (question_id,) = cursor.fetchone()
         return question_id
 
+    def delete_question(self, question_id: int) -> int:
+        """
+        Note that user access has to be checked before.
+        """
+        query_string_question = """
+            UPDATE question
+            SET is_active = FALSE
+            WHERE id = :id;
+        """
+        query_string_answer = """
+            UPDATE answer a
+            SET is_active = FALSE
+            WHERE a.id IN (
+                SELECT answer_id FROM question_answer qa WHERE qa.question_id = :question_id
+            );
+        """
+        self.database.session.execute(_text(query_string_question), {"id": question_id})
+        self.database.session.execute(
+            _text(query_string_answer), {"question_id": question_id}
+        )
+        self.database.session.commit()
+        return True
+
     def get_questions_linked_to_quiz(self, quiz_id: int) -> list:
         query_string = """
             SELECT q.* FROM question q
@@ -164,8 +187,9 @@ class QuestionRepository:
     def get_count_of_question_instances_by_user(self, user_id: int):
         query_string = """
             SELECT COUNT(*) FROM question_instance qi
-            JOIN answer a ON qi.answer_id = a.id
-            WHERE quizuser_id = :quizuser_id;
+            JOIN question q ON q.id = qi.question_id
+            WHERE quizuser_id = :quizuser_id
+            AND q.is_active = TRUE;
         """
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id}
@@ -176,8 +200,11 @@ class QuestionRepository:
         query_string = """
             SELECT 100.0*SUM(CAST(a.is_correct AS INTEGER)) / NULLIF(COUNT(*), 0) AS PERCENTAGE
             FROM question_instance qi
+            JOIN question q ON q.id = qi.question_id
             JOIN answer a ON qi.answer_id = a.id
-            WHERE quizuser_id = :quizuser_id;
+            WHERE quizuser_id = :quizuser_id
+            AND q.is_active = TRUE
+            AND a.is_active = TRUE;
         """
         cursor = self.database.session.execute(
             _text(query_string), {"quizuser_id": user_id}
