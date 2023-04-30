@@ -17,6 +17,17 @@
   <body class="text-slate-700">
     {{ navbar(session) }}
     <div id="content">
+      <div class="flash-message-container">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+          <div
+            class="{{'flash-message-success' if category == 'success' else 'flash-message-error'}}"
+            role="alert"
+            onclick="console.log(this.remove())"
+          >
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      </div>
       {% block content %}{% endblock %}
     </div>
   </body>

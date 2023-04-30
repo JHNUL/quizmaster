@@ -1,5 +1,5 @@
 from re import match
-from flask import render_template, redirect, request, session, url_for
+from flask import render_template, redirect, request, session, url_for, flash
 from werkzeug.exceptions import NotFound
 from src.app import app
 from src.db import db
@@ -65,6 +65,7 @@ def edit_quiz(quiz_id: int):
 def publish_quiz(quiz_id: int):
     user_id = session["user_id"]
     QuizRepository(db).publish_quiz(quiz_id, user_id)
+    flash("Quiz published!", "success")
     return redirect(url_for("landingpage"))
 
 
@@ -74,6 +75,7 @@ def publish_quiz(quiz_id: int):
 def delete_quiz(quiz_id: int):
     user_id = session["user_id"]
     if QuizRepository(db).is_user_quiz(quiz_id, user_id):
+        flash("Quiz deleted!", "success")
         QuizRepository(db).delete_quiz(quiz_id, user_id)
     return redirect(url_for("landingpage"))
 

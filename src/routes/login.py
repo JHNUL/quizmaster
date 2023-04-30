@@ -1,5 +1,5 @@
 from random import randbytes
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, flash
 from werkzeug.security import check_password_hash
 from src.app import app
 from src.db import db
@@ -18,7 +18,8 @@ def login():
     user_repo = UserRepository(db)
     user = user_repo.get_user_by_username(username, include_password=True)
     if user is None:
-        return render_template("views/login.html", message="Username not found!")
+        flash("Username not found!", "error")
+        return render_template("views/login.html")
 
     if check_password_hash(user.pw, password):
         session["username"] = username
@@ -27,4 +28,5 @@ def login():
         user_repo.set_login_time(user.id)
         return redirect("/")
 
-    return render_template("views/login.html", message="Incorrect password!")
+    flash("Incorrect password!", "error")
+    return render_template("views/login.html")
