@@ -22,7 +22,6 @@ class QuestionRepository:
         return questions[0]
 
     def create_new_question(self, name: str) -> int:
-        # TODO: refactor to add the link to connection table at the same time?
         query_string = """
             INSERT INTO question (question_name)
             VALUES (:question_name)
