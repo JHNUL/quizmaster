@@ -22,7 +22,7 @@ jobs:
           docker run --network="host" \
           --volume ${{ github.workspace }}/tests:/home/testrunner/tests \
           --volume ${{ github.workspace }}/test-results:/home/testrunner/test-results \
-          juhanir/test-runner:0.1.4
+          juhanir/test-runner:0.1.5
 
       - name: Publish robot report
         uses: actions/upload-artifact@v3
