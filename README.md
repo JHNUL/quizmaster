@@ -4,8 +4,6 @@
 
 The application allows users to create, share and complete quizzes on various topics.
 
-The deployed application is available at https://quizmastah.herokuapp.com/.
-
 ## Documentation
 
  - [Developing](docs/dev.md)
